@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import AILabModal from "./modals/AILabModal";
 
 const Navbar = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <nav className="bg-gradient-to-l from-[#1E1a39] via-[#14141F] to-[#14141F] text-white px-12 py-6 border-b border-[#4A4763]">
       <div className="flex justify-between items-center w-full">
@@ -85,25 +87,26 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-          <a
-            href="/"
+          <Link
+            to="/library"
             className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300"
           >
             My Library
-          </a>
+          </Link>
           <Link
             to="/plans"
             className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300"
           >
             Pricing
           </Link>
-          <Link
-            to={"ai-labs"}
+          <p
+            onClick={() => setIsModalOpen((state) => !state)}
+            // to={"/"}
             className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300 flex items-center"
           >
             <img src="/Ailabs.png" alt="AI Labs" className="w-5 h-5 mr-2" />
             AI Labs
-          </Link>
+          </p>
           {/* Buttons */}
           <div className="flex items-center space-x-14">
             <button
@@ -126,6 +129,7 @@ const Navbar = () => {
             <button className="px-4 py-2 text-[#5750A2] bg-transparent hover:bg-[#5750A2] hover:text-white font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[24px] transition-colors duration-200">
               Login
             </button>
+            {isModalOpen && <AILabModal />}
           </div>
         </div>
       </div>

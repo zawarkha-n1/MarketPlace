@@ -11,7 +11,7 @@ const Footer = () => {
             alt=""
             className="mb-4"
           />
-          <p className="font-urbanist font-normal text-[14px] leading-[22px] text-center lg:text-start w-full lg:w-[50%] mb-4">
+          <p className="font-Urbanist font-normal text-[14px] leading-[22px] text-center lg:text-start w-full lg:w-[70%] mb-6">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis non,
             fugit totam vel laboriosam vitae.
           </p>
