@@ -7,12 +7,20 @@ const Home = () => {
 
   // Create an array of 20 objects, each representing a card with title, discount, and price
   const totalCards = [
-    { title: "Exploring the Universe", discount: "20% Off", price: "$29.99" },
-    { title: "Mastering React Development", discount: null, price: "$19.99" },
+    {
+      title: "Exploring the Universe",
+      discount: "20% Off",
+      price: "EXA 29.99",
+    },
+    {
+      title: "Mastering React Development",
+      discount: null,
+      price: "EXA 19.99",
+    },
     {
       title: "The Secret to Digital Transformation",
       discount: "10% Off",
-      price: "$49.99",
+      price: "EXA 49.99",
     },
     {
       title: "Understanding AI and Machine Learning",
@@ -22,9 +30,9 @@ const Home = () => {
     {
       title: "How to Build a Startup from Scratch",
       discount: "15% Off",
-      price: "$39.99",
+      price: "EXA 39.99",
     },
-    { title: "The Future of Web3", discount: null, price: "$59.99" },
+    { title: "The Future of Web3", discount: null, price: "EXA 59.99" },
     {
       title: "Unraveling the Mystery of Quantum Computing",
       discount: "30% Off",
@@ -33,22 +41,22 @@ const Home = () => {
     {
       title: "Crypto 101: What You Need to Know",
       discount: null,
-      price: "$49.99",
+      price: "EXA 49.99",
     },
     {
       title: "Digital Marketing for the Modern Era",
       discount: "20% Off",
-      price: "$29.99",
+      price: "EXA 29.99",
     },
     {
       title: "Creating Beautiful UX/UI Designs",
       discount: null,
-      price: "$19.99",
+      price: "EXA 19.99",
     },
     {
       title: "AI in Healthcare: The Next Frontier",
       discount: "10% Off",
-      price: "$69.99",
+      price: "EXA 69.99",
     },
     {
       title: "The Art of Storytelling in Tech",
@@ -58,38 +66,38 @@ const Home = () => {
     {
       title: "Building a Sustainable Tech Company",
       discount: null,
-      price: "$29.99",
+      price: "EXA 29.99",
     },
     {
       title: "Blockchain: A Game Changer for Finance",
       discount: "20% Off",
-      price: "$59.99",
+      price: "EXA 59.99",
     },
     {
       title: "Mastering Cloud Computing",
       discount: "25% Off",
-      price: "$79.99",
+      price: "EXA 79.99",
     },
     {
       title: "Cybersecurity: Protecting the Digital World",
       discount: null,
-      price: "$59.99",
+      price: "EXA 59.99",
     },
     {
       title: "The Power of Data Science in 2024",
       discount: null,
-      price: "$89.99",
+      price: "EXA 89.99",
     },
     {
       title: "The Rise of Virtual Reality",
       discount: "10% Off",
       price: null,
     },
-    { title: "How to Code Like a Pro", discount: null, price: "$29.99" },
+    { title: "How to Code Like a Pro", discount: null, price: "EXA 29.99" },
     {
       title: "Leadership in Tech: The Skills You Need",
       discount: "30% Off",
-      price: "$49.99",
+      price: "EXA 49.99",
     },
   ];
 
