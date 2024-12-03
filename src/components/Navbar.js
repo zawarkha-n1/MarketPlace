@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -90,19 +91,19 @@ const Navbar = () => {
           >
             My Library
           </a>
-          <a
-            href="/"
+          <Link
+            to="/plans"
             className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300"
           >
             Pricing
-          </a>
-          <a
-            href="/"
+          </Link>
+          <Link
+            to={"ai-labs"}
             className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300 flex items-center"
           >
             <img src="/Ailabs.png" alt="AI Labs" className="w-5 h-5 mr-2" />
             AI Labs
-          </a>
+          </Link>
           {/* Buttons */}
           <div className="flex items-center space-x-14">
             <button
