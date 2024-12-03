@@ -35,7 +35,7 @@ const HeroCard = () => {
   };
 
   return (
-    <div className="relative w-[60%] min-h-[450px] bg-gradient-to-r from-[#5750A2] via-[#5750A2] to-[#8482d3] text-white flex flex-col justify-center items-start px-8 md:px-8 rounded-xl opacity-90 shadow-lg -mt-64 border border-transparent">
+    <div className="relative w-[70%] min-h-[450px] bg-gradient-to-r from-[#5750A2] via-[#5750A2] to-[#8482d3] text-white flex flex-col justify-center items-start px-8 md:px-8 rounded-xl opacity-90 shadow-lg  border border-transparent">
       {/* Hero Image */}
       <div className="absolute top-0 left-0 right-0 bottom-0 bg-cover bg-center z-[-1]">
         {/* Background image */}
