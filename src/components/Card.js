@@ -10,6 +10,7 @@ const Card = ({
   smileycount,
   inlibrary,
   bgcolor,
+  image,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
 
@@ -28,7 +29,7 @@ const Card = ({
         className="w-full h-[297px] bg-cover bg-center rounded-[15px] mb-4 relative"
         style={{
           backgroundColor: bgcolor,
-          backgroundImage: "url('/cartoon.png')", // Replace with your image path
+          backgroundImage: `url('/${image}')`, // Replace with your image path
         }}
       >
         {/* Box Positioned at Top Right */}
