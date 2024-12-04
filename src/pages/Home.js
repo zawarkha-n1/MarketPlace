@@ -211,14 +211,14 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-[#14141F] text-white flex flex-col items-center px-4 md:px-8">
       {/* Hero Section wrapped in a div */}
-      <div className="w-full mt-20 mb-32 flex justify-center">
+      <div className="w-full mt-20  flex justify-center">
         <HeroCard />
       </div>
 
       {/* Content Section */}
       <div className="w-full max-w-screen-xl">
-        {/* Additional Content Below Hero Card */}
-        <div className="w-[60%] text-left mb-8">
+        {/*Top Picks */}
+        <div className="w-[60%] text-left mb-8 mt-32">
           <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
             Today's Picks
           </h2>
@@ -237,6 +237,183 @@ const Home = () => {
               savedcount={card.savedCount}
               smileycount={card.smileyCount}
               inlibrary={inlibrary}
+              bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
+            />
+          ))}
+        </div>
+        <div className="flex justify-between mt-6 w-full max-w-[1200px] items-center">
+          <button
+            onClick={handlePrev}
+            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+          >
+            <span className="text-2xl">{/* Left Arrow Icon */} &#8592;</span>
+          </button>
+
+          <button
+            onClick={handleNext}
+            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+          >
+            <span className="text-2xl">{/* Right Arrow Icon */} &#8594;</span>
+          </button>
+        </div>
+
+        {/* Top Deals */}
+        <div className="w-[60%] text-left mb-8 mt-32">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+            Top deals
+          </h2>
+        </div>
+
+        {/* Card Grid Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
+          {visibleCards.map((card, index) => (
+            <Card
+              key={index}
+              title={card.title}
+              discount={card.discount}
+              price={card.price}
+              starcount={card.starCount}
+              heartcount={card.heartCount}
+              savedcount={card.savedCount}
+              smileycount={card.smileyCount}
+              inlibrary={inlibrary}
+              bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
+            />
+          ))}
+        </div>
+        <div className="flex justify-between mt-6 w-full max-w-[1200px] items-center">
+          <button
+            onClick={handlePrev}
+            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+          >
+            <span className="text-2xl">{/* Left Arrow Icon */} &#8592;</span>
+          </button>
+
+          <button
+            onClick={handleNext}
+            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+          >
+            <span className="text-2xl">{/* Right Arrow Icon */} &#8594;</span>
+          </button>
+        </div>
+
+        {/*Oddyssey experiencesd*/}
+        <div className="w-[100%] text-left mb-8 mt-32 flex items-center justify-between">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+            Top Immersive Experiences from Odyssey3D
+          </h2>
+          <div className="relative">
+            <img
+              src="/platform3.png" // Replace with your image path
+              alt="Explore Now"
+              className="w-auto h-auto  cursor-pointer "
+            />
+            <div className="absolute inset-0 bg-[#4C6BFF] rounded-full opacity-0 hover:opacity-80 transition-opacity duration-300"></div>
+          </div>
+        </div>
+
+        {/* Card Grid Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
+          {visibleCards.map((card, index) => (
+            <Card
+              key={index}
+              title={card.title}
+              discount={card.discount}
+              price={card.price}
+              starcount={card.starCount}
+              heartcount={card.heartCount}
+              savedcount={card.savedCount}
+              smileycount={card.smileyCount}
+              inlibrary={inlibrary}
+              bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
+            />
+          ))}
+        </div>
+        <div className="flex justify-between mt-6 w-full max-w-[1200px] items-center">
+          <button
+            onClick={handlePrev}
+            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+          >
+            <span className="text-2xl">{/* Left Arrow Icon */} &#8592;</span>
+          </button>
+
+          <button
+            onClick={handleNext}
+            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+          >
+            <span className="text-2xl">{/* Right Arrow Icon */} &#8594;</span>
+          </button>
+        </div>
+
+        {/**Popular collections */}
+        <div className="w-[100%] text-left mb-8 mt-32 flex items-center justify-between">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+            Popular Collections
+          </h2>
+          <div className="relative">
+            <h2 className="text-white text-[14px] font-bold leading-[44px] capitalize font-urbanist tracking-[1.4px] uppercase custom-underline hover:text-[#5750A2]">
+              EXPLORE MORE
+            </h2>
+          </div>
+        </div>
+
+        <div className="flex gap-4 mt-6 mb-8">
+          <button className="bg-[#5750A2] text-[#fff] py-2 px-6 rounded-full font-normal hover:bg-[#343444] transition duration-300 font-poppins text-[17.811px] leading-normal flex items-center">
+            <img src="/all.png" alt="All" className="w-auto h-auto mr-2" />{" "}
+            {/* Image with a margin to space it from the text */}
+            All
+          </button>
+
+          <button className="bg-[#343444] text-[#888B93] py-2 px-6 rounded-full font-normal hover:bg-[#5750A2] transition duration-300 font-poppins text-[17.811px] leading-normal">
+            3D Models
+          </button>
+          <button className="bg-[#343444] text-[#888B93] py-2 px-6 rounded-full font-normal hover:bg-[#5750A2] transition duration-300 font-poppins text-[17.811px] leading-normal">
+            Textures
+          </button>
+          <button className="bg-[#343444] text-[#888B93] py-2 px-6 rounded-full font-normal hover:bg-[#5750A2] transition duration-300 font-poppins text-[17.811px] leading-normal">
+            Environments
+          </button>
+        </div>
+
+        {/* Card Grid Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
+          {visibleCards.map((card, index) => (
+            <Card
+              key={index}
+              title={card.title}
+              discount={card.discount}
+              price={card.price}
+              starcount={card.starCount}
+              heartcount={card.heartCount}
+              savedcount={card.savedCount}
+              smileycount={card.smileyCount}
+              inlibrary={inlibrary}
+              bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
+            />
+          ))}
+        </div>
+
+        {/*Textures*/}
+        <div className="w-[60%] text-left mb-8 mt-32">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+            Textures
+          </h2>
+        </div>
+
+        {/* Card Grid Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
+          {visibleCards.map((card, index) => (
+            <Card
+              key={index}
+              title={card.title}
+              discount={card.discount}
+              price={card.price}
+              starcount={card.starCount}
+              heartcount={card.heartCount}
+              savedcount={card.savedCount}
+              smileycount={card.smileyCount}
+              inlibrary={inlibrary}
+              bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
             />
           ))}
         </div>

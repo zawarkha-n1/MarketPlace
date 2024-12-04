@@ -9,6 +9,7 @@ const Card = ({
   savedcount,
   smileycount,
   inlibrary,
+  bgcolor,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
 
@@ -26,7 +27,7 @@ const Card = ({
       <div
         className="w-full h-[297px] bg-cover bg-center rounded-[15px] mb-4 relative"
         style={{
-          backgroundColor: "#8A7FFF",
+          backgroundColor: bgcolor,
           backgroundImage: "url('/cartoon.png')", // Replace with your image path
         }}
       >
