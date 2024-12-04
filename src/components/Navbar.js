@@ -5,11 +5,13 @@ const Navbar = () => {
     <nav className="bg-gradient-to-l from-[#1E1a39] via-[#14141F] to-[#14141F] text-white px-12 py-6 border-b border-[#4A4763]">
       <div className="flex justify-between items-center w-full">
         {" "}
-        <div className="flex items-center space-x-20 w-1/2">
+        <div className="flex items-center space-x-20 w-1/2 pl-28">
           {" "}
-          <h1 className="text-white font-montserrat text-[36px] font-bold leading-[44px] capitalize">
-            MarketPlace
-          </h1>
+          <img
+            src="/thedigitalbazar.png"
+            alt="Zeniva Logo"
+            className="h-auto object-contain" // Adjust the size as needed
+          />
           {/* Search and Dropdown */}
           <div className="flex items-center bg-transparent rounded-md px-2 w-full">
             {/* Dropdown */}

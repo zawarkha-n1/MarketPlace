@@ -432,6 +432,39 @@ const Home = () => {
             <span className="text-2xl">{/* Right Arrow Icon */} &#8594;</span>
           </button>
         </div>
+
+        <div
+          className="w-auto h-[430px] bg-cover bg-center mt-32 mb-32 rounded-3xl relative"
+          style={{ backgroundImage: "url('/zenivabackground.png')" }}
+        >
+          {/* Left Side Content */}
+          <div className="absolute inset-y-0 left-0 flex flex-col justify-center pl-8 pr-20">
+            <h2 className="text-white text-[64px] font-normal leading-[78px] font-publicSans mb-4">
+              Zeniva Coming Soon To
+            </h2>
+            <h2 className="text-white text-[64px] font-bold leading-[78px] font-publicSans tracking-[1.4px] ">
+              The Digital Bazar
+            </h2>
+            <a
+              href="https://zeniva.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button className="w-[150px] text-white py-2 px-4 rounded-full font-semibold border-2 border-white hover:text-black hover:border-black transition duration-300 mt-10 underline">
+                Learn More
+              </button>
+            </a>
+          </div>
+
+          {/* Right Side Image */}
+          <div className="absolute inset-y-0 right-0 flex items-center justify-center pr-8">
+            <img
+              src="/zenivalogo.png"
+              alt="Zeniva Logo"
+              className="h-auto object-contain" // Adjust the size as needed
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
