@@ -4,100 +4,188 @@ import Card from "../components/Card.js";
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  let inlibrary = false;
 
-  // Create an array of 20 objects, each representing a card with title, discount, and price
   const totalCards = [
     {
       title: "Exploring the Universe",
       discount: "20% Off",
       price: "EXA 29.99",
+      starCount: 4,
+      heartCount: 12,
+      savedCount: 5,
+      smileyCount: 8,
     },
     {
       title: "Mastering React Development",
       discount: null,
       price: "EXA 19.99",
+      starCount: 5,
+      heartCount: 7,
+      savedCount: 3,
+      smileyCount: 9,
     },
     {
       title: "The Secret to Digital Transformation",
       discount: "10% Off",
       price: "EXA 49.99",
+      starCount: 3,
+      heartCount: 15,
+      savedCount: 7,
+      smileyCount: 4,
     },
     {
       title: "Understanding AI and Machine Learning",
       discount: null,
       price: null,
+      starCount: 2,
+      heartCount: 9,
+      savedCount: 6,
+      smileyCount: 5,
     },
     {
       title: "How to Build a Startup from Scratch",
       discount: "15% Off",
       price: "EXA 39.99",
+      starCount: 4,
+      heartCount: 18,
+      savedCount: 10,
+      smileyCount: 6,
     },
-    { title: "The Future of Web3", discount: null, price: "EXA 59.99" },
+    {
+      title: "The Future of Web3",
+      discount: null,
+      price: "EXA 59.99",
+      starCount: 5,
+      heartCount: 22,
+      savedCount: 14,
+      smileyCount: 11,
+    },
     {
       title: "Unraveling the Mystery of Quantum Computing",
       discount: "30% Off",
       price: null,
+      starCount: 3,
+      heartCount: 5,
+      savedCount: 2,
+      smileyCount: 3,
     },
     {
       title: "Crypto 101: What You Need to Know",
       discount: null,
       price: "EXA 49.99",
+      starCount: 4,
+      heartCount: 20,
+      savedCount: 8,
+      smileyCount: 7,
     },
     {
       title: "Digital Marketing for the Modern Era",
       discount: "20% Off",
       price: "EXA 29.99",
+      starCount: 5,
+      heartCount: 17,
+      savedCount: 11,
+      smileyCount: 6,
     },
     {
       title: "Creating Beautiful UX/UI Designs",
       discount: null,
       price: "EXA 19.99",
+      starCount: 3,
+      heartCount: 14,
+      savedCount: 9,
+      smileyCount: 8,
     },
     {
       title: "AI in Healthcare: The Next Frontier",
       discount: "10% Off",
       price: "EXA 69.99",
+      starCount: 4,
+      heartCount: 21,
+      savedCount: 13,
+      smileyCount: 7,
     },
     {
       title: "The Art of Storytelling in Tech",
       discount: null,
       price: null,
+      starCount: 2,
+      heartCount: 8,
+      savedCount: 4,
+      smileyCount: 2,
     },
     {
       title: "Building a Sustainable Tech Company",
       discount: null,
       price: "EXA 29.99",
+      starCount: 4,
+      heartCount: 10,
+      savedCount: 6,
+      smileyCount: 5,
     },
     {
       title: "Blockchain: A Game Changer for Finance",
       discount: "20% Off",
       price: "EXA 59.99",
+      starCount: 5,
+      heartCount: 25,
+      savedCount: 18,
+      smileyCount: 10,
     },
     {
       title: "Mastering Cloud Computing",
       discount: "25% Off",
       price: "EXA 79.99",
+      starCount: 5,
+      heartCount: 30,
+      savedCount: 22,
+      smileyCount: 12,
     },
     {
       title: "Cybersecurity: Protecting the Digital World",
       discount: null,
       price: "EXA 59.99",
+      starCount: 4,
+      heartCount: 17,
+      savedCount: 9,
+      smileyCount: 6,
     },
     {
       title: "The Power of Data Science in 2024",
       discount: null,
       price: "EXA 89.99",
+      starCount: 5,
+      heartCount: 19,
+      savedCount: 11,
+      smileyCount: 9,
     },
     {
       title: "The Rise of Virtual Reality",
       discount: "10% Off",
       price: null,
+      starCount: 3,
+      heartCount: 6,
+      savedCount: 4,
+      smileyCount: 5,
     },
-    { title: "How to Code Like a Pro", discount: null, price: "EXA 29.99" },
+    {
+      title: "How to Code Like a Pro",
+      discount: null,
+      price: "EXA 29.99",
+      starCount: 4,
+      heartCount: 12,
+      savedCount: 8,
+      smileyCount: 6,
+    },
     {
       title: "Leadership in Tech: The Skills You Need",
       discount: "30% Off",
       price: "EXA 49.99",
+      starCount: 5,
+      heartCount: 20,
+      savedCount: 15,
+      smileyCount: 10,
     },
   ];
 
@@ -144,6 +232,11 @@ const Home = () => {
               title={card.title}
               discount={card.discount}
               price={card.price}
+              starcount={card.starCount}
+              heartcount={card.heartCount}
+              savedcount={card.savedCount}
+              smileycount={card.smileyCount}
+              inlibrary={inlibrary}
             />
           ))}
         </div>
