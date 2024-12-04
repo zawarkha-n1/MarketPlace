@@ -10,11 +10,13 @@ const Navbar = () => {
         {" "}
         <div className="flex items-center space-x-20 w-1/2 pl-28">
           {" "}
-          <img
-            src="/thedigitalbazar.png"
-            alt="Zeniva Logo"
-            className="h-auto object-contain" // Adjust the size as needed
-          />
+          <Link to={"/"}>
+            <img
+              src="/thedigitalbazar.png"
+              alt="Zeniva Logo"
+              className="h-auto object-contain" // Adjust the size as needed
+            />
+          </Link>
           {/* Search and Dropdown */}
           <div className="flex items-center bg-transparent rounded-md px-2 w-full">
             {/* Dropdown */}
