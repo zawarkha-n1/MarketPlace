@@ -10,6 +10,8 @@ module.exports = {
         montserrat: ["Montserrat", "sans-serif"],
         inter: ["Inter", "sans-serif"],
         urbanist: ["Urbanist", "sans-serif"], // Add Urbanist font here
+        poppins: ["Poppins", "sans-serif"],
+        publicSans: ["Public Sans", "sans-serif"],
       },
       fontSize: {
         "58px": "58px", // Adding the specific font size for title

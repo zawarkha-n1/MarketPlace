@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-underline {
+  position: relative;
+}
+
+.custom-underline::after {
+  content: "";
+  position: absolute;
+  bottom: 2px; /* Adjust this value to control the space between the text and the line */
+  left: 0;
+  width: 100%;
+  height: 1px; /* Thickness of the underline */
+  background-color: #5750a2; /* Underline color */
+}
