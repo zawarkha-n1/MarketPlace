@@ -43,93 +43,88 @@ const Home = () => {
     setShuffledTopDeals(shuffleCards(totalCards));
   }, [filter]); // Dependency on filter so that it reshuffles when the filter is changed
 
-  // Pagination logic for each section (same as before)
-
-  const handleNext = (section) => {
+  // Handle page changes for pagination (next and prev)
+  const handlePageChange = (section, action) => {
+    let index, maxLength;
     switch (section) {
       case "topPicks":
-        if (topPicksIndex + 4 >= shuffledTopPicks.length) {
-          setTopPicksIndex(0); // Go back to the first page when the end is reached
-        } else {
-          setTopPicksIndex(topPicksIndex + 4); // Move to the next 4 cards
-        }
+        index = topPicksIndex;
+        maxLength = shuffledTopPicks.length;
         break;
       case "topDeals":
-        if (topDealsIndex + 4 >= shuffledTopDeals.length) {
-          setTopDealsIndex(0);
-        } else {
-          setTopDealsIndex(topDealsIndex + 4);
-        }
+        index = topDealsIndex;
+        maxLength = shuffledTopDeals.length;
         break;
       case "popular":
-        // Ensure we loop back to the start of the list if the index exceeds the available cards
-        if (popularIndex + 4 >= filteredCards.length) {
-          setPopularIndex(0); // Go back to the first page when the end is reached
-        } else {
-          setPopularIndex(popularIndex + 4); // Move to the next 4 cards
-        }
+        index = popularIndex;
+        maxLength = filteredCards.length;
         break;
       case "texture":
-        if (
-          textureIndex + 4 >=
-          totalCards.filter((card) => card.type === "texture").length
-        ) {
-          setTextureIndex(0);
-        } else {
-          setTextureIndex(textureIndex + 4);
-        }
+        index = textureIndex;
+        maxLength = totalCards.filter((card) => card.type === "texture").length;
         break;
       case "experience":
-        if (
-          experienceIndex + 4 >=
-          totalCards.filter((card) => card.type === "experience").length
-        ) {
-          setExperienceIndex(0);
-        } else {
-          setExperienceIndex(experienceIndex + 4);
-        }
+        index = experienceIndex;
+        maxLength = totalCards.filter(
+          (card) => card.type === "experience"
+        ).length;
+        break;
+      default:
+        return;
+    }
+
+    if (action === "next") {
+      if (index + 4 >= maxLength) {
+        index = 0; // Go back to the first page
+      } else {
+        index += 4; // Move to the next 4 cards
+      }
+    } else if (action === "prev") {
+      if (index - 4 < 0) {
+        index = maxLength - 4; // Go back to the last page
+      } else {
+        index -= 4; // Move to the previous 4 cards
+      }
+    }
+
+    // Update the index state
+    switch (section) {
+      case "topPicks":
+        setTopPicksIndex(index);
+        break;
+      case "topDeals":
+        setTopDealsIndex(index);
+        break;
+      case "popular":
+        setPopularIndex(index);
+        break;
+      case "texture":
+        setTextureIndex(index);
+        break;
+      case "experience":
+        setExperienceIndex(index);
         break;
       default:
         break;
     }
   };
 
-  const handlePrev = (section) => {
+  const handlePageClick = (section, pageIndex) => {
     switch (section) {
       case "topPicks":
-        if (topPicksIndex - 4 < 0) {
-          setTopPicksIndex(shuffledTopPicks.length - 4); // Go back to the last page
-        } else {
-          setTopPicksIndex(topPicksIndex - 4); // Move to the previous 4 cards
-        }
+        setTopPicksIndex(pageIndex * 4); // Page index corresponds to the section's offset
         break;
       case "topDeals":
-        if (topDealsIndex - 4 < 0) {
-          setTopDealsIndex(shuffledTopDeals.length - 4);
-        } else {
-          setTopDealsIndex(topDealsIndex - 4);
-        }
+        setTopDealsIndex(pageIndex * 4);
         break;
       case "popular":
-        if (popularIndex - 4 < 0) {
-          setPopularIndex(0); // If we're at the first page, prevent going further back
-        } else {
-          setPopularIndex(popularIndex - 4); // Move to the previous 4 cards
-        }
+        setPopularIndex(pageIndex * 4);
         break;
       case "texture":
-        if (textureIndex - 4 < 0) {
-          setTextureIndex(0);
-        } else {
-          setTextureIndex(textureIndex - 4);
-        }
+        setTextureIndex(pageIndex * 4);
         break;
       case "experience":
-        if (experienceIndex - 4 < 0) {
-          setExperienceIndex(0);
-        } else {
-          setExperienceIndex(experienceIndex - 4);
-        }
+        setExperienceIndex(pageIndex * 4);
         break;
       default:
         break;
@@ -140,6 +135,36 @@ const Home = () => {
     setFilter(filterValue);
     setPopularIndex(0); // Reset pagination index when the filter is changed
   };
+
+  // Helper function to calculate total pages for each section
+  const calculateTotalPages = (section) => {
+    let totalItems;
+    switch (section) {
+      case "topPicks":
+        totalItems = shuffledTopPicks.length;
+        break;
+      case "topDeals":
+        totalItems = shuffledTopDeals.length;
+        break;
+      case "popular":
+        totalItems = filteredCards.length;
+        break;
+      case "texture":
+        totalItems = totalCards.filter(
+          (card) => card.type === "texture"
+        ).length;
+        break;
+      case "experience":
+        totalItems = totalCards.filter(
+          (card) => card.type === "experience"
+        ).length;
+        break;
+      default:
+        return 0;
+    }
+    return Math.ceil(totalItems / 4); // Calculate total pages based on 4 items per page
+  };
+
   return (
     <div className="min-h-screen bg-[#14141F] text-white flex flex-col items-center px-4 md:px-8">
       {/* Hero Section wrapped in a div */}
@@ -179,18 +204,55 @@ const Home = () => {
         </div>
 
         {/* Pagination Controls */}
-        <div className="flex justify-between mt-6 w-full max-w-[1200px] items-center">
+        <div className="flex justify-center items-center mt-6 w-full">
+          {/* Back Button */}
           <button
-            onClick={() => handlePrev("topPicks")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("topPicks", "prev")}
+            className={`p-3  ${topPicksIndex === 0 ? "" : ""}`}
+            disabled={topPicksIndex === 0}
           >
-            <span className="text-2xl">&#8592;</span>
+            <img src="/prev.png" alt="" />
           </button>
+
+          {/* Page Indicator Circles */}
+          <div className="flex gap-3 justify-center mx-3">
+            {Array.from({ length: calculateTotalPages("topPicks") }).map(
+              (_, pageIndex) => (
+                <button
+                  key={pageIndex}
+                  onClick={() => handlePageClick("topPicks", pageIndex)}
+                  className="relative w-5 h-5" // Outer circle size
+                >
+                  {/* Outer Circle */}
+                  <div
+                    className={`absolute inset-0 rounded-full border-2 transition-all duration-300 ease-in-out 
+          ${
+            topPicksIndex / 4 === pageIndex
+              ? "border-[#5750A2]"
+              : "border-transparent"
+          }`}
+                  ></div>
+
+                  {/* Inner Circle */}
+                  <div
+                    className={`absolute inset-1 rounded-full transition-all duration-300 ease-in-out 
+          ${
+            topPicksIndex / 4 === pageIndex
+              ? "bg-[#5750A2] border-[#5750A2]"
+              : "bg-transparent border-2 border-white"
+          }`}
+                  ></div>
+                </button>
+              )
+            )}
+          </div>
+
+          {/* Next Button */}
           <button
-            onClick={() => handleNext("topPicks")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("topPicks", "next")}
+            className="p-3 "
           >
-            <span className="text-2xl">&#8594;</span>
+            <img src="/next.png" alt="" />
           </button>
         </div>
 
@@ -221,18 +283,55 @@ const Home = () => {
               />
             ))}
         </div>
-        <div className="flex justify-between mt-6 w-full max-w-[1200px] items-center">
+        <div className="flex justify-center items-center mt-6 w-full">
+          {/* Back Button */}
           <button
-            onClick={() => handlePrev("topDeals")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("topDeals", "prev")}
+            className={`p-3  ${topDealsIndex === 0 ? "" : ""}`}
+            disabled={topDealsIndex === 0}
           >
-            <span className="text-2xl">&#8592;</span>
+            <img src="/prev.png" alt="" />
           </button>
+
+          {/* Page Indicator Circles */}
+          <div className="flex gap-3 justify-center mx-3">
+            {Array.from({ length: calculateTotalPages("topDeals") }).map(
+              (_, pageIndex) => (
+                <button
+                  key={pageIndex}
+                  onClick={() => handlePageClick("topDeals", pageIndex)}
+                  className="relative w-5 h-5" // Outer circle size
+                >
+                  {/* Outer Circle */}
+                  <div
+                    className={`absolute inset-0 rounded-full border-2 transition-all duration-300 ease-in-out 
+          ${
+            topDealsIndex / 4 === pageIndex
+              ? "border-[#5750A2]"
+              : "border-transparent"
+          }`}
+                  ></div>
+
+                  {/* Inner Circle */}
+                  <div
+                    className={`absolute inset-1 rounded-full transition-all duration-300 ease-in-out 
+          ${
+            topDealsIndex / 4 === pageIndex
+              ? "bg-[#5750A2] border-[#5750A2]"
+              : "bg-transparent border-2 border-white"
+          }`}
+                  ></div>
+                </button>
+              )
+            )}
+          </div>
+
+          {/* Next Button */}
           <button
-            onClick={() => handleNext("topDeals")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("topDeals", "next")}
+            className="p-3 "
           >
-            <span className="text-2xl">&#8594;</span>
+            <img src="/next.png" alt="" />
           </button>
         </div>
 
@@ -267,23 +366,60 @@ const Home = () => {
                 savedcount={card.savedCount}
                 smileycount={card.smileyCount}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
+                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
                 image={card.image}
               />
             ))}
         </div>
-        <div className="flex justify-between mt-6 w-full max-w-[1200px] items-center">
+        <div className="flex justify-center items-center mt-6 w-full">
+          {/* Back Button */}
           <button
-            onClick={() => handlePrev("experience")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("experience", "prev")}
+            className={`p-3  ${experienceIndex === 0 ? "" : ""}`}
+            disabled={experienceIndex === 0}
           >
-            <span className="text-2xl">&#8592;</span>
+            <img src="/prev.png" alt="" />
           </button>
+
+          {/* Page Indicator Circles */}
+          <div className="flex gap-3 justify-center mx-3">
+            {Array.from({ length: calculateTotalPages("experience") }).map(
+              (_, pageIndex) => (
+                <button
+                  key={pageIndex}
+                  onClick={() => handlePageClick("experience", pageIndex)}
+                  className="relative w-5 h-5" // Outer circle size
+                >
+                  {/* Outer Circle */}
+                  <div
+                    className={`absolute inset-0 rounded-full border-2 transition-all duration-300 ease-in-out 
+          ${
+            experienceIndex / 4 === pageIndex
+              ? "border-[#5750A2]"
+              : "border-transparent"
+          }`}
+                  ></div>
+
+                  {/* Inner Circle */}
+                  <div
+                    className={`absolute inset-1 rounded-full transition-all duration-300 ease-in-out 
+          ${
+            experienceIndex / 4 === pageIndex
+              ? "bg-[#5750A2] border-[#5750A2]"
+              : "bg-transparent border-2 border-white"
+          }`}
+                  ></div>
+                </button>
+              )
+            )}
+          </div>
+
+          {/* Next Button */}
           <button
-            onClick={() => handleNext("experience")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("experience", "next")}
+            className="p-3 "
           >
-            <span className="text-2xl">&#8594;</span>
+            <img src="/next.png" alt="" />
           </button>
         </div>
 
@@ -349,18 +485,55 @@ const Home = () => {
               />
             ))}
         </div>
-        <div className="flex justify-between mt-6 w-full max-w-[1200px] items-center">
+        <div className="flex justify-center items-center mt-6 w-full">
+          {/* Back Button */}
           <button
-            onClick={() => handlePrev("popular")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("popular", "prev")}
+            className={`p-3  ${popularIndex === 0 ? "" : ""}`}
+            disabled={popularIndex === 0}
           >
-            <span className="text-2xl">&#8592;</span>
+            <img src="/prev.png" alt="" />
           </button>
+
+          {/* Page Indicator Circles */}
+          <div className="flex gap-3 justify-center mx-3">
+            {Array.from({ length: calculateTotalPages("popular") }).map(
+              (_, pageIndex) => (
+                <button
+                  key={pageIndex}
+                  onClick={() => handlePageClick("popular", pageIndex)}
+                  className="relative w-5 h-5" // Outer circle size
+                >
+                  {/* Outer Circle */}
+                  <div
+                    className={`absolute inset-0 rounded-full border-2 transition-all duration-300 ease-in-out 
+          ${
+            popularIndex / 4 === pageIndex
+              ? "border-[#5750A2]"
+              : "border-transparent"
+          }`}
+                  ></div>
+
+                  {/* Inner Circle */}
+                  <div
+                    className={`absolute inset-1 rounded-full transition-all duration-300 ease-in-out 
+          ${
+            popularIndex / 4 === pageIndex
+              ? "bg-[#5750A2] border-[#5750A2]"
+              : "bg-transparent border-2 border-white"
+          }`}
+                  ></div>
+                </button>
+              )
+            )}
+          </div>
+
+          {/* Next Button */}
           <button
-            onClick={() => handleNext("popular")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("popular", "next")}
+            className="p-3 "
           >
-            <span className="text-2xl">&#8594;</span>
+            <img src="/next.png" alt="" />
           </button>
         </div>
 
@@ -392,18 +565,55 @@ const Home = () => {
               />
             ))}
         </div>
-        <div className="flex justify-between mt-6 w-full max-w-[1200px] items-center">
+        <div className="flex justify-center items-center mt-6 w-full">
+          {/* Back Button */}
           <button
-            onClick={() => handlePrev("texture")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("texture", "prev")}
+            className={`p-3  ${textureIndex === 0 ? "" : ""}`}
+            disabled={textureIndex === 0}
           >
-            <span className="text-2xl">&#8592;</span>
+            <img src="/prev.png" alt="" />
           </button>
+
+          {/* Page Indicator Circles */}
+          <div className="flex gap-3 justify-center mx-3">
+            {Array.from({ length: calculateTotalPages("texture") }).map(
+              (_, pageIndex) => (
+                <button
+                  key={pageIndex}
+                  onClick={() => handlePageClick("texture", pageIndex)}
+                  className="relative w-5 h-5" // Outer circle size
+                >
+                  {/* Outer Circle */}
+                  <div
+                    className={`absolute inset-0 rounded-full border-2 transition-all duration-300 ease-in-out 
+          ${
+            textureIndex / 4 === pageIndex
+              ? "border-[#5750A2]"
+              : "border-transparent"
+          }`}
+                  ></div>
+
+                  {/* Inner Circle */}
+                  <div
+                    className={`absolute inset-1 rounded-full transition-all duration-300 ease-in-out 
+          ${
+            textureIndex / 4 === pageIndex
+              ? "bg-[#5750A2] border-[#5750A2]"
+              : "bg-transparent border-2 border-white"
+          }`}
+                  ></div>
+                </button>
+              )
+            )}
+          </div>
+
+          {/* Next Button */}
           <button
-            onClick={() => handleNext("texture")}
-            className="bg-[#42425a] text-white rounded-full p-3 hover:bg-[#2d2e3f] transition-all"
+            onClick={() => handlePageChange("texture", "next")}
+            className="p-3 "
           >
-            <span className="text-2xl">&#8594;</span>
+            <img src="/next.png" alt="" />
           </button>
         </div>
 

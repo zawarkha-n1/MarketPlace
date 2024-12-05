@@ -17,6 +17,10 @@ module.exports = {
         "58px": "58px", // Adding the specific font size for title
         "18px": "18px", // Adding the specific font size for description
       },
+      colors: {
+        customIndigo: "#5750A2",
+        customGray: "#564769",
+      },
     },
   },
   plugins: [],

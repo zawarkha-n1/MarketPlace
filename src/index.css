@@ -15,3 +15,27 @@
   height: 1px; /* Thickness of the underline */
   background-color: #5750a2; /* Underline color */
 }
+
+/* Custom Modal Styling */
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; /* Make sure the modal is above other content */
+}
+
+.modal-content {
+  background-color: #343444; /* Dark background for the modal */
+  border-radius: 1rem; /* Round corners for a smoother look */
+  max-width: 500px; /* Set maximum width */
+  width: 100%; /* Allow the width to adjust to content */
+  max-height: 80vh; /* Prevent modal from becoming too tall */
+  overflow-y: auto; /* Enable scrolling if the content exceeds the max height */
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect for the modal */
+}

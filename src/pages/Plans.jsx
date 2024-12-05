@@ -6,7 +6,7 @@ const Plans = () => {
     <div className="bg-[#14141F] min-h-screen">
       <div className="text-white font-Urbanist">
         <h1 className="font-urbanist font-bold text-4xl leading-[57.6px] text-center pt-8">
-          Our pricing plans
+          Our Pricing Plans
         </h1>
         <h3 className="text-center pt-5 font-urbanist font-normal text-[18px] leading-[28px]">
           Home / Pages / Pricing
