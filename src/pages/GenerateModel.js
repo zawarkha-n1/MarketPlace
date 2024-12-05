@@ -293,22 +293,18 @@ const GenerateModel = () => {
                 <img
                   src={uploadedImage}
                   alt="Uploaded"
-                  className="max-w-full max-h-96 object-contain"
+                  className="max-w-full max-h-full object-contain"
                 />
               )}
 
               {/* Render Canvas (3D Model) after generation */}
               {showCanvas && !isGenerating && glbFileUrl && (
                 <Canvas
-                  camera={{ position: [0, 1, 3], fov: 50 }}
-                  style={{ height: "100%", width: "100%" }}
+                  camera={{ position: [0, 1, 2], fov: 30 }} // Extremely close camera for a very zoomed-in effect
+                  style={{ height: "30vh", width: "30vw" }}
                 >
-                  <ambientLight intensity={0.5} />
-                  <spotLight
-                    position={[10, 10, 10]}
-                    angle={0.15}
-                    intensity={1}
-                  />
+                  <ambientLight intensity={1} />
+
                   <Model glbUrl={glbFileUrl} />
                   <OrbitControls />
                 </Canvas>
@@ -369,7 +365,7 @@ const GenerateModel = () => {
           )}
         </div>
 
-        <div className="w-full max-w-4xl mt-12 px-0">
+        <div className="w-full max-w-4xl mt-12 px-0 mb-20">
           <h3 className="text-white text-lg font-urbanist font-bold mb-4">
             Examples
           </h3>
