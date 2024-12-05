@@ -25,7 +25,7 @@ const ModelDetails = () => {
       <div className="w-full flex items-center justify-center pt-16 text-white">
         <div className="w-[70%] flex flex-row items-start gap-16">
           <div className="relative flex-1">
-            <img src="/experience.png" alt="" className="w-full" />
+            <img src="/experience.png" alt="" className="w-full rounded-xl" />
 
             <div className="absolute top-4 right-4 flex gap-4">
               <div className="bg-customGray text-white p-3 rounded-lg flex items-center gap-2">

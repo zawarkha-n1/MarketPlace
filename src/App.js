@@ -5,6 +5,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import GenerateModel from "./pages/GenerateModel";
 import Plans from "./pages/Plans";
 import Library from "./pages/Library";
 import ModelDetails from "./pages/ModelDetails";
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/CreateModel" element={<GenerateModel />} />
             <Route path="/plans" element={<Plans />} />
             <Route path="/library" element={<Library />} />
             <Route path="/product/:productId" element={<ModelDetails />} />
