@@ -346,7 +346,7 @@ const Home = () => {
               alt="Explore Now"
               className="w-auto h-auto  cursor-pointer "
             />
-            <div className="absolute inset-0 bg-[#4C6BFF] rounded-full opacity-0 hover:opacity-80 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-[#4C6BFF] rounded-full opacity-0 "></div>
           </div>
         </div>
 
