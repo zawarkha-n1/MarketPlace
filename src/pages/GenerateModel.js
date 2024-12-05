@@ -1,10 +1,20 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import Headingpage from "../components/HeadingPage";
+import { Canvas, useLoader } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
+// Model component to load the .glb file
+function Model() {
+  const gltf = useLoader(GLTFLoader, "/tree.glb"); // Load the 3D model from the public folder
+  return <primitive object={gltf.scene} scale={1} />;
+}
 
 const GenerateModel = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false); // Loader state
   const [isRegenerating, setIsRegenerating] = useState(false); // Regenerate state
+  const [showCanvas, setShowCanvas] = useState(false); // State to show the canvas after loader
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -13,6 +23,7 @@ const GenerateModel = () => {
       setUploadedImage(imageUrl);
       setIsGenerating(false); // Reset loader
       setIsRegenerating(false); // Reset regenerate state on new upload
+      setShowCanvas(false); // Hide canvas until "Generate" is clicked
     }
   };
 
@@ -20,13 +31,16 @@ const GenerateModel = () => {
     setUploadedImage(null); // Remove the uploaded image
     setIsGenerating(false); // Reset loader
     setIsRegenerating(false); // Reset regenerate state
+    setShowCanvas(false); // Hide canvas
   };
 
   const handleGenerateClick = () => {
     if (uploadedImage) {
       setIsGenerating(true); // Show loader for generate action
+      setShowCanvas(false); // Hide the image and canvas while loading
       setTimeout(() => {
         setIsGenerating(false); // Hide loader
+        setShowCanvas(true); // Show canvas after loading
         setIsRegenerating(true); // Enable regenerate button after generation
       }, 3000); // Simulate loading for 3 seconds
     }
@@ -35,10 +49,23 @@ const GenerateModel = () => {
   const handleRegenerateClick = () => {
     setIsGenerating(true); // Show loader for regenerate action
     setIsRegenerating(false); // Disable regenerate button during regeneration
+    setShowCanvas(false); // Hide the canvas while regenerating
     setTimeout(() => {
       setIsGenerating(false); // Hide loader
+      setShowCanvas(true); // Show canvas again after regeneration
       setIsRegenerating(true); // Re-enable regenerate button after regeneration
     }, 3000); // Simulate loading for 3 seconds
+  };
+
+  const handleExampleClick = (imageSrc) => {
+    // Prevent example click if generating or regenerating
+    if (isGenerating || isRegenerating) return;
+
+    // Set the clicked example image as the uploaded image
+    setUploadedImage(imageSrc);
+    setIsGenerating(false); // Reset loader when example is selected
+    setIsRegenerating(false); // Reset regenerate state on example selection
+    setShowCanvas(false); // Hide canvas until "Generate" is clicked
   };
 
   return (
@@ -58,40 +85,59 @@ const GenerateModel = () => {
 
         {/* Upload Box */}
         <div
-          className={
-            "relative rounded-lg bg-[#1F1F2B] flex flex-col items-center justify-center text-center p-8"
-          }
+          className="relative rounded-lg bg-[#1F1F2B] flex flex-col items-center justify-center text-center p-8"
           style={{
-            height: uploadedImage ? "auto" : "150px",
-          }} // Adjust height dynamically
+            height: uploadedImage || isGenerating ? "auto" : "150px", // Adjust height dynamically
+          }}
           onClick={
-            !uploadedImage && !isGenerating
+            !uploadedImage && !isGenerating && !isRegenerating
               ? () => document.getElementById("fileInput").click()
               : undefined
-          } // Trigger file input only when no image or loader is active
+          }
         >
           {isGenerating ? (
             // Show loader if generating
             <div className="loader w-10 h-10 border-4 border-t-transparent border-purple-500 rounded-full animate-spin"></div>
           ) : uploadedImage ? (
             <>
-              {/* Cross Button */}
-              <button
-                className="absolute top-4 right-2 font-bold text-gray-500 hover:text-white rounded-full w-6 h-6 flex items-center justify-center"
-                style={{
-                  fontSize: "20px",
-                }}
-                onClick={handleRemoveImage}
-              >
-                ✕
-              </button>
+              {/* Cross Button (Hidden when generating or regenerating) */}
+              {!isRegenerating && !isGenerating && (
+                <button
+                  className="absolute top-4 right-2 font-bold text-gray-500 hover:text-white rounded-full w-6 h-6 flex items-center justify-center"
+                  style={{
+                    fontSize: "20px",
+                  }}
+                  onClick={handleRemoveImage}
+                >
+                  ✕
+                </button>
+              )}
 
-              {/* Uploaded Image */}
-              <img
-                src={uploadedImage}
-                alt="Uploaded"
-                className="max-w-full max-h-96 object-contain"
-              />
+              {/* Render Image until generation */}
+              {!showCanvas && (
+                <img
+                  src={uploadedImage}
+                  alt="Uploaded"
+                  className="max-w-full max-h-96 object-contain"
+                />
+              )}
+
+              {/* Render Canvas (3D Model) after generation */}
+              {showCanvas && !isGenerating && (
+                <Canvas
+                  camera={{ position: [0, 1, 3], fov: 50 }}
+                  style={{ height: "100%", width: "100%" }}
+                >
+                  <ambientLight intensity={0.5} />
+                  <spotLight
+                    position={[10, 10, 10]}
+                    angle={0.15}
+                    intensity={1}
+                  />
+                  <Model />
+                  <OrbitControls />
+                </Canvas>
+              )}
             </>
           ) : (
             // Placeholder text when no image is uploaded
@@ -161,12 +207,18 @@ const GenerateModel = () => {
             .map((_, index) => (
               <div
                 key={index}
-                className="w-20 h-20 rounded-lg bg-[#1F1F2B] flex-shrink-0"
+                className="w-20 h-20 rounded-[20px] flex-shrink-0"
+                style={{
+                  backgroundColor: "#8A7FFF", // Set the background color to #8A7FFF
+                }}
+                onClick={() => handleExampleClick(`/${index + 1}.png`)} // Handle example click
               >
-                {/* Replace below with <img /> if you have images */}
-                <div className="w-full h-full flex items-center justify-center text-white">
-                  Img {index + 1}
-                </div>
+                {/* Use the image from the public folder */}
+                <img
+                  src={`/${index + 1}.png`} // Use dynamic image path (1.png, 2.png, etc.)
+                  alt={`Example ${index + 1}`}
+                  className="w-full h-full object-contain rounded-lg"
+                />
               </div>
             ))}
         </div>
