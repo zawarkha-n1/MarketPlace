@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Define an array of content for the HeroCard
 const heroContent = [
@@ -20,7 +21,12 @@ const heroContent = [
 ];
 
 const HeroCard = () => {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0); // State to manage the current content index
+
+  const handleClick = () => {
+    navigate("/CreateModel"); // Navigate to the /CreateModel route
+  };
 
   // Function to move to the next content
   const nextContent = () => {
@@ -64,7 +70,10 @@ const HeroCard = () => {
               className="w-full h-full object-contain" // Set a fixed width and height for the image
             />
           </button>
-          <button className="px-6 py-3 text-white bg-transparent border-2 border-white font-inter font-medium text-[16px] leading-normal rounded-full hover:bg-[#5750A2] hover:text-white transition-all duration-300 flex items-center justify-center">
+          <button
+            className="px-6 py-3 text-white bg-transparent border-2 border-white font-inter font-medium text-[16px] leading-normal rounded-full hover:bg-[#5750A2] hover:text-white transition-all duration-300 flex items-center justify-center"
+            onClick={handleClick}
+          >
             Generate with AI
           </button>
         </div>
