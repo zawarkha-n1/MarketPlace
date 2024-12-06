@@ -9,6 +9,7 @@ import GenerateModel from "./pages/GenerateModel";
 import Plans from "./pages/Plans";
 import Library from "./pages/Library";
 import ModelDetails from "./pages/ModelDetails";
+import Cart from "./pages/Cart";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/plans" element={<Plans />} />
             <Route path="/library" element={<Library />} />
             <Route path="/product/:productId" element={<ModelDetails />} />
+            <Route path="/cart" element={<Cart />} />
           </Routes>
         </div>
         <Footer />

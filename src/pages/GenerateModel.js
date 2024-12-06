@@ -3,7 +3,6 @@ import Headingpage from "../components/HeadingPage";
 import { Canvas, useLoader } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { saveAs } from "file-saver"; // Import FileSaver.js
 
 function Model({ glbUrl }) {
   const gltf = useLoader(GLTFLoader, glbUrl);

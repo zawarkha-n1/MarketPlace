@@ -618,34 +618,35 @@ const Home = () => {
         </div>
 
         <div
-          className="w-auto h-[430px] bg-cover bg-center mt-32 mb-32 rounded-3xl relative"
+          className="w-auto 2xl:h-[430px] h-[260px] xl:has-[420px] bg-cover bg-center mt-32 mb-32 rounded-3xl relative"
           style={{ backgroundImage: "url('/zenivabackground.png')" }}
         >
-          {/* Left Side Content */}
-          <div className="absolute inset-y-0 left-0 flex flex-col justify-center pl-8 pr-20">
-            <h2 className="text-white text-[64px] font-normal leading-[78px] font-publicSans mb-4">
+          <div className="absolute inset-y-0 left-0 flex flex-col justify-center pl-6 md:pl-8 lg:pl-12 xl:pl-16 pr-6 md:pr-12 lg:pr-16 xl:pr-20">
+            <h2 className="text-white text-[22px] sm:text-[36px] md:text-[46px] xl:text-[64px] font-normal leading-[38px] sm:leading-[46px] md:leading-[60px] lg:leading-[70px] font-publicSans mb-4">
               Zeniva Coming Soon To
             </h2>
-            <h2 className="text-white text-[64px] font-bold leading-[78px] font-publicSans tracking-[1.4px] ">
-              The Digital Bazar
+            <h2 className="text-white text-[20px] sm:text-[28px] md:text-[36px] xl:text-[64px] leading-[40px] sm:leading-[46px] md:leading-[58px] lg:leading-[70px] font-publicSans tracking-[1.2px] sm:tracking-[1.4px]">
+              The Digital <span className="font-bold ">Bazar</span>
             </h2>
+            <h4 className="2xl:text-[26px] leading-7 mt-3">
+              Currently available on Shopify
+            </h4>
             <a
               href="https://zeniva.ai/"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button className="w-[150px] text-white py-2 px-4 rounded-full font-semibold border-2 border-white hover:text-black hover:border-black transition duration-300 mt-10 underline">
+              <button className="w-[130px] sm:w-[150px] text-white py-2 px-4 rounded-full font-semibold border-2 border-white hover:text-black hover:border-black transition duration-300 mt-6 sm:mt-10">
                 Learn More
               </button>
             </a>
           </div>
 
-          {/* Right Side Image */}
-          <div className="absolute inset-y-0 right-0 flex items-center justify-center pr-8">
+          <div className="absolute inset-y-0 right-0 flex items-center justify-center pr-4 sm:pr-6 md:pr-8 lg:pr-10 xl:pr-12">
             <img
-              src="/zenivalogo.png"
+              src="/images/avatars.png"
               alt="Zeniva Logo"
-              className="h-auto object-contain" // Adjust the size as needed
+              className="h-[30%] sm:h-[40%] md:h-[50%] lg:h-[60%] xl:h-[74%] object-contain"
             />
           </div>
         </div>

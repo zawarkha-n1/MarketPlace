@@ -24,7 +24,7 @@ const Navbar = () => {
           {" "}
           <Link to={"/"}>
             <img
-              src="/thedigitalbazar.png"
+              src="/bazaar.png"
               alt="Zeniva Logo"
               className="h-auto object-contain" // Adjust the size as needed
             />

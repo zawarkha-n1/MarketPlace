@@ -1,19 +1,13 @@
 import React from "react";
 import PricingCard from "./../components/common/pricing-card/PricingCard";
+import Headingpage from "../components/HeadingPage";
 
 const Plans = () => {
   return (
-    <div className="bg-[#14141F] min-h-screen">
-      <div className="text-white font-Urbanist">
-        <h1 className="font-urbanist font-bold text-4xl leading-[57.6px] text-center pt-8">
-          Our Pricing Plans
-        </h1>
-        <h3 className="text-center pt-5 font-urbanist font-normal text-[18px] leading-[28px]">
-          Home / Pages / Pricing
-        </h3>
-      </div>
-      <div className="w-full flex items-center justify-center pt-16">
-        <div className="w-[60%] flex flex-row items-center justify-center gap-8">
+    <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
+      <Headingpage pagename={"Our Pricing Plans"} secondheading={"Pricing"} />
+      <div className="w-full flex items-center justify-center">
+        <div className="xl:w-[70%] 2xl:w-[60%] flex flex-row items-center justify-center gap-8">
           <PricingCard
             title={"Subscription Plan"}
             subtitle={"Monthly credit budget"}
