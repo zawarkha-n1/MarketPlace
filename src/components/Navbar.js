@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import AILabModal from "./modals/AILabModal";
+import ProfileMenu from "./common/menus/ProfileMenu";
+import ExploreDropDownMenu from "./common/menus/DropDownMenu";
 
 const Navbar = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
   return (
     <nav className="bg-gradient-to-l from-[#1E1a39] via-[#14141F] to-[#14141F] text-white px-12 py-6 border-b border-[#4A4763]">
       <div className="flex justify-between items-center w-full">
         {" "}
         <div className="flex items-center space-x-20 w-1/2 pl-28">
           {" "}
-          <img
-            src="/thedigitalbazar.png"
-            alt="Zeniva Logo"
-            className="h-auto object-contain" // Adjust the size as needed
-          />
+          <Link to={"/"}>
+            <img
+              src="/thedigitalbazar.png"
+              alt="Zeniva Logo"
+              className="h-auto object-contain" // Adjust the size as needed
+            />
+          </Link>
           {/* Search and Dropdown */}
           <div className="flex items-center bg-transparent rounded-md px-2 w-full">
             {/* Dropdown */}
@@ -63,11 +80,14 @@ const Navbar = () => {
           </div>
         </div>
         {/* Right Section (Links and Buttons) */}
-        <div className="flex items-center space-x-14 ml-auto">
+        <div className="flex items-center space-x-14 ml-auto ">
           {" "}
           {/* ml-auto to push right content */}
           {/* Links */}
-          <div className="relative group">
+          <div
+            className="relative group"
+            onClick={() => setIsExploreMenuOpen((state) => !state)}
+          >
             <button className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300 flex items-center">
               Explore
               <svg
@@ -86,25 +106,31 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-          <a
-            href="/"
+          <Link
+            to="/library"
             className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300"
           >
             My Library
-          </a>
-          <a
-            href="/"
+          </Link>
+          <Link
+            to="/plans"
             className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300"
           >
             Pricing
-          </a>
-          <a
-            href="/"
+          </Link>
+          <p
+            onClick={() => setIsModalOpen((state) => !state)}
+            // to={"/"}
             className="text-[var(--On-Surface, #FFF)] font-urbanist font-bold text-[18px] leading-[26px] hover:text-gray-400 transition-all duration-300 flex items-center"
           >
-            <img src="/Ailabs.png" alt="AI Labs" className="w-5 h-5 mr-2" />
+            <img
+              src="/Ailabs.png"
+              alt="AI Labs"
+              className="w-5 h-5 mr-2"
+              onClick={openModal}
+            />
             AI Labs
-          </a>
+          </p>
           {/* Buttons */}
           <div className="flex items-center space-x-14">
             <button
@@ -124,9 +150,27 @@ const Navbar = () => {
                 className="w-full h-full object-contain" // Adjust size based on your needs
               />
             </button>
-            <button className="px-4 py-2 text-[#5750A2] bg-transparent hover:bg-[#5750A2] hover:text-white font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[24px] transition-colors duration-200">
+            <button
+              onClick={() => setIsProfileMenuOpen((state) => !state)}
+              className="px-4 py-2 text-[#5750A2] bg-transparent hover:bg-[#5750A2] hover:text-white font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[24px] transition-colors duration-200"
+            >
               Login
             </button>
+            <div className="w-full">
+              {isModalOpen && (
+                <AILabModal modalIsOpen={isModalOpen} closeModal={closeModal} />
+              )}
+            </div>
+            {isProfileMenuOpen && (
+              <div className="absolute top-24 right-28 rounded-[20px] z-10">
+                <ProfileMenu />
+              </div>
+            )}
+            {isExploreMenuOpen && (
+              <div className="absolute top-24 right-[43%] rounded-[20px] z-10">
+                <ExploreDropDownMenu />
+              </div>
+            )}
           </div>
         </div>
       </div>

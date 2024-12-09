@@ -6,12 +6,8 @@ const Footer = () => {
     <div className="bg-[#0D0D11] w-full px-4 sm:px-8 lg:px-52 py-10 text-white">
       <div className="flex flex-col lg:flex-row gap-10 lg:gap-24 justify-between">
         <div className="flex flex-col items-center justify-center lg:w-[25%] lg:items-start p-2 lg:p-4 gap-1">
-          <img
-            src="/assets/icons/odyssey/odyssey.png"
-            alt=""
-            className="mb-4"
-          />
-          <p className="font-urbanist font-normal text-[14px] leading-[22px] text-center lg:text-start w-full lg:w-[50%] mb-4">
+          <img src="/thedigitalbazar.png" alt="" className="mb-4" />
+          <p className="font-Urbanist font-normal text-[14px] leading-[22px] text-center lg:text-start w-full lg:w-[70%] mb-6">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis non,
             fugit totam vel laboriosam vitae.
           </p>
@@ -35,61 +31,61 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-10 justify-between lg:flex-row flex-1">
-          <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 w-auto gap-1 p-4">
-            <h1 className="font-[Urbanist] font-bold text-[18px] leading-[26px]">
+          <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 w-auto  p-4">
+            <h1 className="font-Urbanist font-bold text-[18px] leading-[26px]">
               My Account
             </h1>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
               Authors
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
               Collection
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
               Author Profile
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
               Create Collection
             </p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 w-auto gap-1 p-4">
-            <h1 className="font-[Urbanist] font-bold text-[18px] leading-[26px]">
+          <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 w-auto  p-4">
+            <h1 className="font-Urbanist font-bold text-[18px] leading-[26px]">
               Resources
             </h1>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
               Help & Support
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
               Live Auctions
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
               Author Profile
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
               Activity
             </p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 w-auto gap-1 p-4">
-            <h1 className="font-[Urbanist] font-bold text-[18px] leading-[26px]">
+          <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 w-auto  p-4">
+            <h1 className="font-Urbanist font-bold text-[18px] leading-[26px]">
               Company
             </h1>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
-              Authors
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
+              About Us
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
-              Collection
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
+              Contact Us
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
-              Author Profile
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
+              Our Blog
             </p>
-            <p className="font-[Urbanist] font-normal text-[14px] leading-[22px]">
-              Create Collection
+            <p className="font-Urbanist font-normal text-[14px] leading-[22px]">
+              Discover
             </p>
           </div>
         </div>
 
         <div className="flex flex-col gap-5 lg:items-start items-center pt-4">
-          <h1 className="font-[Urbanist] font-bold text-[18px] leading-[26px]">
+          <h1 className="font-Urbanist font-bold text-[18px] leading-[26px]">
             Subscribe Us
           </h1>
 
