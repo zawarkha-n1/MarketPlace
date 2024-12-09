@@ -1,17 +1,26 @@
 import React from "react";
 import Modal from "react-modal";
+import { useNavigate } from "react-router-dom";
 
 const AILabModal = ({ modalIsOpen, closeModal }) => {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate("/create-model");
+    closeModal();
+  };
   return (
     <Modal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       ariaHideApp={false}
-      className="modal-content absolute top-24 right-8"
+      className="modal-content absolute top-24 right-8 w-fit"
       overlayClassName="modal-overlay"
     >
       <div className="space-y-2 bg-[#343444] py-3">
-        <button className="w-full bg-[#343444] hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group">
+        <button
+          className="w-full bg-[#343444] hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group"
+          onClick={handleNavigate}
+        >
           <div className="w-10 h-10 bg-[#5750A2] rounded-lg flex items-center justify-center">
             <img src="/assets/icons/content-logos/3d.png" alt="" />
           </div>
@@ -23,7 +32,10 @@ const AILabModal = ({ modalIsOpen, closeModal }) => {
           </div>
         </button>
         <hr className="border-gray-500" />
-        <button className="w-full  hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group">
+        <button
+          className="w-full  hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group"
+          disabled
+        >
           <div className="w-10 h-10 bg-[#5750A2] rounded-lg flex items-center justify-center">
             <img src="/assets/icons/content-logos/texture.png" alt="" />
           </div>
@@ -40,7 +52,10 @@ const AILabModal = ({ modalIsOpen, closeModal }) => {
           </div>
         </button>
         <hr className="border-gray-500" />
-        <button className="w-full  hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group">
+        <button
+          className="w-full  hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group"
+          disabled
+        >
           <div className="w-10 h-10 bg-[#5750A2] rounded-lg flex items-center justify-center">
             <img src="/assets/icons/content-logos/music.png" alt="" />
           </div>

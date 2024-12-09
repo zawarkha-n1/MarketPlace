@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react";
 import { totalCards } from "../data/totalcards.js";
 import HeroCard from "../components/HeroCard.js";
 import Card from "../components/Card.js";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   // States for pagination in each section
@@ -429,9 +430,12 @@ const Home = () => {
             Popular Collections
           </h2>
           <div className="relative">
-            <h2 className="text-white text-[14px] font-bold leading-[44px] capitalize font-urbanist tracking-[1.4px] uppercase custom-underline hover:text-[#5750A2]">
+            <Link
+              to={"/explore"}
+              className="text-white text-[14px] font-bold leading-[44px] font-urbanist tracking-[1.4px] uppercase custom-underline hover:text-[#5750A2]"
+            >
               EXPLORE MORE
-            </h2>
+            </Link>
           </div>
         </div>
 

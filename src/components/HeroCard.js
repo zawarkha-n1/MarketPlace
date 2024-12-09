@@ -25,7 +25,7 @@ const HeroCard = () => {
   const [currentIndex, setCurrentIndex] = useState(0); // State to manage the current content index
 
   const handleClick = () => {
-    navigate("/CreateModel"); // Navigate to the /CreateModel route
+    navigate("/create-model"); // Navigate to the /CreateModel route
   };
 
   // Function to move to the next content

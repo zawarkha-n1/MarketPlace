@@ -10,6 +10,9 @@ import Plans from "./pages/Plans";
 import Library from "./pages/Library";
 import ModelDetails from "./pages/ModelDetails";
 import Cart from "./pages/Cart";
+import Explore from "./pages/Explore";
+import SavedProducts from "./pages/SavedProducts";
+import { totalCards } from "./data/totalcards";
 
 const App = () => {
   return (
@@ -21,10 +24,15 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/CreateModel" element={<GenerateModel />} />
+            <Route path="/create-model" element={<GenerateModel />} />
             <Route path="/plans" element={<Plans />} />
             <Route path="/library" element={<Library />} />
-            <Route path="/product/:productId" element={<ModelDetails />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/saved-products" element={<SavedProducts />} />
+            <Route
+              path="/product/:productId"
+              element={<ModelDetails data={totalCards[0]} />}
+            />
             <Route path="/cart" element={<Cart />} />
           </Routes>
         </div>

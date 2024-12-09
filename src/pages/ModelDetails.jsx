@@ -5,16 +5,14 @@ import ScrollableCards from "../components/common/scrollable-cards/ScrollableCar
 import Card from "../components/Card";
 import { totalCards } from "../data/totalcards";
 
-const ModelDetails = () => {
+const ModelDetails = ({ data }) => {
   const [isRated, setIsRated] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
-
-  // Function to handle button click and update states
-  const handleRateProductClick = () => {
-    setIsRated(true); // Mark the product as rated
-    setIsSelected(true); // Mark the button as selected
-  };
   const [activeTab, setActiveTab] = useState("details");
+  const handleRateProductClick = () => {
+    setIsRated(true);
+    setIsSelected(true);
+  };
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
@@ -31,7 +29,7 @@ const ModelDetails = () => {
               </div>
               <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
                 <img src="/save-filled.png" alt="icon2" className="w-4 h-4" />
-                <span className="font-semibold">10</span>
+                <span className="font-semibold">{data.savedCount}</span>
               </div>
             </div>
 
@@ -48,27 +46,28 @@ const ModelDetails = () => {
 
           <div className="flex flex-col flex-1 items-start gap-6">
             <div className="text-white text-3xl sm:text-4xl md:text-[36px]">
-              "The Fantasy Flower illustration"
+              {/* "The Fantasy Flower illustration" */}
+              {data.title}
             </div>
 
             <div className="flex items-start justify-between w-full">
               <div className="flex flex-row gap-3">
                 <div className="w-full">
-                  <div className="p-1 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
+                  <div className="py-1 px-3 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
                     <img src="/star.png" alt="" className="w-4 h-4" />
-                    <span className="text-white">4</span>
+                    <span className="text-white">{data.starCount}</span>
                   </div>
                 </div>
                 <div className="w-full">
-                  <div className="p-1 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
+                  <div className="py-1 px-3 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
                     <img src="/heart.png" alt="" className="w-4 h-4" />
-                    <span className="text-white">3</span>
+                    <span className="text-white">{data.heartCount}</span>
                   </div>
                 </div>
                 <div className="w-full">
-                  <div className="p-1 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
+                  <div className="py-1 px-3 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
                     <img src="/smiley.png" alt="" className="w-4 h-4" />
-                    <span className="text-white">8</span>
+                    <span className="text-white">{data.smileyCount}</span>
                   </div>
                 </div>
               </div>
@@ -88,7 +87,7 @@ const ModelDetails = () => {
                 Price
               </p>
               <h3 className="font-urbanist font-bold text-[24px] leading-[26px]">
-                4.89 EXA
+                {data.price} EXA
               </h3>
             </div>
 

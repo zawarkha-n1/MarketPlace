@@ -4,6 +4,13 @@ import AILabModal from "./modals/AILabModal";
 import ProfileMenu from "./common/menus/ProfileMenu";
 import ExploreDropDownMenu from "./common/menus/DropDownMenu";
 
+const menuItems = [
+  { name: "All Products" },
+  { name: "3D Models" },
+  { name: "Textures" },
+  { name: "Music" },
+];
+
 const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -105,6 +112,11 @@ const Navbar = () => {
                 />
               </svg>
             </button>
+            {isExploreMenuOpen && (
+              <div className="absolute top-8 left-0 rounded-[20px] z-10">
+                <ExploreDropDownMenu items={menuItems} />
+              </div>
+            )}
           </div>
           <Link
             to="/library"
@@ -150,27 +162,24 @@ const Navbar = () => {
                 className="w-full h-full object-contain" // Adjust size based on your needs
               />
             </button>
-            <button
-              onClick={() => setIsProfileMenuOpen((state) => !state)}
-              className="px-4 py-2 text-[#5750A2] bg-transparent hover:bg-[#5750A2] hover:text-white font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[24px] transition-colors duration-200"
-            >
-              Login
-            </button>
-            <div className="w-full">
+            <div className="relative">
+              <button
+                onClick={() => setIsProfileMenuOpen((state) => !state)}
+                className="px-4 py-2 text-[#5750A2] bg-transparent hover:bg-[#5750A2] hover:text-white font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[24px] transition-colors duration-200"
+              >
+                Login
+              </button>
+              {isProfileMenuOpen && (
+                <div className="absolute top-12 -left-40 rounded-[20px] z-10">
+                  <ProfileMenu />
+                </div>
+              )}
+            </div>
+            <div className="w-fit">
               {isModalOpen && (
                 <AILabModal modalIsOpen={isModalOpen} closeModal={closeModal} />
               )}
             </div>
-            {isProfileMenuOpen && (
-              <div className="absolute top-24 right-28 rounded-[20px] z-10">
-                <ProfileMenu />
-              </div>
-            )}
-            {isExploreMenuOpen && (
-              <div className="absolute top-24 right-[43%] rounded-[20px] z-10">
-                <ExploreDropDownMenu />
-              </div>
-            )}
           </div>
         </div>
       </div>
