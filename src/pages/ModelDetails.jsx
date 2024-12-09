@@ -4,8 +4,9 @@ import Headingpage from "../components/HeadingPage";
 import ScrollableCards from "../components/common/scrollable-cards/ScrollableCards";
 import Card from "../components/Card";
 import { totalCards } from "../data/totalcards";
+import { useLocation } from "react-router-dom";
 
-const ModelDetails = ({ data }) => {
+const ModelDetails = () => {
   const [isRated, setIsRated] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [activeTab, setActiveTab] = useState("details");
@@ -13,6 +14,9 @@ const ModelDetails = ({ data }) => {
     setIsRated(true);
     setIsSelected(true);
   };
+
+  const location = useLocation();
+  const data = location.state;
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">

@@ -11,6 +11,7 @@ const Card = ({
   inlibrary,
   bgcolor,
   image,
+  onClick,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
 
@@ -20,6 +21,7 @@ const Card = ({
 
   return (
     <div
+      onClick={onClick}
       className={`w-[280px] ${
         inlibrary ? "h-[342px]" : "h-[442px]"
       } bg-[#343444] rounded-[20px] p-4 relative flex flex-col`}

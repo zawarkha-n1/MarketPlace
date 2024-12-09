@@ -2,7 +2,10 @@ import { React, useState, useEffect } from "react";
 import { totalCards } from "../data/totalcards.js";
 import HeroCard from "../components/HeroCard.js";
 import Card from "../components/Card.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   // States for pagination in each section
@@ -11,6 +14,86 @@ const Home = () => {
   const [popularIndex, setPopularIndex] = useState(0);
   const [textureIndex, setTextureIndex] = useState(0);
   const [experienceIndex, setExperienceIndex] = useState(0);
+
+  const [user, setUser] = useState(null); // Store user info
+  const [authToken, setAuthToken] = useState(null); // Store JWT
+
+  const handleLoginSuccess = async (credentialResponse) => {
+    const token = credentialResponse.credential;
+
+    try {
+      const response = await axios.post(
+        "http://172.16.15.155:5000/verify-token",
+        {
+          token,
+        }
+      );
+
+      console.log("User verified successfully:", response.data.user);
+
+      // Store the custom JWT in localStorage
+      const newAuthToken = response.data.token;
+      localStorage.setItem("authToken", newAuthToken);
+
+      // Set user info and token in state
+      setUser(response.data.user);
+      setAuthToken(newAuthToken);
+    } catch (error) {
+      console.error("Error verifying user:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Check for an existing token in localStorage on page load
+    const token = localStorage.getItem("authToken");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token); // Decode the JWT
+        console.log("Decoded token:", decodedToken);
+
+        // Check if the token is expired
+        const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+        if (decodedToken.exp < currentTime) {
+          console.log("Token expired, clearing storage");
+          localStorage.removeItem("authToken");
+        } else {
+          // Restore user session
+          setAuthToken(token);
+          setUser({
+            id: decodedToken.id,
+            email: decodedToken.email,
+            name: decodedToken.name,
+            picture: decodedToken.picture,
+          });
+        }
+      } catch (err) {
+        console.error("Error decoding token:", err);
+        localStorage.removeItem("authToken");
+      }
+    }
+  }, []); // Run once on component mount
+
+  useEffect(() => {
+    if (authToken) {
+      const decodedToken = jwtDecode(authToken);
+      const timeUntilExpiry = decodedToken.exp * 1000 - Date.now(); // Time in milliseconds
+
+      const timeout = setTimeout(() => {
+        console.log("Token expired, logging out");
+        handleLogout();
+      }, timeUntilExpiry);
+
+      return () => clearTimeout(timeout); // Clear timeout on component unmount
+    }
+  }, [authToken]); // Run when authToken changes
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken"); // Clear token from storage
+    setUser(null); // Clear user state
+    setAuthToken(null);
+    console.log("User logged out");
+  };
 
   let inlibrary = false;
   const [filter, setFilter] = useState("All");
@@ -166,9 +249,31 @@ const Home = () => {
     return Math.ceil(totalItems / 4); // Calculate total pages based on 4 items per page
   };
 
+  const navigate = useNavigate();
+
+  const handleCardClick = (card) => {
+    navigate(`/product/${card.title}`, {
+      state: card,
+    });
+  };
   return (
     <div className="min-h-screen bg-[#14141F] text-white flex flex-col items-center px-4 md:px-8">
       {/* Hero Section wrapped in a div */}
+      <div>
+        {!user ? (
+          <GoogleLogin
+            onSuccess={handleLoginSuccess}
+            onError={() => console.log("Login Failed")}
+          />
+        ) : (
+          <div>
+            <h2>Welcome, {user.name}</h2>
+            <img src={user.picture} alt={user.name} />
+            <p>Email: {user.email}</p>
+            <button onClick={handleLogout}>Logout</button>
+          </div>
+        )}
+      </div>
       <div className="w-full mt-20  flex justify-center">
         <HeroCard />
       </div>
@@ -200,6 +305,7 @@ const Home = () => {
                 inlibrary={inlibrary}
                 bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
                 image={card.image}
+                onClick={() => handleCardClick(card)}
               />
             ))}
         </div>

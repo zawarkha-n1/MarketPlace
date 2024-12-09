@@ -29,10 +29,7 @@ const App = () => {
             <Route path="/library" element={<Library />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/saved-products" element={<SavedProducts />} />
-            <Route
-              path="/product/:productId"
-              element={<ModelDetails data={totalCards[0]} />}
-            />
+            <Route path="/product/:productId" element={<ModelDetails />} />
             <Route path="/cart" element={<Cart />} />
           </Routes>
         </div>
