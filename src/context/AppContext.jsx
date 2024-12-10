@@ -19,9 +19,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const response = await axios.post(
-        `${
-          process.env.REACT_APP_API_URL || "http://172.16.15.155:5000"
-        }/verify-token`,
+        `${"http://localhost:5000"}/verify-token`,
         { token }
       );
 
