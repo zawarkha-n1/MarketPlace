@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import AILabModal from "./modals/AILabModal";
 import ProfileMenu from "./common/menus/ProfileMenu";
 import ExploreDropDownMenu from "./common/menus/DropDownMenu";
+import LoginModal from "./modals/LoginModal";
 
 const menuItems = [
   { name: "All Products" },
@@ -12,20 +13,32 @@ const menuItems = [
 ];
 
 const Navbar = () => {
-  let loggedin = true;
+  const navigate = useNavigate();
+  let loggedin = false;
   const plans = () => {
-    Navigate("/plans");
+    navigate("/plans");
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+  // google login code
+
+  //ends here
   function openModal() {
     setIsModalOpen(true);
   }
 
   function closeModal() {
     setIsModalOpen(false);
+  }
+  function openLoginModal() {
+    setIsLoginModalOpen(true);
+  }
+
+  function closeLoginModal() {
+    setIsLoginModalOpen(false);
   }
   return (
     // <nav className="bg-gradient-to-l from-[#1E1a39] via-[#14141F] to-[#14141F] text-white px-12 py-6 border-b border-[#4A4763]">
@@ -243,7 +256,7 @@ const Navbar = () => {
               />
             </svg>
             <div className="absolute top-10 left-0">
-              {isExploreMenuOpen && <ExploreDropDownMenu />}
+              {isExploreMenuOpen && <ExploreDropDownMenu items={menuItems} />}
             </div>
           </Link>
           <Link
@@ -262,13 +275,13 @@ const Navbar = () => {
             onClick={() => setIsModalOpen((state) => !state)}
             className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300 flex items-center relative"
           >
-            <img src="/Ailabs.png" alt="AI Labs" className="w-5 h-5 mr-2" />
+            <img
+              src="/Ailabs.png"
+              alt="AI Labs"
+              className="w-5 h-5 mr-2"
+              onClick={openModal}
+            />
             AI Labs
-            <div className="absolute top-10 left-0">
-              {isModalOpen && (
-                <AILabModal modalIsOpen={openModal} closeModal={closeModal} />
-              )}
-            </div>
           </p>
         </div>
 
@@ -304,21 +317,37 @@ const Navbar = () => {
             />
           </button>
           {!loggedin && (
-            <button className="text-white font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[50px] px-4 py-3 hover:text-gray-400 transition-all duration-300">
+            <button
+              onClick={openLoginModal}
+              className="text-white font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[50px] px-4 py-3 hover:text-gray-400 transition-all duration-300"
+            >
               Login
             </button>
           )}
 
           {loggedin && (
-            <button className="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center bg-[#8A8AA0]">
+            <button className="w-12 h-12  rounded-full flex items-center justify-center bg-[#8A8AA0]">
               <img src="/Cart.png" alt="Platform" className="w-6 h-6" />
             </button>
           )}
 
           {loggedin && (
-            <button className="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center bg-[#8A8AA0]">
+            <button className="w-12 h-12 rounded-full flex items-center justify-center bg-[#8A8AA0]">
               <img src="/woman.png" alt="Platform" className="w-full h-full" />
             </button>
+          )}
+        </div>
+        <div className="w-fit">
+          {isModalOpen && (
+            <AILabModal modalIsOpen={isModalOpen} closeModal={closeModal} />
+          )}
+        </div>
+        <div className="w-fit">
+          {isLoginModalOpen && (
+            <LoginModal
+              modalIsOpen={isLoginModalOpen}
+              closeModal={closeLoginModal}
+            />
           )}
         </div>
       </div>
