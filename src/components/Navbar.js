@@ -174,11 +174,12 @@ const Navbar = () => {
           )}
 
           {isLogin && (
-            <button className="w-12 h-12 rounded-full flex items-center justify-center bg-[#8A8AA0]">
+            <button className="w-12 h-12 rounded-full flex items-center justify-center bg-[#8A8AA0] relative">
               <img
                 src={user?.picture || "/woman.png"} // Use user.picture if available, otherwise fallback to woman.png
                 alt={user?.name || "User Profile"} // Use user's name for accessibility
                 className="w-full h-full rounded-full" // Ensure the image is styled as a circle
+                onClick={() => setIsProfileMenuOpen((prevState) => !prevState)}
               />
             </button>
           )}
@@ -193,6 +194,15 @@ const Navbar = () => {
             <LoginModal
               modalIsOpen={isLoginModalOpen}
               closeModal={closeLoginModal}
+            />
+          )}
+        </div>
+        <div className="w-fit absolute top-20 right-8 z-50">
+          {isProfileMenuOpen && (
+            <ProfileMenu
+              name="Irfan Ullah"
+              plan="Free"
+              setIsProfileMenuOpen={setIsProfileMenuOpen}
             />
           )}
         </div>

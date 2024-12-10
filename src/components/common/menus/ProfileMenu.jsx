@@ -1,6 +1,17 @@
 import React from "react";
+import { useAppData } from "../../../context/AppContext";
 
-const ProfileMenu = ({ name = "Irfan Ullah", plan = "Free" }) => {
+const ProfileMenu = ({
+  name = "Irfan Ullah",
+  plan = "Free",
+  setIsProfileMenuOpen,
+}) => {
+  const { handleLogout } = useAppData();
+
+  const handleClick = () => {
+    handleLogout();
+    setIsProfileMenuOpen(false);
+  };
   return (
     <div className="bg-[#343444] rounded-[20px] lg:w-[327px] flex flex-col gap-3">
       <div className="flex items-center justify-between px-3 pt-4">
@@ -40,7 +51,10 @@ const ProfileMenu = ({ name = "Irfan Ullah", plan = "Free" }) => {
         <button className="rounded-lg px-3 py-[5px] text-[14px] hover:bg-[#4f4f66]">
           Terms of Use
         </button>
-        <button className="border border-white rounded-3xl px-3 py-[4px] text-[14px] hover:bg-[#4f4f66]">
+        <button
+          onClick={handleClick}
+          className="border border-white rounded-3xl px-3 py-[4px] text-[14px] hover:bg-[#4f4f66]"
+        >
           Log Out
         </button>
       </div>
