@@ -12,6 +12,7 @@ export function useAppData() {
 export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Store user info
   const [authToken, setAuthToken] = useState(null); // Store JWT
+  const [isLogin, setIsLogin] = useState(false);
 
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
@@ -34,6 +35,7 @@ export const AppProvider = ({ children }) => {
 
       // Set user info and token in state
       setUser(response.data.user);
+      setIsLogin(true);
       setAuthToken(newAuthToken);
     } catch (error) {
       console.error("Error verifying user:", error);
@@ -93,6 +95,7 @@ export const AppProvider = ({ children }) => {
     }
     setUser(null); // Clear user state
     setAuthToken(null);
+    setIsLogin(false);
     console.log("User logged out");
   };
 
@@ -105,6 +108,7 @@ export const AppProvider = ({ children }) => {
         handleLoginSuccess,
         authToken,
         setAuthToken,
+        isLogin,
       }}
     >
       {children}

@@ -4,6 +4,7 @@ import AILabModal from "./modals/AILabModal";
 import ProfileMenu from "./common/menus/ProfileMenu";
 import ExploreDropDownMenu from "./common/menus/DropDownMenu";
 import LoginModal from "./modals/LoginModal";
+import { useAppData } from "../context/AppContext";
 
 const menuItems = [
   { name: "All Products" },
@@ -18,6 +19,7 @@ const Navbar = () => {
   const plans = () => {
     navigate("/plans");
   };
+  const { user, isLogin } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
@@ -316,7 +318,7 @@ const Navbar = () => {
               className="w-full h-full"
             />
           </button>
-          {!loggedin && (
+          {!isLogin && (
             <button
               onClick={openLoginModal}
               className="text-white font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[50px] px-4 py-3 hover:text-gray-400 transition-all duration-300"
