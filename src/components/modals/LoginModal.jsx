@@ -19,26 +19,40 @@ const LoginModal = ({ modalIsOpen, closeModal }) => {
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       ariaHideApp={false}
-      className="modal-content absolute top-24 right-8 w-fit"
+      className="modal-content absolute top-24 right-8 w-fit bg-[#2C2C47] rounded-xl p-6"
       overlayClassName="modal-overlay"
     >
-      <div className="">
-        <RoundedOutlineButton buttonName="Google" />
+      <div className="w-full text-left mb-4">
+        <h2 className="text-white text-xl font-semibold">
+          Sign in with Google
+        </h2>
       </div>
       <div onClick={closeModal}>
-        {!user ? (
+        <div
+          className="border-2 border-[#5750A2] rounded-full  inline-block"
+          style={{ width: "fit-content" }}
+        >
           <GoogleLogin
             onSuccess={handleLoginSuccess}
             onError={() => console.log("Login Failed")}
+            type="standard"
+            theme="filled_black"
+            size="large"
+            text="continue_with"
+            shape="pill"
+            logo_alignment="center"
+            width="400"
+            locale="en"
           />
-        ) : (
-          <div>
-            <h2>Welcome, {user.name}</h2>
-            <img src={user.picture} alt={user.name} />
-            <p>Email: {user.email}</p>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-        )}
+          {/* <button
+            // onClick={handleNavigateToEmailLogin}
+            className="flex items-center justify-center border-2 border-[#5750A2] bg-[#2C2C47] text-white rounded-full py-3 px-6 w-[400px] hover:bg-[#33335A] transition duration-200 cursor-pointer"
+          >
+            <span className="text-white font-medium text-lg">
+              Login with Email
+            </span>
+          </button> */}
+        </div>
       </div>
     </Modal>
   );
