@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Headingpage from "../components/HeadingPage";
 import Card from "../components/Card";
 import { totalCards } from "../data/totalcards";
@@ -16,7 +16,9 @@ const Explore = () => {
   const [isActive, setIsActive] = useState("All");
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
   const [isAllNetworkMenuOpen, setIsAllNetworkMenuOpen] = useState(false);
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top-left corner of the page
+  }, []);
   const handleShowMore = () => {
     setVisibleCards(visibleCards + 4); // Show 4 more cards
   };

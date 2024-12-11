@@ -1,30 +1,58 @@
-import React, { useState } from "react";
+// import React from "react";
+// import { useParams, useLocation } from "react-router-dom";
+
+// const ModelDetails = () => {
+//   const { title } = useParams(); // Extract title from URL
+//   const location = useLocation();
+//   const cardData = location.state || {}; // Use the state passed from navigation
+
+//   console.log("Title from URL:", title);
+//   console.log("Card data from state:", cardData);
+
+//   return (
+//     <div>
+//       <h1>Product Detail for {title}</h1>
+//       {/* Use cardData to display more details */}
+//       <p>Description: {cardData.asset_data?.description}</p>
+//       <p>Price: ${cardData.asset_data?.price}</p>
+//       <p>Discount: {cardData.asset_data?.discount}</p>
+//       {/* Add more details as needed */}
+//     </div>
+//   );
+// };
+
+// export default ModelDetails;
+
+import React, { useState, useEffect } from "react";
 import RoundedOutlineButton from "../components/common/buttons/RoundedOutlineButton";
 import Headingpage from "../components/HeadingPage";
 import ScrollableCards from "../components/common/scrollable-cards/ScrollableCards";
 import Card from "../components/Card";
 import { totalCards } from "../data/totalcards";
-import { useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 const ModelDetails = () => {
-  const [isRated, setIsRated] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
+  const { productId } = useParams();
   const [activeTab, setActiveTab] = useState("details");
-  const handleRateProductClick = () => {
-    setIsRated(true);
-    setIsSelected(true);
-  };
-
+  const { title } = useParams(); // Extract title from URL
   const location = useLocation();
-  const data = location.state;
+  const cardData = location.state || {}; // Use the state passed from navigation
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top-left corner of the page
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
       <Headingpage pagename={"Model Details"} secondheading={"Model Details"} />
       <div className="w-full flex items-center justify-center text-white">
-        <div className="w-full sm:w-[80%] md:w-[70%] lg:w-[66%] flex flex-col md:flex-row items-start gap-16">
-          <div className="relative flex-1">
-            <img src="/experience.png" alt="" className="w-full rounded-xl" />
+        <div className="w-full sm:w-[80%] md:w-[70%] lg:w-[66%] flex flex-col md:flex-row items-start gap-28">
+          <div className="relative flex-1 bg-[#DC90FF] rounded-lg">
+            <img
+              src={cardData.asset_data.url}
+              alt=""
+              className="w-full rounded-xl"
+            />
 
             <div className="absolute top-4 right-4 flex gap-4">
               <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
@@ -33,17 +61,23 @@ const ModelDetails = () => {
               </div>
               <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
                 <img src="/save-filled.png" alt="icon2" className="w-4 h-4" />
-                <span className="font-semibold">{data.savedCount}</span>
+                <span className="font-semibold">
+                  {cardData.asset_data.metadata.bookmark}
+                </span>
               </div>
             </div>
 
             <div className="absolute bottom-4 right-4 bg-[#70598C] text-white p-3 rounded-lg flex items-center gap-2">
-              <img src="/creatorImage.png" alt="Powered By" className="w-12" />
+              <img
+                src={cardData.asset_data.creatorLogo}
+                alt="Powered By"
+                className="w-12"
+              />
               <span className="font-700 text-[14px]">
                 <span className="text-[#8A8AA0] text-[13px] font-400 block">
                   Powered
                 </span>{" "}
-                By Zeniva
+                By {cardData.asset_data.creatorName}
               </span>
             </div>
           </div>
@@ -51,7 +85,7 @@ const ModelDetails = () => {
           <div className="flex flex-col flex-1 items-start gap-6">
             <div className="text-white text-3xl sm:text-4xl md:text-[36px]">
               {/* "The Fantasy Flower illustration" */}
-              {data.title}
+              {title}
             </div>
 
             <div className="flex items-start justify-between w-full">
@@ -59,19 +93,25 @@ const ModelDetails = () => {
                 <div className="w-full">
                   <div className="py-1 px-3 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
                     <img src="/star.png" alt="" className="w-4 h-4" />
-                    <span className="text-white">{data.starCount}</span>
+                    <span className="text-white">
+                      {cardData.asset_data.metadata?.stars}
+                    </span>
                   </div>
                 </div>
                 <div className="w-full">
                   <div className="py-1 px-3 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
                     <img src="/heart.png" alt="" className="w-4 h-4" />
-                    <span className="text-white">{data.heartCount}</span>
+                    <span className="text-white">
+                      {cardData.asset_data.metadata?.favourite}
+                    </span>
                   </div>
                 </div>
                 <div className="w-full">
                   <div className="py-1 px-3 bg-slate-800 flex gap-2 rounded-lg items-center justify-center">
                     <img src="/smiley.png" alt="" className="w-4 h-4" />
-                    <span className="text-white">{data.smileyCount}</span>
+                    <span className="text-white">
+                      {cardData.asset_data.metadata?.smiley}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -91,7 +131,7 @@ const ModelDetails = () => {
                 Price
               </p>
               <h3 className="font-urbanist font-bold text-[24px] leading-[26px]">
-                {data.price} EXA
+                {cardData.asset_data.price} EXA
               </h3>
             </div>
 
@@ -138,19 +178,7 @@ const ModelDetails = () => {
               <div className="pt-4">
                 {activeTab === "details" ? (
                   <div className="text-sm text-white">
-                    <div>
-                      Habitant sollicitudin faucibus cursus lectus pulvinar
-                      dolor non ultrices eget. Facilisi lobortisal morbi
-                      fringilla urna amet sed ipsum vitae ipsum malesuada.
-                      Habitant sollicitudin faucibus cursus lectus pulvinar
-                      dolor non ultrices eget. Facilisi lobortisal morbi
-                      fringilla urna amet sed ipsum. Habitant sollicitudin
-                      faucibus cursus lectus pulvinar dolor non ultrices eget.
-                      Facilisi lobortisal morbi fringilla urna amet sed ipsum
-                      vitae ipsum malesuada. Habitant sollicitudin faucibus
-                      cursus lectus pulvinar dolor non ultrices eget. Facilisi
-                      lobortisal morbi fringilla urna amet sed ipsum
-                    </div>
+                    <div>{cardData.asset_data.description}</div>
                   </div>
                 ) : (
                   <div className="text-sm text-gray-300">
