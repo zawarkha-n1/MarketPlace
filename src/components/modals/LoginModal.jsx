@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import RoundedOutlineButton from "./../common/buttons/RoundedOutlineButton";
 import { GoogleLogin } from "@react-oauth/google";
 import { useAppData } from "../../context/AppContext";
+import axios from "axios";
 
 const LoginModal = ({ modalIsOpen, closeModal }) => {
   const navigate = useNavigate();
-  const { user, handleLoginSuccess, handleLogout } = useAppData();
+  const { handleLoginSuccess } = useAppData();
 
   const handleNavigate = () => {
     navigate("/create-model");
@@ -44,16 +45,20 @@ const LoginModal = ({ modalIsOpen, closeModal }) => {
             width="400"
             locale="en"
           />
-          {/* <button
-            // onClick={handleNavigateToEmailLogin}
-            className="flex items-center justify-center border-2 border-[#5750A2] bg-[#2C2C47] text-white rounded-full py-3 px-6 w-[400px] hover:bg-[#33335A] transition duration-200 cursor-pointer"
-          >
-            <span className="text-white font-medium text-lg">
-              Login with Email
-            </span>
-          </button> */}
         </div>
       </div>
+      {/* <div
+        onClick={closeModal}
+        className="border-2 border-[#5750A2] rounded-full inline-block mt-4 bg-[#2C2C47] hover:bg-[#33335A] transition duration-200"
+        style={{ width: "400px" }}
+      >
+        <button
+          className="w-full py-3 text-center text-white font-medium text-lg"
+          onClick={handleEmailSignIn}
+        >
+          Sign in with Email
+        </button>
+      </div> */}
     </Modal>
   );
 };

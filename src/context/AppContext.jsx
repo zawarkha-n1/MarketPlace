@@ -13,6 +13,7 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Store user info
   const [authToken, setAuthToken] = useState(null); // Store JWT
   const [isLogin, setIsLogin] = useState(false);
+  const [exaCredits, setExaCredits] = useState(0);
 
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
@@ -35,6 +36,7 @@ export const AppProvider = ({ children }) => {
       setUser(response.data.user);
       setIsLogin(true);
       setAuthToken(newAuthToken);
+      setExaCredits(response.data.user.exaCredits);
     } catch (error) {
       console.error("Error verifying user:", error);
     }
@@ -59,6 +61,7 @@ export const AppProvider = ({ children }) => {
         } else {
           // Restore user session
           setAuthToken(token);
+          setIsLogin(true);
           setUser({
             id: decodedToken.id,
             email: decodedToken.email,
@@ -97,6 +100,40 @@ export const AppProvider = ({ children }) => {
     console.log("User logged out");
   };
 
+  // const handleEmailSignIn = async () => {
+  //   const email = "zawdsdsdddddar@gsssmail.com";
+  //   const password = "userpddddddddassword";
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:5000/sign-in-with-email",
+  //       {
+  //         email,
+  //         password,
+  //       }
+  //     );
+
+  //     console.log("User signed in successfully:", response.data);
+
+  //     // Save token to local storage or context
+  //     setAuthToken(response.data.token);
+  //     localStorage.setItem("authToken", response.data.token);
+
+  //     // Update state in context
+  //     setUser(response.data.user);
+  //     setIsLogin(true);
+  //   } catch (error) {
+  //     if (
+  //       error.response &&
+  //       error.response.data.message ===
+  //         "Email already exists. Please continue with Google Sign-In."
+  //     ) {
+  //       alert("Email already exists. Please continue with Google Sign-In.");
+  //     } else {
+  //       console.error("Error signing in with email:", error);
+  //     }
+  //   }
+  // };
+
   return (
     <AppContext.Provider
       value={{
@@ -107,6 +144,8 @@ export const AppProvider = ({ children }) => {
         authToken,
         setAuthToken,
         isLogin,
+        // handleEmailSignIn,
+        exaCredits,
       }}
     >
       {children}

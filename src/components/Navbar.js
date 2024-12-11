@@ -15,7 +15,7 @@ const menuItems = [
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, isLogin } = useAppData();
+  const { user, isLogin, exaCredits } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
@@ -131,7 +131,7 @@ const Navbar = () => {
           {isLogin && (
             <button className="flex items-center text-[#8A7FFF] font-urbanist font-bold text-[15px] leading-[22px] border border-[#5750A2] rounded-[24px] px-1 py-2 hover:text-gray-400 transition-all duration-300">
               <img src="/coin.png" alt="Coin" className="w-full h-full mr-2" />
-              <div className="text-center flex-grow">50</div>{" "}
+              <div className="text-center flex-grow">{exaCredits}</div>{" "}
               {/* Replace with dynamic number */}
               <img
                 src="/plus.png"

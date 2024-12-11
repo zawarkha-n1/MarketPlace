@@ -6,7 +6,7 @@ const ProfileMenu = ({
   plan = "Free",
   setIsProfileMenuOpen,
 }) => {
-  const { handleLogout } = useAppData();
+  const { handleLogout, user } = useAppData();
 
   const handleClick = () => {
     handleLogout();
@@ -16,7 +16,7 @@ const ProfileMenu = ({
     <div className="bg-[#343444] rounded-[20px] lg:w-[327px] flex flex-col gap-3">
       <div className="flex items-center justify-between px-3 pt-4">
         <h1 className="flex-1 font-urbanist font-bold text-[16px] leading-[22px]">
-          {name}
+          {user.name}
         </h1>
         <div className="bg-customIndigo text-white text-center px-2 py-1 rounded-2xl">
           {plan}
