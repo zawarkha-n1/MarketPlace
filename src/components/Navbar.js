@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AILabModal from "./modals/AILabModal";
 import ProfileMenu from "./common/menus/ProfileMenu";
-import ExploreDropDownMenu from "./common/menus/DropDownMenu";
+import DropDownMenu from "./common/menus/DropDownMenu";
 import LoginModal from "./modals/LoginModal";
 import { useAppData } from "../context/AppContext";
 
 const menuItems = [
-  { name: "All Products" },
-  { name: "3D Models" },
-  { name: "Textures" },
-  { name: "Music" },
+  { name: "All Products", type: "All" },
+  { name: "3D Models", type: "3d" },
+  { name: "Textures", type: "texture" },
+  { name: "Experience", type: "experience" },
 ];
 
 const Navbar = () => {
@@ -20,6 +20,7 @@ const Navbar = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const plans = () => {
     navigate("/plans");
@@ -42,6 +43,13 @@ const Navbar = () => {
   function closeLoginModal() {
     setIsLoginModalOpen(false);
   }
+
+  const handleExploreBtnClick = (itemName) => {
+    const selectedItem = menuItems.find((item) => item.name === itemName);
+    setSelectedItem(selectedItem.name);
+    navigate(`/explore/${selectedItem.type}`); // Pass the card.type to the URL
+  };
+
   return (
     <nav className="bg-gradient-to-l from-[#1E1a39] via-[#14141F] to-[#14141F] text-white px-12 py-6 border-b border-[#4A4763]">
       <div className="flex justify-between items-center w-full">
@@ -78,7 +86,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-6 text-white w-auto  ml-20">
-          <Link
+          <div
             className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300 flex items-center relative"
             onClick={() => setIsExploreMenuOpen((state) => !state)}
           >
@@ -97,10 +105,15 @@ const Navbar = () => {
                 d="M19 9l-7 7-7-7"
               />
             </svg>
-            <div className="absolute top-10 left-0">
-              {isExploreMenuOpen && <ExploreDropDownMenu items={menuItems} />}
+            <div className="absolute top-10 left-0 z-50">
+              {isExploreMenuOpen && (
+                <DropDownMenu
+                  items={menuItems}
+                  onClick={handleExploreBtnClick}
+                />
+              )}
             </div>
-          </Link>
+          </div>
           <Link
             to="/library"
             className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300"

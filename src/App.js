@@ -27,7 +27,7 @@ const App = () => {
             <Route path="/create-model" element={<GenerateModel />} />
             <Route path="/plans" element={<Plans />} />
             <Route path="/library" element={<Library />} />
-            <Route path="/explore" element={<Explore />} />
+            <Route path="/explore/:itemName" element={<Explore />} />
             <Route path="/saved-products" element={<SavedProducts />} />
             <Route path="/product/:productId" element={<ModelDetails />} />
             <Route path="/cart" element={<Cart />} />

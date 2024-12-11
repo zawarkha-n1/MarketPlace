@@ -440,7 +440,7 @@ const Home = () => {
           </h2>
           <div className="relative">
             <Link
-              to={"/explore"}
+              to={"/explore/All"}
               className="text-white text-[14px] font-bold leading-[44px] font-urbanist tracking-[1.4px] uppercase custom-underline hover:text-[#5750A2]"
             >
               EXPLORE MORE
