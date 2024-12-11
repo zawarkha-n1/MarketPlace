@@ -3,6 +3,7 @@ import { totalCards } from "../data/totalcards.js";
 import HeroCard from "../components/HeroCard.js";
 import Card from "../components/Card.js";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppData } from "../context/AppContext.jsx";
 
 const Home = () => {
   // States for pagination in each section
@@ -11,6 +12,8 @@ const Home = () => {
   const [popularIndex, setPopularIndex] = useState(0);
   const [textureIndex, setTextureIndex] = useState(0);
   const [experienceIndex, setExperienceIndex] = useState(0);
+  const { assets, fetchAssets } = useAppData();
+  console.log(assets);
 
   let inlibrary = false;
   const [filter, setFilter] = useState("All");
@@ -559,7 +562,7 @@ const Home = () => {
 
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
-          {totalCards
+          {/* {totalCards
             .filter((card) => card.type === "texture") // Filter for only "Experience" type
             .slice(textureIndex, textureIndex + 4)
             .map((card, index) => (
@@ -575,6 +578,26 @@ const Home = () => {
                 inlibrary={inlibrary}
                 bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
                 image={card.image}
+              />
+            ))} */}
+          {assets
+            .filter((card) => card.asset_data.type === "texture") // Filter for only "Experience" type
+            .slice(textureIndex, textureIndex + 4)
+            .map((card, index) => (
+              <Card
+                key={index}
+                title={card.asset_data.title}
+                discount={card.asset_data.discount}
+                price={card.asset_data.price}
+                starcount={card.asset_data.metadata.stars}
+                heartcount={card.asset_data.metadata.favourite}
+                savedcount={card.asset_data.metadata.bookmark}
+                smileycount={card.asset_data.metadata.promotion.length} // Example use
+                inlibrary={inlibrary}
+                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                image={card.asset_data.url}
+                creatorImage={card.asset_data.creatorLogo}
+                creatorName={card.asset_data.creatorName}
               />
             ))}
         </div>
