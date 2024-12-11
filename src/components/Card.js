@@ -12,6 +12,8 @@ const Card = ({
   bgcolor,
   image,
   onClick,
+  creatorImage,
+  creatorName,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
 
@@ -31,7 +33,7 @@ const Card = ({
         className="w-full h-[297px] bg-cover bg-center rounded-[15px] mb-4 relative"
         style={{
           backgroundColor: bgcolor,
-          backgroundImage: `url('/${image}')`, // Replace with your image path
+          backgroundImage: `url(${image})`,
         }}
       >
         {/* Box Positioned at Top Right */}
@@ -190,7 +192,7 @@ const Card = ({
               color: "var(--On-Surface, #FFF)", // Discount color
             }}
           >
-            {discount}
+            {`${discount} %`}
           </span>
         )}
       </div>
@@ -200,7 +202,7 @@ const Card = ({
           {/* Left Section: Image in a Square Div */}
           <div className="w-[50px] h-[50px] bg-gray-200 rounded-[20px] overflow-hidden">
             <img
-              src="/creatorImage.png"
+              src={creatorImage}
               alt="Creator"
               className="w-full h-full object-cover"
             />
@@ -212,7 +214,7 @@ const Card = ({
               Creator
             </span>
             <span className="text-[#EBEBEB] text-[15px] font-semibold leading-[22px] capitalize">
-              exarta
+              {creatorName || "exartaaaaa"}
             </span>
           </div>
 
@@ -222,7 +224,7 @@ const Card = ({
               Price
             </span>
             <span className="text-[#EBEBEB] text-[15px] font-semibold leading-[22px] capitalize">
-              {price ? price : "FREE"}
+              {price ? `${price} EXA` : "FREE"}
             </span>
           </div>
         </div>

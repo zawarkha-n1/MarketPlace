@@ -3,6 +3,7 @@ import { totalCards } from "../data/totalcards.js";
 import HeroCard from "../components/HeroCard.js";
 import Card from "../components/Card.js";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppData } from "../context/AppContext.jsx";
 
 const Home = () => {
   // States for pagination in each section
@@ -11,6 +12,7 @@ const Home = () => {
   const [popularIndex, setPopularIndex] = useState(0);
   const [textureIndex, setTextureIndex] = useState(0);
   const [experienceIndex, setExperienceIndex] = useState(0);
+  const { assets, fetchAssets } = useAppData();
 
   let inlibrary = false;
   const [filter, setFilter] = useState("All");
@@ -18,12 +20,6 @@ const Home = () => {
   // State to store shuffled cards for Top Picks and Top Deals
   const [shuffledTopPicks, setShuffledTopPicks] = useState([]);
   const [shuffledTopDeals, setShuffledTopDeals] = useState([]);
-
-  // Filtered cards based on the selected filter
-  const filteredCards = totalCards.filter((card) => {
-    if (filter === "All") return true;
-    return card.type === filter;
-  });
 
   // Shuffle cards function (this will be used only once to shuffle the data)
   const shuffleCards = (cards) => {
@@ -40,8 +36,8 @@ const Home = () => {
 
   // Shuffle cards once when the component mounts or when the filter changes
   useEffect(() => {
-    setShuffledTopPicks(shuffleCards(totalCards));
-    setShuffledTopDeals(shuffleCards(totalCards));
+    setShuffledTopPicks(shuffleCards(assets));
+    setShuffledTopDeals(shuffleCards(assets));
   }, [filter]); // Dependency on filter so that it reshuffles when the filter is changed
 
   // Handle page changes for pagination (next and prev)
@@ -58,16 +54,20 @@ const Home = () => {
         break;
       case "popular":
         index = popularIndex;
-        maxLength = filteredCards.length;
+        maxLength = assets.filter(
+          (card) => filter === "All" || card.asset_data.type === filter
+        ).length; // Filter based on the current filter value
         break;
       case "texture":
         index = textureIndex;
-        maxLength = totalCards.filter((card) => card.type === "texture").length;
+        maxLength = assets.filter(
+          (card) => card.asset_data.type === "texture"
+        ).length; // Use the correct array
         break;
       case "experience":
         index = experienceIndex;
-        maxLength = totalCards.filter(
-          (card) => card.type === "experience"
+        maxLength = assets.filter(
+          (card) => card.asset_data.type === "experience"
         ).length;
         break;
       default:
@@ -148,16 +148,18 @@ const Home = () => {
         totalItems = shuffledTopDeals.length;
         break;
       case "popular":
-        totalItems = filteredCards.length;
+        totalItems = assets.filter(
+          (card) => filter === "All" || card.asset_data.type === filter
+        ).length;
         break;
       case "texture":
-        totalItems = totalCards.filter(
-          (card) => card.type === "texture"
+        totalItems = assets.filter(
+          (card) => card.asset_data.type === "texture"
         ).length;
         break;
       case "experience":
-        totalItems = totalCards.filter(
-          (card) => card.type === "experience"
+        totalItems = assets.filter(
+          (card) => card.asset_data.type === "experience"
         ).length;
         break;
       default:
@@ -169,7 +171,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleCardClick = (card) => {
-    navigate(`/product/${card.title}`, {
+    navigate(`/product/${card.asset_data.title}`, {
       state: card,
     });
   };
@@ -198,16 +200,18 @@ const Home = () => {
             .map((card, index) => (
               <Card
                 key={index}
-                title={card.title}
-                discount={card.discount}
-                price={card.price}
-                starcount={card.starCount}
-                heartcount={card.heartCount}
-                savedcount={card.savedCount}
-                smileycount={card.smileyCount}
+                title={card.asset_data.title}
+                discount={card.asset_data.discount}
+                price={card.asset_data.price}
+                starcount={card.asset_data.metadata.stars}
+                heartcount={card.asset_data.metadata.favourite}
+                savedcount={card.asset_data.metadata.bookmark}
+                smileycount={card.asset_data.metadata.smiley}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
-                image={card.image}
+                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                image={card.asset_data.url}
+                creatorImage={card.asset_data.creatorLogo}
+                creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
               />
             ))}
@@ -280,16 +284,19 @@ const Home = () => {
             .map((card, index) => (
               <Card
                 key={index}
-                title={card.title}
-                discount={card.discount}
-                price={card.price}
-                starcount={card.starCount}
-                heartcount={card.heartCount}
-                savedcount={card.savedCount}
-                smileycount={card.smileyCount}
+                title={card.asset_data.title}
+                discount={card.asset_data.discount}
+                price={card.asset_data.price}
+                starcount={card.asset_data.metadata.stars}
+                heartcount={card.asset_data.metadata.favourite}
+                savedcount={card.asset_data.metadata.bookmark}
+                smileycount={card.asset_data.metadata.smiley}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
-                image={card.image}
+                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                image={card.asset_data.url}
+                creatorImage={card.asset_data.creatorLogo}
+                creatorName={card.asset_data.creatorName}
+                onClick={() => handleCardClick(card)}
               />
             ))}
         </div>
@@ -362,22 +369,25 @@ const Home = () => {
 
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
-          {totalCards
-            .filter((card) => card.type === "experience")
-            .slice(experienceIndex, experienceIndex + 4)
+          {assets
+            .filter((card) => card.asset_data.type === "experience") // Filter for experience cards
+            .slice(experienceIndex, experienceIndex + 4) // Paginate with experienceIndex
             .map((card, index) => (
               <Card
                 key={index}
-                title={card.title}
-                discount={card.discount}
-                price={card.price}
-                starcount={card.starCount}
-                heartcount={card.heartCount}
-                savedcount={card.savedCount}
-                smileycount={card.smileyCount}
+                title={card.asset_data.title}
+                discount={card.asset_data.discount}
+                price={card.asset_data.price}
+                starcount={card.asset_data.metadata.stars}
+                heartcount={card.asset_data.metadata.favourite}
+                savedcount={card.asset_data.metadata.bookmark}
+                smileycount={card.asset_data.metadata.smiley}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
-                image={card.image}
+                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                image={card.asset_data.url}
+                creatorImage={card.asset_data.creatorLogo}
+                creatorName={card.asset_data.creatorName}
+                onClick={() => handleCardClick(card)}
               />
             ))}
         </div>
@@ -480,21 +490,27 @@ const Home = () => {
 
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
-          {filteredCards
-            .slice(popularIndex, popularIndex + 4)
+          {assets
+            .filter(
+              (card) => filter === "All" || card.asset_data.type === filter
+            ) // Filter by current filter value
+            .slice(popularIndex, popularIndex + 4) // Paginate based on the current index
             .map((card, index) => (
               <Card
                 key={index}
-                title={card.title}
-                discount={card.discount}
-                price={card.price}
-                starcount={card.starCount}
-                heartcount={card.heartCount}
-                savedcount={card.savedCount}
-                smileycount={card.smileyCount}
+                title={card.asset_data.title}
+                discount={card.asset_data.discount}
+                price={card.asset_data.price}
+                starcount={card.asset_data.metadata.stars}
+                heartcount={card.asset_data.metadata.favourite}
+                savedcount={card.asset_data.metadata.bookmark}
+                smileycount={card.asset_data.metadata.smiley}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Set alternating background color
-                image={card.image}
+                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                image={card.asset_data.url}
+                creatorImage={card.asset_data.creatorLogo}
+                creatorName={card.asset_data.creatorName}
+                onClick={() => handleCardClick(card)}
               />
             ))}
         </div>
@@ -559,22 +575,25 @@ const Home = () => {
 
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
-          {totalCards
-            .filter((card) => card.type === "texture") // Filter for only "Experience" type
+          {assets
+            .filter((card) => card.asset_data.type === "texture") // Filter for only "Experience" type
             .slice(textureIndex, textureIndex + 4)
             .map((card, index) => (
               <Card
                 key={index}
-                title={card.title}
-                discount={card.discount}
-                price={card.price}
-                starcount={card.starCount}
-                heartcount={card.heartCount}
-                savedcount={card.savedCount}
-                smileycount={card.smileyCount}
+                title={card.asset_data.title}
+                discount={card.asset_data.discount}
+                price={card.asset_data.price}
+                starcount={card.asset_data.metadata.stars}
+                heartcount={card.asset_data.metadata.favourite}
+                savedcount={card.asset_data.metadata.bookmark}
+                smileycount={card.asset_data.metadata.smiley} // Example use
                 inlibrary={inlibrary}
                 bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
-                image={card.image}
+                image={card.asset_data.url}
+                creatorImage={card.asset_data.creatorLogo}
+                creatorName={card.asset_data.creatorName}
+                onClick={() => handleCardClick(card)}
               />
             ))}
         </div>

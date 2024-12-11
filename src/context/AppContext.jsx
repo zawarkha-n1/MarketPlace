@@ -14,6 +14,7 @@ export const AppProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(null); // Store JWT
   const [isLogin, setIsLogin] = useState(false);
   const [exaCredits, setExaCredits] = useState(0);
+  const [assets, setAssets] = useState([]); // Global assets data
 
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
@@ -23,16 +24,12 @@ export const AppProvider = ({ children }) => {
         `${"http://172.16.15.155:5000"}/verify-token`,
         { token }
       );
-
       console.log("User verified successfully:", response.data.user);
 
-      // Store the custom JWT in localStorage
       const newAuthToken = response.data.token;
       if (typeof window !== "undefined") {
         localStorage.setItem("authToken", newAuthToken);
       }
-
-      // Set user info and token in state
       setUser(response.data.user);
       setIsLogin(true);
       setAuthToken(newAuthToken);
@@ -134,6 +131,20 @@ export const AppProvider = ({ children }) => {
   //   }
   // };
 
+  const fetchAssets = async () => {
+    try {
+      const response = await axios.get("http://172.16.15.155:5000/assets");
+      setAssets(response.data); // Save fetched data to global variable
+      console.log("Fetched Assets Data:", response.data); // Log fetched data
+    } catch (error) {
+      console.error("Error fetching assets:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssets(); // Fetch assets when the app context is initialized
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
@@ -146,6 +157,8 @@ export const AppProvider = ({ children }) => {
         isLogin,
         // handleEmailSignIn,
         exaCredits,
+        assets, // Expose assets in context
+        fetchAssets, // Optional: Expose fetch function for manual refresh
       }}
     >
       {children}

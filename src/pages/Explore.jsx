@@ -164,6 +164,9 @@ const Explore = () => {
   const [visibleCards, setVisibleCards] = useState(8);
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
   const [isAllNetworkMenuOpen, setIsAllNetworkMenuOpen] = useState(false);
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top-left corner of the page
+  }, []);
   const [networkFilter, setNetworkFilter] = useState("All Products"); // Track the selected network
   const { itemName } = useParams();
 
