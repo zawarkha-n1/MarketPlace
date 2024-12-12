@@ -27,48 +27,47 @@ export const AppProvider = ({ children }) => {
       console.log("User verified successfully:", response.data.user);
 
       const newAuthToken = response.data.token;
+      const userData = response.data.user;
+
       if (typeof window !== "undefined") {
         localStorage.setItem("authToken", newAuthToken);
+        localStorage.setItem("user", JSON.stringify(userData)); // Save user data to local storage
       }
-      setUser(response.data.user);
+
+      setUser(userData);
       setIsLogin(true);
       setAuthToken(newAuthToken);
-      setExaCredits(response.data.user.exaCredits);
+      setExaCredits(userData.exaCredits);
     } catch (error) {
       console.error("Error verifying user:", error);
     }
   };
-
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Check for an existing token in localStorage on page load
     const token = localStorage.getItem("authToken");
+    const userData = localStorage.getItem("user"); // Get user data from localStorage
 
-    if (token) {
+    if (token && userData) {
       try {
-        const decodedToken = jwtDecode(token); // Decode the JWT
-        console.log("Decoded token:", decodedToken);
-
-        // Check if the token is expired
+        const decodedToken = jwtDecode(token);
         const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
         if (decodedToken.exp < currentTime) {
           console.log("Token expired, clearing storage");
           localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
         } else {
-          // Restore user session
+          // Restore authToken and user state
           setAuthToken(token);
           setIsLogin(true);
-          setUser({
-            id: decodedToken.id,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            picture: decodedToken.picture,
-          });
+          setUser(JSON.parse(userData)); // Parse and set the user data
+          setExaCredits(JSON.parse(userData).exaCredits || 0); // Restore credits
         }
       } catch (err) {
         console.error("Error decoding token:", err);
         localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
       }
     }
   }, []); // Run once on component mount
@@ -94,42 +93,9 @@ export const AppProvider = ({ children }) => {
     setUser(null); // Clear user state
     setAuthToken(null);
     setIsLogin(false);
+    localStorage.removeItem("user");
     console.log("User logged out");
   };
-
-  // const handleEmailSignIn = async () => {
-  //   const email = "zawdsdsdddddar@gsssmail.com";
-  //   const password = "userpddddddddassword";
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:5000/sign-in-with-email",
-  //       {
-  //         email,
-  //         password,
-  //       }
-  //     );
-
-  //     console.log("User signed in successfully:", response.data);
-
-  //     // Save token to local storage or context
-  //     setAuthToken(response.data.token);
-  //     localStorage.setItem("authToken", response.data.token);
-
-  //     // Update state in context
-  //     setUser(response.data.user);
-  //     setIsLogin(true);
-  //   } catch (error) {
-  //     if (
-  //       error.response &&
-  //       error.response.data.message ===
-  //         "Email already exists. Please continue with Google Sign-In."
-  //     ) {
-  //       alert("Email already exists. Please continue with Google Sign-In.");
-  //     } else {
-  //       console.error("Error signing in with email:", error);
-  //     }
-  //   }
-  // };
 
   const fetchAssets = async () => {
     try {
