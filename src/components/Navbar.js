@@ -46,8 +46,11 @@ const Navbar = () => {
 
   const handleExploreBtnClick = (itemName) => {
     const selectedItem = menuItems.find((item) => item.name === itemName);
-    setSelectedItem(selectedItem.name);
-    navigate(`/explore/${selectedItem.type}`); // Pass the card.type to the URL
+    if (selectedItem) {
+      setSelectedItem(selectedItem.name);
+      navigate(`/explore/${selectedItem.type}`); // Pass the type to the URL
+      setIsExploreMenuOpen(false); // Close the dropdown
+    }
   };
 
   return (
@@ -87,8 +90,11 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-6 text-white w-auto  ml-20">
           <div
-            className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300 flex items-center relative"
-            onClick={() => setIsExploreMenuOpen((state) => !state)}
+            className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300 flex items-center relative cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent parent clicks from closing the dropdown
+              setIsExploreMenuOpen((state) => !state); // Toggle dropdown
+            }}
           >
             Explore
             <svg
@@ -105,11 +111,15 @@ const Navbar = () => {
                 d="M19 9l-7 7-7-7"
               />
             </svg>
-            <div className="absolute top-10 left-0 z-50">
+            <div
+              className="absolute top-10 left-0 z-50"
+              onClick={(e) => e.stopPropagation()} // Prevent dropdown from closing on item click
+            >
               {isExploreMenuOpen && (
                 <DropDownMenu
                   items={menuItems}
                   onClick={handleExploreBtnClick}
+                  closeDropdown={() => setIsExploreMenuOpen(false)} // Ensure dropdown closes
                 />
               )}
             </div>

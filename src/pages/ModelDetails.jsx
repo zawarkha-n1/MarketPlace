@@ -44,7 +44,7 @@ const ModelDetails = () => {
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
-      <Headingpage pagename={"Model Details"} secondheading={"Model Details"} />
+      <Headingpage pagename={"Model Details"} secondheading={"Explore"} />
       <div className="w-full flex items-center justify-center text-white">
         <div className="w-full sm:w-[80%] md:w-[70%] lg:w-[66%] flex flex-col md:flex-row items-start gap-28">
           <div className="relative flex-1 bg-[#DC90FF] rounded-lg">
@@ -131,7 +131,9 @@ const ModelDetails = () => {
                 Price
               </p>
               <h3 className="font-urbanist font-bold text-[24px] leading-[26px]">
-                {cardData.asset_data.price} EXA
+                {cardData.asset_data.price == 0
+                  ? "Free"
+                  : `${cardData.asset_data.price} EXA`}
               </h3>
             </div>
 
