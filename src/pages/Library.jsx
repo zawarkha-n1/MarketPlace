@@ -100,7 +100,7 @@ const Library = () => {
       ) : (
         <>
           {/* Category Buttons */}
-          <div className="w-[70%]  mb-8 flex justify-between">
+          <div className="w-[65%]  mb-8 flex justify-between">
             <div className="flex space-x-4 w-auto">
               {["All", "3d", "experience", "texture"].map((btn, index) => (
                 <button
@@ -156,8 +156,8 @@ const Library = () => {
             </div>
           </div>
 
-          <div className="flex justify-center mb-8 w-[70%] 2xl:min-h-[800px]">
-            <div className="grid grid-rows-1 grid-cols-4 gap-16">
+          <div className="flex justify-center mb-8 w-[70%] 2xl:min-h-[600px]">
+            <div className="grid grid-rows-2 grid-cols-4 gap-10">
               {displayedAssets.slice(0, visibleCards).map((card, index) => (
                 <Card
                   key={index}
