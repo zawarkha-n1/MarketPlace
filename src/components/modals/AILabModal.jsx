@@ -13,7 +13,7 @@ const AILabModal = ({ modalIsOpen, closeModal }) => {
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       ariaHideApp={false}
-      className="modal-content absolute top-24 right-8 w-fit"
+      className="modal-content absolute top-20 right-1/4 w-fit"
       overlayClassName="modal-overlay"
     >
       <div className="space-y-2 bg-[#343444] py-3">

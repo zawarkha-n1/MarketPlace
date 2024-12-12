@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AILabModal from "./modals/AILabModal";
 import ProfileMenu from "./common/menus/ProfileMenu";
@@ -53,6 +53,44 @@ const Navbar = () => {
     }
   };
 
+  const exploreMenuRef = useRef(null); // Ref to track the dropdown container
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        exploreMenuRef.current &&
+        !exploreMenuRef.current.contains(event.target)
+      ) {
+        setIsExploreMenuOpen(false); // Close the dropdown
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  const profilemenuref = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        profilemenuref.current &&
+        !profilemenuref.current.contains(event.target)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <nav className="bg-gradient-to-l from-[#1E1a39] via-[#14141F] to-[#14141F] text-white px-12 py-6 border-b border-[#4A4763]">
       <div className="flex justify-between items-center w-full">
@@ -90,6 +128,7 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-6 text-white w-auto  ml-20">
           <div
+            ref={exploreMenuRef}
             className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300 flex items-center relative cursor-pointer"
             onClick={(e) => {
               e.stopPropagation(); // Prevent parent clicks from closing the dropdown
@@ -148,6 +187,11 @@ const Navbar = () => {
             />
             AI Labs
           </p>
+          <div className="w-fit ">
+            {isModalOpen && (
+              <AILabModal modalIsOpen={isModalOpen} closeModal={closeModal} />
+            )}
+          </div>
         </div>
 
         <div className="flex items-center space-x-6 ml-auto">
@@ -210,11 +254,7 @@ const Navbar = () => {
             </button>
           )}
         </div>
-        <div className="w-fit">
-          {isModalOpen && (
-            <AILabModal modalIsOpen={isModalOpen} closeModal={closeModal} />
-          )}
-        </div>
+
         <div className="w-fit">
           {isLoginModalOpen && (
             <LoginModal
@@ -223,7 +263,10 @@ const Navbar = () => {
             />
           )}
         </div>
-        <div className="w-fit absolute top-20 right-8 z-50">
+        <div
+          className="w-fit absolute top-20 right-8 z-50"
+          ref={profilemenuref}
+        >
           {isProfileMenuOpen && (
             <ProfileMenu
               name="Irfan Ullah"

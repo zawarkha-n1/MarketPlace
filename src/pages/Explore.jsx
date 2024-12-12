@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Headingpage from "../components/HeadingPage";
 import Card from "../components/Card";
 import DropDownMenu from "../components/common/menus/DropDownMenu";
@@ -25,6 +25,8 @@ const Explore = () => {
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
   const [isAllNetworkMenuOpen, setIsAllNetworkMenuOpen] = useState(false);
   const { assets } = useAppData();
+  const sortRef = useRef(null);
+  const dropDownRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top-left corner of the page
@@ -32,6 +34,34 @@ const Explore = () => {
 
   const [networkFilter, setNetworkFilter] = useState("All Products"); // Track the selected network
   const { itemName } = useParams();
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+        setIsAllNetworkMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (sortRef.current && !sortRef.current.contains(event.target)) {
+        setIsSortMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   // Handle showing more cards
   const handleShowMore = () => {
@@ -108,6 +138,7 @@ const Explore = () => {
               e.stopPropagation(); // Prevent parent click from interfering
               setIsAllNetworkMenuOpen((prevState) => !prevState);
             }}
+            ref={dropDownRef}
           >
             {networkFilter}
             <img
@@ -128,6 +159,7 @@ const Explore = () => {
           <div
             className="bg-[#343444] px-4 py-2 rounded-lg flex gap-2 items-center justify-center relative cursor-pointer"
             onClick={handleSortClick}
+            ref={sortRef}
           >
             Sort by
             <img
