@@ -36,9 +36,11 @@ const Home = () => {
 
   // Shuffle cards once when the component mounts or when the filter changes
   useEffect(() => {
-    setShuffledTopPicks(shuffleCards(assets));
-    setShuffledTopDeals(shuffleCards(assets));
-  }, [filter]); // Dependency on filter so that it reshuffles when the filter is changed
+    if (assets.length > 0) {
+      setShuffledTopPicks(shuffleCards(assets));
+      setShuffledTopDeals(shuffleCards(assets));
+    }
+  }, [assets]); // Dependency on filter so that it reshuffles when the filter is changed
 
   // Handle page changes for pagination (next and prev)
   const handlePageChange = (section, action) => {

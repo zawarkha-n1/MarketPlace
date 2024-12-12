@@ -142,9 +142,8 @@ export const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchAssets(); // Fetch assets when the app context is initialized
+    fetchAssets(); // Fetch assets when the component mounts
   }, []);
-
   return (
     <AppContext.Provider
       value={{
