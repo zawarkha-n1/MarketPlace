@@ -156,7 +156,7 @@ const Library = () => {
             </div>
           </div>
 
-          <div className="flex justify-center mb-8 w-[70%] min-h-[800px]">
+          <div className="flex justify-center mb-8 w-[70%] 2xl:min-h-[800px]">
             <div className="grid grid-rows-1 grid-cols-4 gap-16">
               {displayedAssets.slice(0, visibleCards).map((card, index) => (
                 <Card
