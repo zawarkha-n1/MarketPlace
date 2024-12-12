@@ -1,29 +1,6 @@
-// import React from "react";
-// import { useParams, useLocation } from "react-router-dom";
-
-// const ModelDetails = () => {
-//   const { title } = useParams(); // Extract title from URL
-//   const location = useLocation();
-//   const cardData = location.state || {}; // Use the state passed from navigation
-
-//   console.log("Title from URL:", title);
-//   console.log("Card data from state:", cardData);
-
-//   return (
-//     <div>
-//       <h1>Product Detail for {title}</h1>
-//       {/* Use cardData to display more details */}
-//       <p>Description: {cardData.asset_data?.description}</p>
-//       <p>Price: ${cardData.asset_data?.price}</p>
-//       <p>Discount: {cardData.asset_data?.discount}</p>
-//       {/* Add more details as needed */}
-//     </div>
-//   );
-// };
-
-// export default ModelDetails;
-
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 import RoundedOutlineButton from "../components/common/buttons/RoundedOutlineButton";
 import Headingpage from "../components/HeadingPage";
 import ScrollableCards from "../components/common/scrollable-cards/ScrollableCards";
@@ -41,6 +18,30 @@ const ModelDetails = () => {
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top-left corner of the page
   }, []);
+
+  const handleBuyNowClick = async () => {
+    console.log("Button clicked: handleBuyNowClick is called"); // Debug log
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log("User fetched from localStorage:", user); // Debug log
+    const useremail = user?.email;
+
+    if (!useremail) {
+      console.error("User email not found in localStorage.");
+      return;
+    }
+
+    try {
+      console.log("Sending POST request to API...");
+      await axios.post("http://172.16.15.155:5000/update-user-assets-library", {
+        useremail,
+        assetTitle: title,
+      });
+      console.log(`Asset "${title}" added to library successfully.`);
+    } catch (error) {
+      console.error("Error adding asset to library:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
@@ -143,6 +144,7 @@ const ModelDetails = () => {
                 flexProp="flex-1"
                 buttonName="Buy Now"
                 customPaddingY="12px"
+                onClick={() => handleBuyNowClick()} // Pass the title dynamically
               />
 
               <RoundedOutlineButton

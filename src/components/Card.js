@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useAppData } from "../context/AppContext";
 
 const Card = ({
   title,
@@ -16,9 +18,33 @@ const Card = ({
   creatorName,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
+  const { fetchAssets } = useAppData();
 
-  const handleSaveClick = () => {
-    setIsSaved(!isSaved);
+  const handleSaveClick = async (event) => {
+    event.stopPropagation();
+    setIsSaved(!isSaved); // Optimistically toggle the saved state for a responsive UI
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const useremail = user?.email;
+
+    if (!useremail) {
+      console.error("User email not found in localStorage.");
+      return;
+    }
+
+    try {
+      await axios.post("http://172.16.15.155:5000/update-user-assets-saved", {
+        useremail,
+        assetTitle: title,
+        status: !isSaved, // Send the new state to the backend
+      });
+
+      console.log(`Asset ${!isSaved ? "saved" : "unsaved"} successfully.`);
+    } catch (error) {
+      console.error("Error updating saved assets:", error);
+      // Revert state if API call fails
+      setIsSaved(isSaved);
+    }
   };
 
   return (

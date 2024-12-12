@@ -4,6 +4,7 @@ import HeroCard from "../components/HeroCard.js";
 import Card from "../components/Card.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppData } from "../context/AppContext.jsx";
+import axios from "axios";
 
 const Home = () => {
   // States for pagination in each section
@@ -172,8 +173,32 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  const handleCardClick = (card) => {
-    navigate(`/product/${card.asset_data.title}`, {
+  const handleCardClick = async (card) => {
+    const user = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+    const useremail = user?.email; // Extract user email
+    const assetTitle = card.asset_data.title;
+    if (!useremail) {
+      console.error("User email not found in localStorage.");
+      navigate(`/product/${assetTitle}`, {
+        state: card,
+      });
+      return;
+    }
+
+    try {
+      // Make an API call to update the user_assets table
+      await axios.post("http://172.16.15.155:5000/update-user-assets-recent", {
+        useremail,
+        assetTitle,
+      });
+
+      console.log("API call successful: Recent asset added.");
+    } catch (error) {
+      console.error("Error updating user assets:", error);
+    }
+
+    // Navigate to the product page
+    navigate(`/product/${assetTitle}`, {
       state: card,
     });
   };
