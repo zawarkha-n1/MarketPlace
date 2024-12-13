@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from "react";
-import { totalCards } from "../data/totalcards.js";
 import HeroCard from "../components/HeroCard.js";
 import Card from "../components/Card.js";
 import { Link, useNavigate } from "react-router-dom";

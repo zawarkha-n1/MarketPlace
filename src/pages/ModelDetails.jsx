@@ -7,6 +7,7 @@ import ScrollableCards from "../components/common/scrollable-cards/ScrollableCar
 import Card from "../components/Card";
 import { totalCards } from "../data/totalcards";
 import { useParams, useLocation } from "react-router-dom";
+import { useAppData } from "../context/AppContext";
 
 const ModelDetails = () => {
   const { productId } = useParams();
@@ -42,6 +43,59 @@ const ModelDetails = () => {
       console.error("Error adding asset to library:", error);
     }
   };
+
+  const { isLogin, user, assets } = useAppData();
+  const [recentAssets, setRecentAssets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecentAssets = async () => {
+      setLoading(true);
+
+      try {
+        if (isLogin && user) {
+          const response = await axios.get(
+            `http://172.16.15.155:5000/user-assets`
+          );
+          const userAssetsData = response.data.find(
+            (item) => item.useremail === user.email
+          );
+
+          const recentAssets =
+            userAssetsData?.userassetsdata?.recentassets || [];
+
+          if (recentAssets.length >= 4) {
+            // Display recent assets if 4 or more exist
+            setRecentAssets(
+              assets.filter((asset) => recentAssets.includes(asset.id))
+            );
+          } else {
+            // Display 6 random assets if recent assets are fewer than 4
+            const randomAssets = assets
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 6);
+            setRecentAssets(randomAssets);
+          }
+        } else {
+          // User not logged in: Show 6 random assets
+          const randomAssets = assets
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 6);
+          setRecentAssets(randomAssets);
+        }
+      } catch (error) {
+        console.error("Error fetching recent assets:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentAssets();
+  }, [isLogin, user, assets]);
+
+  if (loading) {
+    return <div className="text-white">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
@@ -197,7 +251,7 @@ const ModelDetails = () => {
 
       <div className="my-16">
         <ScrollableCards
-          cards={totalCards} // Passing the cards to the component
+          cards={recentAssets} // Passing the cards to the component
           CardComponent={Card} // Passing the Card component as the prop
           title="Recent Products"
         />

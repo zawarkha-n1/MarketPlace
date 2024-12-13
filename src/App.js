@@ -12,7 +12,6 @@ import ModelDetails from "./pages/ModelDetails";
 import Cart from "./pages/Cart";
 import Explore from "./pages/Explore";
 import SavedProducts from "./pages/SavedProducts";
-import { totalCards } from "./data/totalcards";
 
 const App = () => {
   return (

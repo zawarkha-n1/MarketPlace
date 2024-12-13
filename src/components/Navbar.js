@@ -97,7 +97,7 @@ const Navbar = () => {
         <div className="flex items-center space-x-12 w-1/3  ml-20">
           <Link to="/">
             <img
-              src="/thedigitalbazar.png"
+              src="/bazaar.png"
               alt="Logo"
               className="h-auto object-contain"
             />
