@@ -227,7 +227,7 @@ const Home = () => {
             .slice(topPicksIndex, topPicksIndex + 4)
             .map((card, index) => (
               <Card
-                key={index}
+                key={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -241,6 +241,7 @@ const Home = () => {
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
+                saved={card.isSaved}
               />
             ))}
         </div>
@@ -311,7 +312,7 @@ const Home = () => {
             .slice(topDealsIndex, topDealsIndex + 4)
             .map((card, index) => (
               <Card
-                key={index}
+                key={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -325,6 +326,7 @@ const Home = () => {
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
+                saved={card.isSaved}
               />
             ))}
         </div>
@@ -402,7 +404,7 @@ const Home = () => {
             .slice(experienceIndex, experienceIndex + 4) // Paginate with experienceIndex
             .map((card, index) => (
               <Card
-                key={index}
+                key={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -416,6 +418,7 @@ const Home = () => {
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
+                saved={card.isSaved}
               />
             ))}
         </div>
@@ -525,7 +528,7 @@ const Home = () => {
             .slice(popularIndex, popularIndex + 4) // Paginate based on the current index
             .map((card, index) => (
               <Card
-                key={index}
+                key={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -539,6 +542,7 @@ const Home = () => {
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
+                saved={card.isSaved}
               />
             ))}
         </div>
@@ -608,7 +612,7 @@ const Home = () => {
             .slice(textureIndex, textureIndex + 4)
             .map((card, index) => (
               <Card
-                key={index}
+                key={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -622,6 +626,7 @@ const Home = () => {
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
+                saved={card.isSaved}
               />
             ))}
         </div>

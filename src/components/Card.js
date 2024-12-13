@@ -16,35 +16,49 @@ const Card = ({
   onClick,
   creatorImage,
   creatorName,
-  savedproduct,
+  saved,
 }) => {
-  const [isSaved, setIsSaved] = useState(false);
-  const { fetchAssets } = useAppData();
+  const [isSaved, setIsSaved] = useState(saved);
+  const { fetchAssets, user } = useAppData();
+  const [localSavedCount, setLocalSavedCount] = useState(savedcount);
 
   const handleSaveClick = async (event) => {
     event.stopPropagation();
-    setIsSaved(!isSaved); // Optimistically toggle the saved state for a responsive UI
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    const useremail = user?.email;
-
-    if (!useremail) {
-      console.error("User email not found in localStorage.");
+    if (!user) {
+      console.error("User is not logged in.");
       return;
     }
 
+    const useremail = user.email;
+
     try {
+      // Optimistically update the UI
+      const newSavedStatus = !isSaved;
+      setIsSaved(newSavedStatus);
+      setLocalSavedCount((prevCount) =>
+        newSavedStatus ? prevCount + 1 : Math.max(prevCount - 1, 0)
+      );
+
+      // Make the API call to update the saved status
       await axios.post("http://172.16.15.155:5000/update-user-assets-saved", {
         useremail,
         assetTitle: title,
-        status: !isSaved, // Send the new state to the backend
+        status: newSavedStatus,
       });
+      // fetchAssets();
 
-      console.log(`Asset ${!isSaved ? "saved" : "unsaved"} successfully.`);
+      console.log(
+        `Asset ${newSavedStatus ? "saved" : "unsaved"} successfully.`
+      );
     } catch (error) {
-      console.error("Error updating saved assets:", error);
-      // Revert state if API call fails
-      setIsSaved(isSaved);
+      console.error("Error updating saved status in backend:", error);
+
+      // Revert the UI state if the API call fails
+      setIsSaved((prevSaved) => !prevSaved);
+      setLocalSavedCount((prevCount) =>
+        !isSaved ? prevCount - 1 : prevCount + 1
+      );
     }
   };
 
@@ -75,7 +89,7 @@ const Card = ({
           {/* Use filled or empty heart depending on isSaved state */}
           {!inlibrary ? (
             <img
-              src={isSaved || savedproduct ? "/filledsaved.png" : "/save.png"} // Toggle between filled and empty heart
+              src={isSaved ? "/filledsaved.png" : "/save.png"} // Toggle between filled and empty heart
               alt="Save"
               className="w-[16px] h-[16px] ml-2"
             />
@@ -92,11 +106,11 @@ const Card = ({
               fontFamily: "Urbanist",
               fontSize: "14px",
               fontWeight: 700,
-              lineHeight: "24px", // or adjust based on design
+              lineHeight: "24px",
               textTransform: "uppercase",
             }}
           >
-            {!inlibrary ? savedcount : starcount}
+            {!inlibrary ? localSavedCount : starcount}
           </span>
         </div>
 

@@ -160,7 +160,7 @@ const SavedProducts = () => {
             <div className="grid grid-rows-2 grid-cols-4 gap-10">
               {displayedAssets.slice(0, visibleCards).map((card, index) => (
                 <Card
-                  key={index}
+                  key={card.id}
                   title={card.asset_data.title}
                   discount={card.asset_data.discount}
                   price={card.asset_data.price}
@@ -173,7 +173,7 @@ const SavedProducts = () => {
                   image={card.asset_data.url}
                   creatorImage={card.asset_data.creatorLogo}
                   creatorName={card.asset_data.creatorName}
-                  savedproduct={true}
+                  saved={card.isSaved}
                 />
               ))}
             </div>

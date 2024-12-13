@@ -167,6 +167,7 @@ export const AppProvider = ({ children }) => {
         exaCredits,
         assets,
         loadingAssets,
+        fetchUserAssets,
       }}
     >
       {children}
