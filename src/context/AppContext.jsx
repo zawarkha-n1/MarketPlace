@@ -75,7 +75,7 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("authToken");
       localStorage.removeItem("user");
@@ -84,11 +84,25 @@ export const AppProvider = ({ children }) => {
     setAuthToken(null);
     setIsLogin(false);
 
-    setAssets((prevAssets) =>
-      prevAssets.map((asset) => ({ ...asset, isSaved: false }))
-    );
+    try {
+      const fetchedAssets = await axios
+        .get("http://172.16.15.155:5000/assets")
+        .then((res) => res.data);
 
-    console.log("User logged out");
+      const updatedAssets = fetchedAssets.map((asset) => ({
+        ...asset,
+        isSaved: false,
+      }));
+
+      setAssets(updatedAssets);
+
+      console.log(
+        "User logged out and assets updated for non-logged-in state."
+      );
+      window.location.reload();
+    } catch (error) {
+      console.error("Error fetching assets after logout:", error);
+    }
   };
 
   useEffect(() => {

@@ -219,7 +219,7 @@ const SavedProducts = () => {
   const [filteredAssets, setFilteredAssets] = useState([]);
   const [displayedAssets, setDisplayedAssets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { assets } = useAppData();
+  const { assets, isLogin, fetchUserAssets } = useAppData();
 
   useEffect(() => {
     const fetchUserSavedAssets = async () => {
@@ -318,6 +318,17 @@ const SavedProducts = () => {
     setIsSortMenuOpen((prevState) => !prevState);
   };
 
+  useEffect(() => {
+    if (isLogin) {
+      // Re-fetch user assets or any other necessary data
+      fetchUserAssets();
+      setVisibleCards(8);
+    } else {
+      // Handle the case when user logs out, e.g., reset data
+      setFilteredAssets([]);
+      setDisplayedAssets([]);
+    }
+  }, [isLogin]);
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-center">
       <div className="text-white font-Urbanist">
