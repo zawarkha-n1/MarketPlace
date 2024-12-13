@@ -1,5 +1,6 @@
 import React from "react";
 import { useAppData } from "../../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = ({
   name = "Irfan Ullah",
@@ -12,6 +13,12 @@ const ProfileMenu = ({
     handleLogout();
     setIsProfileMenuOpen(false);
   };
+  const navigate = useNavigate();
+
+  const handleSavedproducts = () => {
+    setIsProfileMenuOpen(false);
+    navigate("/saved-products");
+  };
   return (
     <div className="bg-[#343444] rounded-[20px] lg:w-[327px] flex flex-col gap-3">
       <div className="flex items-center justify-between px-3 pt-4">
@@ -23,31 +30,34 @@ const ProfileMenu = ({
         </div>
       </div>
       <hr className="border-gray-500" />
-      <div className="flex gap-3 justify-start items-center px-3 py-2">
+      <div className="flex gap-3 justify-start items-center px-3 py-2 cursor-pointer hover:bg-[#4f4f66]">
         <img src="/assets/icons/profile-logos/profile.png" alt="icon" />
         <h3 className="font-urbanist font-normal text-[14px] leading-[22px]">
           My Profile
         </h3>
       </div>
-      <div className="flex gap-3 justify-start items-center px-3 py-2">
+      <div className="flex gap-3 justify-start items-center px-3 py-2 cursor-pointer hover:bg-[#4f4f66]">
         <img src="/assets/icons/profile-logos/setting.png" alt="icon" />
         <h3 className="font-urbanist font-normal text-[14px] leading-[22px]">
           Settings
         </h3>
       </div>
-      <div className="flex gap-3 justify-start items-center px-3 py-2">
+      <div
+        className="flex gap-3 justify-start items-center px-3 py-2 cursor-pointer hover:bg-[#4f4f66]"
+        onClick={handleSavedproducts}
+      >
         <img src="/assets/icons/profile-logos/saved.png" alt="icon" />
-        <h3 className="font-urbanist font-normal text-[14px] leading-[22px]">
+        <div className="font-urbanist font-normal text-[14px] leading-[22px]">
           Saved Products
-        </h3>
+        </div>
       </div>
-      <div className="flex gap-3 justify-start items-center px-3 py-2">
+      <div className="flex gap-3 justify-start items-center px-3 py-2 cursor-pointer hover:bg-[#4f4f66]">
         <img src="/assets/icons/profile-logos/profile.png" alt="icon" />
         <h3 className="font-urbanist font-normal text-[14px] leading-[22px]">
           Languges
         </h3>
       </div>
-      <div className="flex items-center justify-between px-3 pt-0 pb-4">
+      <div className="flex items-center justify-between px-3 pt-0 pb-4 cursor-pointer">
         <button className="rounded-lg px-3 py-[5px] text-[14px] hover:bg-[#4f4f66]">
           Terms of Use
         </button>

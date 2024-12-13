@@ -37,6 +37,7 @@ const Home = () => {
 
   // Shuffle cards once when the component mounts or when the filter changes
   useEffect(() => {
+    console.log(assets);
     if (assets.length > 0) {
       setShuffledTopPicks(shuffleCards(assets));
       setShuffledTopDeals(shuffleCards(assets));

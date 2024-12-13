@@ -16,6 +16,7 @@ const Card = ({
   onClick,
   creatorImage,
   creatorName,
+  savedproduct,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
   const { fetchAssets } = useAppData();
@@ -74,7 +75,7 @@ const Card = ({
           {/* Use filled or empty heart depending on isSaved state */}
           {!inlibrary ? (
             <img
-              src={isSaved ? "/filledsaved.png" : "/save.png"} // Toggle between filled and empty heart
+              src={isSaved || savedproduct ? "/filledsaved.png" : "/save.png"} // Toggle between filled and empty heart
               alt="Save"
               className="w-[16px] h-[16px] ml-2"
             />
