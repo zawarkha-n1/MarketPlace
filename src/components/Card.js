@@ -20,7 +20,7 @@ const Card = ({
   onSaveToggle,
 }) => {
   const [isSaved, setIsSaved] = useState(saved);
-  const { fetchAssets, user } = useAppData();
+  const { fetchUserAssets, user } = useAppData();
   const [localSavedCount, setLocalSavedCount] = useState(savedcount);
 
   const handleSaveClick = async (event) => {
@@ -65,7 +65,6 @@ const Card = ({
         !isSaved ? prevCount - 1 : prevCount + 1
       );
 
-      // Revert parent state if necessary
       if (onSaveToggle) {
         onSaveToggle(!isSaved, title);
       }

@@ -42,27 +42,6 @@ export const AppProvider = ({ children }) => {
     console.log("Updated Assets with Saved Status:", updatedAssets);
   };
 
-  const fetchAssets = async () => {
-    try {
-      setLoadingAssets(true);
-      const fetchedAssets = await axios
-        .get("http://172.16.15.155:5000/assets")
-        .then((res) => res.data);
-
-      if (isLogin && user) {
-        const savedAssetIds = await fetchUserAssets(user.email);
-        updateAssetsWithSavedStatus(fetchedAssets, savedAssetIds);
-      } else {
-        setAssets(fetchedAssets);
-      }
-
-      setLoadingAssets(false);
-    } catch (error) {
-      console.error("Error fetching assets:", error);
-      setLoadingAssets(false);
-    }
-  };
-
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
 

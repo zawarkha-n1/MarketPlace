@@ -222,7 +222,7 @@ const SavedProducts = () => {
   const { assets } = useAppData();
 
   useEffect(() => {
-    const fetchUserAssets = async () => {
+    const fetchUserSavedAssets = async () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const useremail = user?.email;
 
@@ -238,6 +238,7 @@ const SavedProducts = () => {
         );
         const userAssetsData = response.data;
 
+        // Filter data for the current user
         const currentUserAssets = userAssetsData.find(
           (item) => item.useremail === useremail
         );
@@ -246,14 +247,18 @@ const SavedProducts = () => {
           const libraryAssetIds =
             currentUserAssets.userassetsdata.savedassets || [];
 
-          const userFilteredAssets = assets.filter((asset) =>
-            libraryAssetIds.includes(asset.id)
-          );
+          // Filter assets based on libraryAssetIds
+          const userFilteredAssets = assets
+            .filter((asset) => libraryAssetIds.includes(asset.id))
+            .map((asset) => ({
+              ...asset,
+              isSaved: true, // Mark these assets as saved
+            }));
 
-          setFilteredAssets(userFilteredAssets);
-          setDisplayedAssets(userFilteredAssets);
+          setFilteredAssets(userFilteredAssets); // Store fetched assets
+          setDisplayedAssets(userFilteredAssets); // Initially display all assets
         } else {
-          setFilteredAssets([]);
+          setFilteredAssets([]); // No library assets for this user
           setDisplayedAssets([]);
         }
 
@@ -264,9 +269,8 @@ const SavedProducts = () => {
       }
     };
 
-    fetchUserAssets();
-  }, [assets]);
-
+    fetchUserSavedAssets();
+  }, [assets]); // Ensure this runs whenever `assets` are updated
   useEffect(() => {
     const updatedAssets =
       isActive === "All"
