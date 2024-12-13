@@ -17,6 +17,7 @@ const Card = ({
   creatorImage,
   creatorName,
   saved,
+  onSaveToggle,
 }) => {
   const [isSaved, setIsSaved] = useState(saved);
   const { fetchAssets, user } = useAppData();
@@ -40,13 +41,17 @@ const Card = ({
         newSavedStatus ? prevCount + 1 : Math.max(prevCount - 1, 0)
       );
 
+      // Notify the parent component if needed (e.g., to remove unsaved items)
+      if (onSaveToggle) {
+        onSaveToggle(newSavedStatus, title);
+      }
+
       // Make the API call to update the saved status
       await axios.post("http://172.16.15.155:5000/update-user-assets-saved", {
         useremail,
         assetTitle: title,
         status: newSavedStatus,
       });
-      // fetchAssets();
 
       console.log(
         `Asset ${newSavedStatus ? "saved" : "unsaved"} successfully.`
@@ -59,6 +64,11 @@ const Card = ({
       setLocalSavedCount((prevCount) =>
         !isSaved ? prevCount - 1 : prevCount + 1
       );
+
+      // Revert parent state if necessary
+      if (onSaveToggle) {
+        onSaveToggle(!isSaved, title);
+      }
     }
   };
 
