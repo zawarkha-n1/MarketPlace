@@ -3,6 +3,7 @@ import Headingpage from "../components/HeadingPage";
 import { Canvas, useLoader } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { RectAreaLightUniformsLib } from "three/examples/jsm/Addons.js";
 
 function Model({ glbUrl }) {
   const gltf = useLoader(GLTFLoader, glbUrl);
@@ -50,8 +51,12 @@ const GenerateModel = () => {
   };
 
   const handleGenerateClick = async () => {
+    if (!localStorage.getItem("authToken")) {
+      alert("Please login first to generate Model");
+      return;
+    }
     if (!uploadedFile && !uploadedImage) {
-      console.error("No file or image selected for upload");
+      alert("Please Uplaod image first");
       return;
     }
 
