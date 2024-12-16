@@ -5,9 +5,9 @@ import RoundedOutlineButton from "../components/common/buttons/RoundedOutlineBut
 import Headingpage from "../components/HeadingPage";
 import ScrollableCards from "../components/common/scrollable-cards/ScrollableCards";
 import Card from "../components/Card";
-import { totalCards } from "../data/totalcards";
 import { useParams, useLocation } from "react-router-dom";
 import { useAppData } from "../context/AppContext";
+import LoginModal from "../components/modals/LoginModal";
 
 const ModelDetails = () => {
   const { productId } = useParams();
@@ -15,12 +15,64 @@ const ModelDetails = () => {
   const { title } = useParams(); // Extract title from URL
   const location = useLocation();
   const cardData = location.state || {}; // Use the state passed from navigation
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const { isLogin, user, assets } = useAppData();
+  const [recentAssets, setRecentAssets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isOwned, setIsOwned] = useState(false); // New state to track ownership
+  function openLoginModal() {
+    setIsLoginModalOpen(true);
+  }
+
+  function closeLoginModal() {
+    setIsLoginModalOpen(false);
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top-left corner of the page
   }, []);
 
+  useEffect(() => {
+    const fetchLibraryStatus = async () => {
+      if (!isLogin || !user) {
+        setIsOwned(false); // User is not logged in, no ownership
+        return;
+      }
+
+      try {
+        // Fetch user assets
+        const response = await axios.get(
+          `http://172.16.15.155:5000/user-assets`
+        );
+        const userAssetsData = response.data.find(
+          (item) => item.useremail === user.email
+        );
+
+        // Check if the asset is in libraryassets
+        const libraryAssets =
+          userAssetsData?.userassetsdata?.libraryassets || [];
+        const assetId = cardData.id; // Assuming cardData has the asset's ID
+
+        if (libraryAssets.includes(assetId)) {
+          setIsOwned(true); // Asset is already owned
+        } else {
+          setIsOwned(false); // Asset is not owned
+        }
+      } catch (error) {
+        console.error("Error fetching library status:", error);
+        setIsOwned(false); // Fallback in case of an error
+      }
+    };
+
+    fetchLibraryStatus();
+  }, [isLogin, user, cardData]);
+
   const handleBuyNowClick = async () => {
+    if (!isLogin || !user) {
+      openLoginModal();
+      return;
+    }
     console.log("Button clicked: handleBuyNowClick is called"); // Debug log
 
     const user = JSON.parse(localStorage.getItem("user"));
@@ -32,6 +84,17 @@ const ModelDetails = () => {
       return;
     }
 
+    // Display a confirmation alert with the product price
+    const confirmPurchase = window.confirm(
+      `You want to confirm buy for this product? ${cardData.asset_data.price} Exas will be cut from your account.`
+    );
+
+    // Exit function if user cancels
+    if (!confirmPurchase) {
+      console.log("User cancelled the purchase.");
+      return;
+    }
+
     try {
       console.log("Sending POST request to API...");
       await axios.post("http://172.16.15.155:5000/update-user-assets-library", {
@@ -39,14 +102,11 @@ const ModelDetails = () => {
         assetTitle: title,
       });
       console.log(`Asset "${title}" added to library successfully.`);
+      setIsOwned(true); // Update ownership state after purchase
     } catch (error) {
       console.error("Error adding asset to library:", error);
     }
   };
-
-  const { isLogin, user, assets } = useAppData();
-  const [recentAssets, setRecentAssets] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRecentAssets = async () => {
@@ -193,20 +253,31 @@ const ModelDetails = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row w-full gap-7">
-              <RoundedOutlineButton
-                buttonBG="#5750A2"
-                flexProp="flex-1"
-                buttonName="Buy Now"
-                customPaddingY="12px"
-                onClick={() => handleBuyNowClick()} // Pass the title dynamically
-              />
-
-              <RoundedOutlineButton
-                flexProp="flex-1"
-                buttonName="Add to Cart"
-                buttonBG="#343444"
-                customPaddingY="12px"
-              />
+              {!isOwned ? (
+                <>
+                  <RoundedOutlineButton
+                    buttonBG="#5750A2"
+                    flexProp="flex-1"
+                    buttonName="Buy Now"
+                    customPaddingY="12px"
+                    onClick={handleBuyNowClick}
+                  />
+                  <RoundedOutlineButton
+                    flexProp="flex-1"
+                    buttonName="Add to Cart"
+                    buttonBG="#343444"
+                    customPaddingY="12px"
+                  />
+                </>
+              ) : (
+                <RoundedOutlineButton
+                  buttonBG="#343444"
+                  flexProp="flex-1"
+                  buttonName="Owned"
+                  customPaddingY="12px"
+                  disabled // Make the button non-clickable
+                />
+              )}
             </div>
 
             <div className="pt-4 w-full">
@@ -256,6 +327,12 @@ const ModelDetails = () => {
           title="Recent Products"
         />
       </div>
+      {isLoginModalOpen && (
+        <LoginModal
+          modalIsOpen={isLoginModalOpen}
+          closeModal={closeLoginModal}
+        />
+      )}
     </div>
   );
 };
