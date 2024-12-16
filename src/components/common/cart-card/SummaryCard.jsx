@@ -12,7 +12,7 @@ const SummaryCard = ({
   checkoutLabel = "Checkout",
   onCheckout = () => {},
   className = "",
-  buttonClassName = "bg-customIndigo rounded-3xl px-3 py-1.5 text-white",
+  buttonClassName = "bg-customIndigo text-md rounded-3xl px-3 py-1.5 mt-3 text-white w-[90%] ",
 }) => {
   return (
     <div
@@ -36,7 +36,7 @@ const SummaryCard = ({
       <hr className="border-slate-600" />
 
       <div className="flex items-center justify-between text-sm md:text-base font-semibold px-3 xl:px-4">
-        <p>{totalLabel}</p>
+        <p>Subtotal</p>
         <p>{totalValue}</p>
       </div>
 

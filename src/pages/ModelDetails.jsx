@@ -18,11 +18,19 @@ const ModelDetails = () => {
   const location = useLocation();
   const cardData = location.state || {}; // Use the state passed from navigation
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
 
-  const { isLogin, user, assets, addToCart } = useAppData();
+  const { isLogin, user, assets, addToCart, cartAssets } = useAppData();
   const [recentAssets, setRecentAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOwned, setIsOwned] = useState(false); // New state to track ownership
+
+  useEffect(() => {
+    // Check if the asset is already in the cart
+    const isInCart = cartAssets.some((item) => item.id === cardData.id);
+    setIsAddedToCart(isInCart);
+  }, [cartAssets, cardData]);
+
   function openLoginModal() {
     setIsLoginModalOpen(true);
   }
@@ -158,21 +166,21 @@ const ModelDetails = () => {
   }
 
   const handleAddToCart = () => {
-    if (!cardData || !cardData.asset_data) {
-      console.error("No asset data available for adding to cart.");
+    if (!isLogin || !user) {
+      openLoginModal();
       return;
     }
 
-    const assetToAdd = {
-      id: cardData.id,
-      title: cardData.asset_data.title,
-      price: cardData.asset_data.price,
-      image: cardData.asset_data.url,
-    };
-
-    addToCart(assetToAdd);
-    console.log(`Added to cart: ${assetToAdd.title}`);
-    navigate("/cart");
+    if (!isAddedToCart) {
+      const assetToAdd = {
+        id: cardData.id,
+        title: cardData.asset_data.title,
+        price: cardData.asset_data.price,
+        image: cardData.asset_data.url,
+      };
+      addToCart(assetToAdd);
+      setIsAddedToCart(true); // Update button state
+    }
   };
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
@@ -282,9 +290,12 @@ const ModelDetails = () => {
                   <RoundedOutlineButton
                     onClick={handleAddToCart}
                     flexProp="flex-1"
-                    buttonName="Add to Cart"
-                    buttonBG="#343444"
+                    buttonName={
+                      isAddedToCart ? "Added to Cart!" : "Add to Cart"
+                    }
+                    buttonBG={isAddedToCart ? "#7979A2" : "#343444"}
                     customPaddingY="12px"
+                    disabled={isAddedToCart}
                   />
                 </>
               ) : (

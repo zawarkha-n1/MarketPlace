@@ -17,19 +17,87 @@ export const AppProvider = ({ children }) => {
   const [loadingAssets, setLoadingAssets] = useState(true);
   const [cartAssets, setCartAssets] = useState([]);
 
-  const addToCart = (asset) => {
-    setCartAssets((prev) => {
-      // Avoid duplicate items in the cart
-      const exists = prev.find((item) => item.id === asset.id);
-      if (!exists) {
-        return [...prev, asset];
+  // const addToCart = (asset) => {
+  //   setCartAssets((prev) => {
+  //     // Avoid duplicate items in the cart
+  //     const exists = prev.find((item) => item.id === asset.id);
+  //     if (!exists) {
+  //       return [...prev, asset];
+  //     }
+  //     return prev;
+  //   });
+  // };
+
+  // const removeFromCart = (assetId) => {
+  //   setCartAssets((prev) => prev.filter((item) => item.id !== assetId));
+  // };
+
+  useEffect(() => {
+    const initializeCart = async () => {
+      try {
+        const savedUser = JSON.parse(localStorage.getItem("user"));
+        if (savedUser) {
+          setUser(savedUser);
+          setIsLogin(true);
+          await fetchCartAssets(savedUser.email);
+        }
+      } catch (error) {
+        console.error("Error initializing cart:", error);
       }
-      return prev;
-    });
+    };
+
+    initializeCart();
+  }, []);
+
+  const fetchCartAssets = async (useremail) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/user-assets`);
+      const userAssetsData = response.data.find(
+        (item) => item.useremail === useremail
+      );
+      const cartAssetIds = userAssetsData?.userassetsdata?.cartassets || [];
+
+      // Fetch full asset details
+      const assetsResponse = await axios.get(`http://localhost:5000/assets`);
+      const allAssets = assetsResponse.data;
+
+      const cartAssetsDetails = allAssets.filter((asset) =>
+        cartAssetIds.includes(asset.id)
+      );
+
+      setCartAssets(cartAssetsDetails);
+      localStorage.setItem("cartAssets", JSON.stringify(cartAssetsDetails)); // Persist in localStorage
+    } catch (error) {
+      console.error("Error fetching cart assets:", error);
+    }
   };
 
-  const removeFromCart = (assetId) => {
-    setCartAssets((prev) => prev.filter((item) => item.id !== assetId));
+  const addToCart = async (asset) => {
+    try {
+      const response = await axios.post("http://localhost:5000/add-to-cart", {
+        useremail: user.email,
+        assetId: asset.id,
+      });
+      const updatedCart = [...cartAssets, response.data.asset];
+      setCartAssets(updatedCart);
+      localStorage.setItem("cartAssets", JSON.stringify(updatedCart)); // Update localStorage
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
+
+  const removeFromCart = async (assetId) => {
+    try {
+      await axios.post("http://localhost:5000/remove-from-cart", {
+        useremail: user.email,
+        assetId,
+      });
+      const updatedCart = cartAssets.filter((item) => item.id !== assetId);
+      setCartAssets(updatedCart);
+      localStorage.setItem("cartAssets", JSON.stringify(updatedCart)); // Update localStorage
+    } catch (error) {
+      console.error("Error removing from cart:", error);
+    }
   };
 
   const fetchUserAssets = async (useremail) => {
@@ -80,6 +148,7 @@ export const AppProvider = ({ children }) => {
       setIsLogin(true);
       setAuthToken(newAuthToken);
       setExaCredits(userData.exaCredits);
+      await fetchCartAssets(userData.email);
 
       const fetchedAssets = await axios
         .get("http://172.16.15.155:5000/assets")
@@ -99,6 +168,8 @@ export const AppProvider = ({ children }) => {
     setUser(null);
     setAuthToken(null);
     setIsLogin(false);
+    setCartAssets([]);
+    localStorage.removeItem("cartAssets"); // Clear localStorage
 
     try {
       const fetchedAssets = await axios
