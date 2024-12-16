@@ -8,8 +8,8 @@ const Card = ({
   price,
   starcount,
   heartcount,
-  savedcount,
   smileycount,
+  savedcount,
   inlibrary,
   bgcolor,
   image,
@@ -22,6 +22,51 @@ const Card = ({
   const [isSaved, setIsSaved] = useState(saved);
   const { fetchUserAssets, user } = useAppData();
   const [localSavedCount, setLocalSavedCount] = useState(savedcount);
+  const [localStarCount, setLocalStarCount] = useState(starcount);
+  const [localHeartCount, setLocalHeartCount] = useState(heartcount);
+  const [localSmileyCount, setLocalSmileyCount] = useState(smileycount);
+
+  const [clicked, setClicked] = useState({
+    stars: false,
+    smiley: false,
+    favourite: false,
+  });
+
+  const handleActionClick = async (actionType) => {
+    if (clicked[actionType]) return; // Prevent multiple clicks
+
+    try {
+      // Optimistically update the UI
+      setClicked((prev) => ({ ...prev, [actionType]: true }));
+      if (actionType === "stars") {
+        setLocalStarCount((prev) => prev + 1);
+      } else if (actionType === "smiley") {
+        setLocalSmileyCount((prev) => prev + 1);
+      } else if (actionType === "favourite") {
+        setLocalHeartCount((prev) => prev + 1);
+      }
+
+      // Make the backend API call
+      await axios.post("http://172.16.15.155:5000/update-asset-action", {
+        assetTitle: title,
+        actionType,
+      });
+
+      console.log(`${actionType} count incremented for asset: ${title}`);
+    } catch (error) {
+      console.error(`Error updating ${actionType} count:`, error);
+
+      // Revert UI state if the API call fails
+      setClicked((prev) => ({ ...prev, [actionType]: false }));
+      if (actionType === "stars") {
+        setLocalStarCount((prev) => prev - 1);
+      } else if (actionType === "smiley") {
+        setLocalSmileyCount((prev) => prev - 1);
+      } else if (actionType === "favourite") {
+        setLocalHeartCount((prev) => prev - 1);
+      }
+    }
+  };
 
   const handleSaveClick = async (event) => {
     event.stopPropagation();
@@ -128,10 +173,15 @@ const Card = ({
           <div className="absolute bottom-1 left-2 flex space-x-2">
             {/* Box 1 */}
             <div
-              className="w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center relative"
+              className="w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center relative cursor-pointer"
               style={{
                 background: "#42425a", // Apply background color
                 opacity: 0.7, // Apply opacity
+              }}
+              disabled={clicked.smiley}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent parent click
+                handleActionClick("smiley");
               }}
             >
               <img
@@ -149,16 +199,21 @@ const Card = ({
                   textTransform: "uppercase",
                 }}
               >
-                {smileycount}
+                {localSmileyCount}
               </span>
             </div>
 
             {/* Box 2 */}
             <div
-              className="w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center relative"
+              className="w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center relative cursor-pointer"
               style={{
                 background: "#42425a", // Apply background color
                 opacity: 0.7, // Apply opacity
+              }}
+              disabled={clicked.stars}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent parent click
+                handleActionClick("stars");
               }}
             >
               <img
@@ -176,16 +231,21 @@ const Card = ({
                   textTransform: "uppercase",
                 }}
               >
-                {starcount}
+                {localStarCount}
               </span>
             </div>
 
             {/* Box 3 */}
             <div
-              className="w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center relative"
+              className="w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center relative cursor-pointer"
               style={{
                 background: "#42425a", // Apply background color
                 opacity: 0.7, // Apply opacity
+              }}
+              disabled={clicked.favourite}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent parent click
+                handleActionClick("favourite");
               }}
             >
               <img
@@ -203,7 +263,7 @@ const Card = ({
                   textTransform: "uppercase",
                 }}
               >
-                {heartcount}
+                {localHeartCount}
               </span>
             </div>
           </div>
