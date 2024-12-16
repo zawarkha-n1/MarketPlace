@@ -8,8 +8,10 @@ import Card from "../components/Card";
 import { useParams, useLocation } from "react-router-dom";
 import { useAppData } from "../context/AppContext";
 import LoginModal from "../components/modals/LoginModal";
+import { useNavigate } from "react-router-dom";
 
 const ModelDetails = () => {
+  const navigate = useNavigate();
   const { productId } = useParams();
   const [activeTab, setActiveTab] = useState("details");
   const { title } = useParams(); // Extract title from URL
@@ -17,7 +19,7 @@ const ModelDetails = () => {
   const cardData = location.state || {}; // Use the state passed from navigation
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  const { isLogin, user, assets } = useAppData();
+  const { isLogin, user, assets, addToCart } = useAppData();
   const [recentAssets, setRecentAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOwned, setIsOwned] = useState(false); // New state to track ownership
@@ -73,14 +75,13 @@ const ModelDetails = () => {
       openLoginModal();
       return;
     }
-    console.log("Button clicked: handleBuyNowClick is called"); // Debug log
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log("User fetched from localStorage:", user); // Debug log
+    console.log("Button clicked: handleBuyNowClick is called"); // Debug log
+    console.log("User fetched from context:", user); // Debug log
     const useremail = user?.email;
 
     if (!useremail) {
-      console.error("User email not found in localStorage.");
+      console.error("User email not found.");
       return;
     }
 
@@ -107,7 +108,6 @@ const ModelDetails = () => {
       console.error("Error adding asset to library:", error);
     }
   };
-
   useEffect(() => {
     const fetchRecentAssets = async () => {
       setLoading(true);
@@ -157,6 +157,23 @@ const ModelDetails = () => {
     return <div className="text-white">Loading...</div>;
   }
 
+  const handleAddToCart = () => {
+    if (!cardData || !cardData.asset_data) {
+      console.error("No asset data available for adding to cart.");
+      return;
+    }
+
+    const assetToAdd = {
+      id: cardData.id,
+      title: cardData.asset_data.title,
+      price: cardData.asset_data.price,
+      image: cardData.asset_data.url,
+    };
+
+    addToCart(assetToAdd);
+    console.log(`Added to cart: ${assetToAdd.title}`);
+    navigate("/cart");
+  };
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
       <Headingpage pagename={"Model Details"} secondheading={"Explore"} />
@@ -263,6 +280,7 @@ const ModelDetails = () => {
                     onClick={handleBuyNowClick}
                   />
                   <RoundedOutlineButton
+                    onClick={handleAddToCart}
                     flexProp="flex-1"
                     buttonName="Add to Cart"
                     buttonBG="#343444"

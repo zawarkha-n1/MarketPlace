@@ -15,6 +15,22 @@ export const AppProvider = ({ children }) => {
   const [exaCredits, setExaCredits] = useState(0);
   const [assets, setAssets] = useState([]);
   const [loadingAssets, setLoadingAssets] = useState(true);
+  const [cartAssets, setCartAssets] = useState([]);
+
+  const addToCart = (asset) => {
+    setCartAssets((prev) => {
+      // Avoid duplicate items in the cart
+      const exists = prev.find((item) => item.id === asset.id);
+      if (!exists) {
+        return [...prev, asset];
+      }
+      return prev;
+    });
+  };
+
+  const removeFromCart = (assetId) => {
+    setCartAssets((prev) => prev.filter((item) => item.id !== assetId));
+  };
 
   const fetchUserAssets = async (useremail) => {
     try {
@@ -161,6 +177,9 @@ export const AppProvider = ({ children }) => {
         assets,
         loadingAssets,
         fetchUserAssets,
+        cartAssets,
+        addToCart,
+        removeFromCart,
       }}
     >
       {children}

@@ -15,7 +15,7 @@ const menuItems = [
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, isLogin, exaCredits } = useAppData();
+  const { user, isLogin, exaCredits, cartAssets } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
@@ -177,7 +177,7 @@ const Navbar = () => {
           </Link>
           <p
             onClick={() => setIsModalOpen((state) => !state)}
-            className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300 flex items-center relative"
+            className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300 flex items-center relative cursor-pointer"
           >
             <img
               src="/Ailabs.png"
@@ -235,8 +235,16 @@ const Navbar = () => {
           )}
 
           {isLogin && (
-            <button className="w-12 h-12  rounded-full flex items-center justify-center bg-[#8A8AA0]">
+            <button
+              className="w-12 h-12  rounded-full flex items-center justify-center bg-[#8A8AA0] relative "
+              onClick={() => navigate("/cart")}
+            >
               <img src="/Cart.png" alt="Platform" className="w-6 h-6" />
+              {cartAssets.length > 0 && (
+                <span className="absolute -top-2 -right-2  bg-red-700 rounded-full text-white w-6 h-6">
+                  {cartAssets.length}
+                </span>
+              )}
             </button>
           )}
 
