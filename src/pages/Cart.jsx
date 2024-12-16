@@ -5,8 +5,10 @@ import CartCard from "../components/common/cart-card/CartCard";
 import SummaryCard from "../components/common/cart-card/SummaryCard";
 
 const Cart = () => {
-  const { cartAssets, removeFromCart } = useAppData();
+  const { cartAssets, removeFromCart, setIsCartModalOpen, setTotalPrice } =
+    useAppData();
 
+  setIsCartModalOpen(false);
   const calculateTotal = () => {
     // Ensure all asset prices are valid numbers
     return cartAssets
@@ -18,6 +20,7 @@ const Cart = () => {
   };
   console.log("Cart Assets: ", cartAssets);
   console.log("Total Price: ", calculateTotal());
+  setTotalPrice(calculateTotal());
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">

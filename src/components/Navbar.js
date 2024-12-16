@@ -5,6 +5,7 @@ import ProfileMenu from "./common/menus/ProfileMenu";
 import DropDownMenu from "./common/menus/DropDownMenu";
 import LoginModal from "./modals/LoginModal";
 import { useAppData } from "../context/AppContext";
+import CartModal from "./modals/CartModal";
 
 const menuItems = [
   { name: "All Products", type: "All" },
@@ -15,7 +16,15 @@ const menuItems = [
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, isLogin, exaCredits, cartAssets } = useAppData();
+  const {
+    user,
+    isLogin,
+    exaCredits,
+    cartAssets,
+    setIsCartModalOpen,
+    isCartModalOpen,
+    handleCloseModal,
+  } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
@@ -81,6 +90,24 @@ const Navbar = () => {
         !profilemenuref.current.contains(event.target)
       ) {
         setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  const cartmodalref = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        cartmodalref.current &&
+        !cartmodalref.current.contains(event.target)
+      ) {
+        setIsCartModalOpen(false);
       }
     };
 
@@ -245,6 +272,13 @@ const Navbar = () => {
                   {cartAssets.length}
                 </span>
               )}
+              <div
+                className="absolute top-20 -right-10"
+                ref={cartmodalref}
+                onClick={(e) => e.stopPropagation()} // Stop event propagation
+              >
+                {isCartModalOpen && <CartModal />}
+              </div>
             </button>
           )}
 

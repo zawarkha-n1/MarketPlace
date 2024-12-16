@@ -20,7 +20,8 @@ const ModelDetails = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
 
-  const { isLogin, user, assets, addToCart, cartAssets } = useAppData();
+  const { isLogin, user, assets, addToCart, cartAssets, setIsCartModalOpen } =
+    useAppData();
   const [recentAssets, setRecentAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOwned, setIsOwned] = useState(false); // New state to track ownership
@@ -181,7 +182,13 @@ const ModelDetails = () => {
       addToCart(assetToAdd);
       setIsAddedToCart(true); // Update button state
     }
+
+    // Delay opening the cart modal by 1 second
+    setTimeout(() => {
+      setIsCartModalOpen(true);
+    }, 1000);
   };
+
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
       <Headingpage pagename={"Model Details"} secondheading={"Explore"} />

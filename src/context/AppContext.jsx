@@ -16,6 +16,8 @@ export const AppProvider = ({ children }) => {
   const [assets, setAssets] = useState([]);
   const [loadingAssets, setLoadingAssets] = useState(true);
   const [cartAssets, setCartAssets] = useState([]);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0.0);
 
   // const addToCart = (asset) => {
   //   setCartAssets((prev) => {
@@ -32,6 +34,9 @@ export const AppProvider = ({ children }) => {
   //   setCartAssets((prev) => prev.filter((item) => item.id !== assetId));
   // };
 
+  const handleCloseModal = () => {
+    setIsCartModalOpen(false);
+  };
   useEffect(() => {
     const initializeCart = async () => {
       try {
@@ -251,6 +256,11 @@ export const AppProvider = ({ children }) => {
         cartAssets,
         addToCart,
         removeFromCart,
+        setIsCartModalOpen,
+        isCartModalOpen,
+        handleCloseModal,
+        setTotalPrice,
+        totalPrice,
       }}
     >
       {children}
