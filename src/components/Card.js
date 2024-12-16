@@ -132,41 +132,37 @@ const Card = ({
         }}
       >
         {/* Box Positioned at Top Right */}
-        <div
-          className="absolute top-2 right-4 w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center cursor-pointer"
-          style={{
-            background: "#42425a", // Apply background color
-            opacity: 0.7, // Apply opacity
-          }}
-          onClick={handleSaveClick} // Toggle saved state on click
-        >
-          {/* Use filled or empty heart depending on isSaved state */}
-          {!inlibrary ? (
+        {!inlibrary && (
+          <div
+            className="absolute top-2 right-4 w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center cursor-pointer"
+            style={{
+              background: "#42425a", // Apply background color
+              opacity: 0.7, // Apply opacity
+            }}
+            onClick={handleSaveClick} // Toggle saved state on click
+          >
+            {/* Use filled or empty heart depending on isSaved state */}
+
             <img
               src={isSaved ? "/filledsaved.png" : "/save.png"} // Toggle between filled and empty heart
               alt="Save"
               className="w-[16px] h-[16px] ml-2"
             />
-          ) : (
-            <img
-              src="/star.png" // Change to the image you want when inLibrary is true
-              alt="Library"
-              className="w-[16px] h-[16px] ml-2"
-            />
-          )}
-          <span
-            className="text-white mr-2"
-            style={{
-              fontFamily: "Urbanist",
-              fontSize: "14px",
-              fontWeight: 700,
-              lineHeight: "24px",
-              textTransform: "uppercase",
-            }}
-          >
-            {!inlibrary ? localSavedCount : starcount}
-          </span>
-        </div>
+
+            <span
+              className="text-white mr-2"
+              style={{
+                fontFamily: "Urbanist",
+                fontSize: "14px",
+                fontWeight: 700,
+                lineHeight: "24px",
+                textTransform: "uppercase",
+              }}
+            >
+              {localSavedCount}
+            </span>
+          </div>
+        )}
 
         {/* Boxes Positioned at Bottom Left */}
         {!inlibrary && (
@@ -307,38 +303,46 @@ const Card = ({
         )}
       </div>
       {/* Creator Section at the Bottom */}
-      {!inlibrary && (
-        <div className="w-full flex justify-between items-center mt-4">
-          {/* Left Section: Image in a Square Div */}
-          <div className="w-[50px] h-[50px] bg-gray-200 rounded-[20px] overflow-hidden">
-            <img
-              src={creatorImage}
-              alt="Creator"
-              className="w-full h-full object-cover"
-            />
-          </div>
 
-          {/* Center Section: Creator Name */}
-          <div className="flex flex-col ml-4">
-            <span className="text-[#8A8AA0] text-sm font-normal leading-[20px] capitalize">
-              Creator
-            </span>
-            <span className="text-[#EBEBEB] text-[15px] font-semibold leading-[22px] capitalize">
-              {creatorName || "exartaaaaa"}
-            </span>
-          </div>
+      <div className="w-full flex justify-between items-center mt-4">
+        {/* Left Section: Image in a Square Div */}
+        <div className="w-[50px] h-[50px] bg-gray-200 rounded-[20px] overflow-hidden">
+          <img
+            src={creatorImage}
+            alt="Creator"
+            className="w-full h-full object-cover"
+          />
+        </div>
 
-          {/* Right Section: Price */}
-          <div className="flex flex-col text-right ml-auto">
-            <span className="text-[#8A8AA0] text-sm font-normal leading-[20px] capitalize">
-              Price
-            </span>
+        {/* Center Section: Creator Name */}
+        <div className="flex flex-col ml-4">
+          <span className="text-[#8A8AA0] text-sm font-normal leading-[20px] capitalize">
+            Creator
+          </span>
+          <span className="text-[#EBEBEB] text-[15px] font-semibold leading-[22px] capitalize">
+            {creatorName || "exartaaaaa"}
+          </span>
+        </div>
+
+        {/* Right Section: Price */}
+        <div className="flex flex-col text-right ml-auto">
+          <span className="text-[#8A8AA0] text-sm font-normal leading-[20px] capitalize">
+            {!inlibrary ? "Price" : "Status"}
+          </span>
+          {!inlibrary && (
             <span className="text-[#EBEBEB] text-[15px] font-semibold leading-[22px] capitalize">
               {price ? `${price} EXA` : "FREE"}
             </span>
-          </div>
+          )}
+          {inlibrary && (
+            <img
+              src="/owned.png"
+              alt="Creator"
+              className="w-full h-full object-cover"
+            />
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
