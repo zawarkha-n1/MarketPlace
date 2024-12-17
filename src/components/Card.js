@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAppData } from "../context/AppContext";
 
 const Card = ({
+  id, // Assuming you have an asset `id` passed as a prop now
   title,
   discount,
   price,
@@ -48,11 +49,11 @@ const Card = ({
 
       // Make the backend API call
       await axios.post("http://172.16.15.155:5000/update-asset-action", {
-        assetTitle: title,
+        assetId: id,
         actionType,
       });
 
-      console.log(`${actionType} count incremented for asset: ${title}`);
+      console.log(`${actionType} count incremented for asset: ${id}`);
     } catch (error) {
       console.error(`Error updating ${actionType} count:`, error);
 
@@ -94,7 +95,7 @@ const Card = ({
       // Make the API call to update the saved status
       await axios.post("http://172.16.15.155:5000/update-user-assets-saved", {
         useremail,
-        assetTitle: title,
+        assetId: id, // Pass assetId instead of assetTitle
         status: newSavedStatus,
       });
 

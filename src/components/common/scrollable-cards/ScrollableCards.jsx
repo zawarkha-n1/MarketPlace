@@ -61,6 +61,7 @@ const ScrollableCards = ({ cards, CardComponent, title = "Default Title" }) => {
         {cards.slice(currentIndex, currentIndex + 4).map((card, index) => (
           <Card
             key={card.id}
+            id={card.id}
             title={card.asset_data.title}
             discount={card.asset_data.discount}
             price={card.asset_data.price}

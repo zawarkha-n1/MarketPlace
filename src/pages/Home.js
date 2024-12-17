@@ -187,6 +187,7 @@ const Home = () => {
     const user = JSON.parse(sessionStorage.getItem("user")); // Get user data from sessionStorage
     const useremail = user?.email; // Extract user email
     const assetTitle = card.asset_data.title;
+    const assetId = card.id;
     if (!useremail) {
       console.error("User email not found in sessionStorage.");
       navigate(`/product/${assetTitle}`, {
@@ -199,10 +200,10 @@ const Home = () => {
       // Make an API call to update the user_assets table
       await axios.post("http://172.16.15.155:5000/update-user-assets-recent", {
         useremail,
-        assetTitle,
+        assetId,
       });
 
-      console.log("API call successful: Recent asset added.");
+      console.log("API call successful: Recent asset added.", assetId);
     } catch (error) {
       console.error("Error updating user assets:", error);
     }
@@ -237,6 +238,7 @@ const Home = () => {
             .map((card, index) => (
               <Card
                 key={card.id}
+                id={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -322,6 +324,7 @@ const Home = () => {
             .map((card, index) => (
               <Card
                 key={card.id}
+                id={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -414,6 +417,7 @@ const Home = () => {
             .map((card, index) => (
               <Card
                 key={card.id}
+                id={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -538,6 +542,7 @@ const Home = () => {
             .map((card, index) => (
               <Card
                 key={card.id}
+                id={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}
@@ -622,6 +627,7 @@ const Home = () => {
             .map((card, index) => (
               <Card
                 key={card.id}
+                id={card.id}
                 title={card.asset_data.title}
                 discount={card.asset_data.discount}
                 price={card.asset_data.price}

@@ -24,7 +24,7 @@ const CartModal = ({
     : null;
   console.log(lastAsset);
   const handleNavigate = () => {
-    navigate("/create-model");
+    navigate("/cart");
   };
 
   const calculateTotal = () => {

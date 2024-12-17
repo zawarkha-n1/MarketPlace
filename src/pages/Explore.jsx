@@ -185,6 +185,7 @@ const Explore = () => {
           {filteredCards.slice(0, visibleCards).map((card, index) => (
             <Card
               key={index}
+              id={card.id}
               title={card.asset_data.title}
               discount={card.asset_data.discount}
               price={card.asset_data.price}

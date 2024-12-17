@@ -280,7 +280,7 @@ const SavedProducts = () => {
     setDisplayedAssets(updatedAssets);
   }, [isActive, filteredAssets]);
 
-  const handleUnsave = async (assetTitle) => {
+  const handleUnsave = async (assetId) => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     const useremail = user?.email;
 
@@ -291,19 +291,19 @@ const SavedProducts = () => {
 
     try {
       setDisplayedAssets((prevAssets) =>
-        prevAssets.filter((asset) => asset.asset_data.title !== assetTitle)
+        prevAssets.filter((asset) => asset.asset_data.title !== assetId)
       );
       setFilteredAssets((prevAssets) =>
-        prevAssets.filter((asset) => asset.asset_data.title !== assetTitle)
+        prevAssets.filter((asset) => asset.asset_data.title !== assetId)
       );
 
       await axios.post("http://172.16.15.155:5000/update-user-assets-saved", {
         useremail,
-        assetTitle,
+        assetId,
         status: false,
       });
 
-      console.log(`Asset with title "${assetTitle}" removed from saved.`);
+      console.log(`Asset with title "${assetId}" removed from saved.`);
     } catch (error) {
       console.error("Error unsaving asset:", error);
     }
@@ -399,6 +399,7 @@ const SavedProducts = () => {
               {displayedAssets.slice(0, visibleCards).map((card, index) => (
                 <Card
                   key={card.id}
+                  id={card.id}
                   title={card.asset_data.title}
                   discount={card.asset_data.discount}
                   price={card.asset_data.price}
@@ -412,7 +413,7 @@ const SavedProducts = () => {
                   creatorImage={card.asset_data.creatorLogo}
                   creatorName={card.asset_data.creatorName}
                   saved={card.isSaved}
-                  onSaveToggle={() => handleUnsave(card.asset_data.title)}
+                  onSaveToggle={() => handleUnsave(card.id)}
                 />
               ))}
             </div>

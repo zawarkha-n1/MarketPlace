@@ -139,14 +139,12 @@ const ModelDetails = () => {
           "http://172.16.15.155:5000/update-user-assets-library",
           {
             useremail,
-            assetTitles: [cardData.asset_data.title], // Make sure to send an array of titles
+            assetIds: [cardData.id], // Make sure to send an array of titles
           }
         );
 
         if (addLibraryResponse.status === 200) {
-          console.log(
-            `Asset "${cardData.asset_data.title}" added to library successfully.`
-          );
+          console.log(`Asset "${cardData.id}" added to library successfully.`);
           setIsOwned(true);
         }
       } else {

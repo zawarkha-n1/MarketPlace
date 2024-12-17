@@ -73,10 +73,10 @@ const Cart = () => {
         console.log(`Updated EXA Credits: ${updatedCredits}`);
         // Collect all asset titles for the API
         const assetTitles = cartAssets.map((asset) => asset.asset_data.title);
+        const assetIds = cartAssets.map((asset) => asset.id);
 
-        // Ensure assetTitles is a valid array
-        if (!Array.isArray(assetTitles) || assetTitles.length === 0) {
-          console.error("No asset titles found.");
+        if (!Array.isArray(assetIds) || assetIds.length === 0) {
+          console.error("No asset Ids found.");
           alert("Error: No assets to add to the library.");
           return;
         }
@@ -86,7 +86,7 @@ const Cart = () => {
           "http://172.16.15.155:5000/update-user-assets-library",
           {
             useremail,
-            assetTitles,
+            assetIds,
           }
         );
 
@@ -98,8 +98,7 @@ const Cart = () => {
           for (const asset of cartAssets) {
             await removeFromCart(asset.id); // Remove each asset from cart
           }
-
-          // Optionally clear the cart state (if needed)
+          window.location.reload();
         } else {
           console.error("Error adding assets to library:", response.data.error);
           alert("Error adding assets to library.");
