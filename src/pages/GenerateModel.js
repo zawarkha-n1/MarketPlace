@@ -20,7 +20,7 @@ const GenerateModel = () => {
   const [previousGlbFileUrl, setPreviousGlbFileUrl] = useState(null); // To track the previous GLB file URL
 
   useEffect(() => {
-    const storedImage = localStorage.getItem("uploadedImage");
+    const storedImage = sessionStorage.getItem("uploadedImage");
     if (storedImage) {
       setShowCanvas(false);
     }
@@ -32,7 +32,7 @@ const GenerateModel = () => {
       const imageUrl = URL.createObjectURL(file); // For preview URL
       setUploadedImage(imageUrl); // Show the preview image
       setUploadedFile(file); // Save the actual file
-      localStorage.setItem("uploadedImage", imageUrl); // Save image URL to localStorage
+      sessionStorage.setItem("uploadedImage", imageUrl); // Save image URL to sessionStorage
       console.log("Image uploaded:", file);
       setIsGenerating(false); // Reset loader
       setIsRegenerating(false); // Reset regenerate state on new upload
@@ -43,15 +43,15 @@ const GenerateModel = () => {
   const handleRemoveImage = () => {
     setUploadedImage(null); // Remove the uploaded image
     setUploadedFile(null); // Remove the actual file
-    localStorage.removeItem("uploadedImage"); // Clear the image URL from localStorage
-    console.log("Image removed from localStorage");
+    sessionStorage.removeItem("uploadedImage"); // Clear the image URL from sessionStorage
+    console.log("Image removed from sessionStorage");
     setIsGenerating(false); // Reset loader
     setIsRegenerating(false); // Reset regenerate state
     setShowCanvas(false); // Hide canvas
   };
 
   const handleGenerateClick = async () => {
-    if (!localStorage.getItem("authToken")) {
+    if (!sessionStorage.getItem("authToken")) {
       alert("Please login first to generate Model");
       return;
     }
@@ -241,8 +241,8 @@ const GenerateModel = () => {
     setUploadedImage(imageUrl);
     setUploadedFile(null); // Reset the uploaded file since we're using an image URL
 
-    // Save the image URL to localStorage (optional, for persistence)
-    localStorage.setItem("uploadedImage", imageUrl);
+    // Save the image URL to sessionStorage (optional, for persistence)
+    sessionStorage.setItem("uploadedImage", imageUrl);
 
     // Reset other states
     setIsGenerating(false); // Reset loader

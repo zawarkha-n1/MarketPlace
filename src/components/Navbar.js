@@ -286,7 +286,7 @@ const Navbar = () => {
             <button className="w-12 h-12 rounded-full flex items-center justify-center bg-[#8A8AA0] relative">
               <img
                 src={
-                  JSON.parse(localStorage.getItem("user"))?.picture ||
+                  JSON.parse(sessionStorage.getItem("user"))?.picture ||
                   "/woman.png"
                 } // Use user.picture if available, otherwise fallback to woman.png
                 alt={user?.name || "User Profile"} // Use user's name for accessibility

@@ -184,11 +184,11 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleCardClick = async (card) => {
-    const user = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+    const user = JSON.parse(sessionStorage.getItem("user")); // Get user data from sessionStorage
     const useremail = user?.email; // Extract user email
     const assetTitle = card.asset_data.title;
     if (!useremail) {
-      console.error("User email not found in localStorage.");
+      console.error("User email not found in sessionStorage.");
       navigate(`/product/${assetTitle}`, {
         state: card,
       });

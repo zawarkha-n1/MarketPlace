@@ -19,20 +19,18 @@ export const AppProvider = ({ children }) => {
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0.0);
 
-  // const addToCart = (asset) => {
-  //   setCartAssets((prev) => {
-  //     // Avoid duplicate items in the cart
-  //     const exists = prev.find((item) => item.id === asset.id);
-  //     if (!exists) {
-  //       return [...prev, asset];
-  //     }
-  //     return prev;
-  //   });
-  // };
-
-  // const removeFromCart = (assetId) => {
-  //   setCartAssets((prev) => prev.filter((item) => item.id !== assetId));
-  // };
+  axios.interceptors.request.use(
+    (config) => {
+      const token = sessionStorage.getItem("authToken"); // Get token from session storage
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   const handleCloseModal = () => {
     setIsCartModalOpen(false);
@@ -40,7 +38,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const initializeCart = async () => {
       try {
-        const savedUser = JSON.parse(localStorage.getItem("user"));
+        const savedUser = JSON.parse(sessionStorage.getItem("user"));
         if (savedUser) {
           setUser(savedUser);
           setIsLogin(true);
@@ -56,14 +54,14 @@ export const AppProvider = ({ children }) => {
 
   const fetchCartAssets = async (useremail) => {
     try {
-      const response = await axios.get(`http://localhost:5000/user-assets`);
+      const response = await axios.get("http://localhost:5000/user-assets");
       const userAssetsData = response.data.find(
         (item) => item.useremail === useremail
       );
       const cartAssetIds = userAssetsData?.userassetsdata?.cartassets || [];
 
       // Fetch full asset details
-      const assetsResponse = await axios.get(`http://localhost:5000/assets`);
+      const assetsResponse = await axios.get("http://localhost:5000/assets");
       const allAssets = assetsResponse.data;
 
       const cartAssetsDetails = allAssets.filter((asset) =>
@@ -71,7 +69,7 @@ export const AppProvider = ({ children }) => {
       );
 
       setCartAssets(cartAssetsDetails);
-      localStorage.setItem("cartAssets", JSON.stringify(cartAssetsDetails)); // Persist in localStorage
+      sessionStorage.setItem("cartAssets", JSON.stringify(cartAssetsDetails)); // Persist in sessionStorage
     } catch (error) {
       console.error("Error fetching cart assets:", error);
     }
@@ -85,7 +83,7 @@ export const AppProvider = ({ children }) => {
       });
       const updatedCart = [...cartAssets, response.data.asset];
       setCartAssets(updatedCart);
-      localStorage.setItem("cartAssets", JSON.stringify(updatedCart)); // Update localStorage
+      sessionStorage.setItem("cartAssets", JSON.stringify(updatedCart)); // Update sessionStorage
     } catch (error) {
       console.error("Error adding to cart:", error);
     }
@@ -99,7 +97,7 @@ export const AppProvider = ({ children }) => {
       });
       const updatedCart = cartAssets.filter((item) => item.id !== assetId);
       setCartAssets(updatedCart);
-      localStorage.setItem("cartAssets", JSON.stringify(updatedCart)); // Update localStorage
+      sessionStorage.setItem("cartAssets", JSON.stringify(updatedCart)); // Update sessionStorage
     } catch (error) {
       console.error("Error removing from cart:", error);
     }
@@ -136,30 +134,27 @@ export const AppProvider = ({ children }) => {
 
     try {
       const response = await axios.post(
-        "http://172.16.15.155:5000/verify-token",
-        { token }
+        `http://172.16.15.155:5000/verify-token`,
+        {
+          token,
+        }
       );
-      console.log("User verified successfully:", response.data.user);
-
       const newAuthToken = response.data.token;
       const userData = response.data.user;
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem("authToken", newAuthToken);
-        localStorage.setItem("user", JSON.stringify(userData));
-      }
+      // Store auth token in sessionStorage
+      sessionStorage.setItem("authToken", newAuthToken);
+      sessionStorage.setItem("user", JSON.stringify(userData));
 
+      setAuthToken(newAuthToken);
       setUser(userData);
       setIsLogin(true);
-      setAuthToken(newAuthToken);
       setExaCredits(userData.exaCredits);
-      await fetchCartAssets(userData.email);
 
-      const fetchedAssets = await axios
-        .get("http://172.16.15.155:5000/assets")
-        .then((res) => res.data);
+      await fetchCartAssets(userData.email);
+      const fetchedAssets = await axios.get(`http://172.16.15.155:5000/assets`);
       const savedAssetIds = await fetchUserAssets(userData.email);
-      updateAssetsWithSavedStatus(fetchedAssets, savedAssetIds);
+      updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {
       console.error("Error verifying user:", error);
     }
@@ -167,14 +162,14 @@ export const AppProvider = ({ children }) => {
 
   const handleLogout = async () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
+      sessionStorage.removeItem("authToken");
+      sessionStorage.removeItem("user");
     }
     setUser(null);
     setAuthToken(null);
     setIsLogin(false);
     setCartAssets([]);
-    localStorage.removeItem("cartAssets"); // Clear localStorage
+    sessionStorage.removeItem("cartAssets"); // Clear sessionStorage
 
     try {
       const fetchedAssets = await axios
@@ -199,8 +194,8 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     const initializeApp = async () => {
-      const token = localStorage.getItem("authToken");
-      const userData = localStorage.getItem("user");
+      const token = sessionStorage.getItem("authToken");
+      const userData = sessionStorage.getItem("user");
 
       try {
         const fetchedAssets = await axios
@@ -213,8 +208,8 @@ export const AppProvider = ({ children }) => {
 
           if (decodedToken.exp < currentTime) {
             console.log("Token expired, clearing storage");
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("user");
+            sessionStorage.removeItem("authToken");
+            sessionStorage.removeItem("user");
           } else {
             const parsedUser = JSON.parse(userData);
             setAuthToken(token);
@@ -250,6 +245,7 @@ export const AppProvider = ({ children }) => {
         setAuthToken,
         isLogin,
         exaCredits,
+        setExaCredits,
         assets,
         loadingAssets,
         fetchUserAssets,

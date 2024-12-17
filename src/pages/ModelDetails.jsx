@@ -20,8 +20,16 @@ const ModelDetails = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
 
-  const { isLogin, user, assets, addToCart, cartAssets, setIsCartModalOpen } =
-    useAppData();
+  const {
+    isLogin,
+    user,
+    setUser,
+    assets,
+    addToCart,
+    cartAssets,
+    setIsCartModalOpen,
+    setExaCredits,
+  } = useAppData();
   const [recentAssets, setRecentAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOwned, setIsOwned] = useState(false); // New state to track ownership
@@ -106,15 +114,49 @@ const ModelDetails = () => {
     }
 
     try {
-      console.log("Sending POST request to API...");
-      await axios.post("http://172.16.15.155:5000/update-user-assets-library", {
-        useremail,
-        assetTitle: title,
-      });
-      console.log(`Asset "${title}" added to library successfully.`);
-      setIsOwned(true); // Update ownership state after purchase
+      console.log("Starting payment process...");
+
+      // Call the payment API first
+      const paymentResponse = await axios.post(
+        "http://172.16.15.155:5000/process-payment",
+        {
+          email: useremail, // Assuming useremail is already defined
+          paymentType: "onetime", // Hardcoded as onetime for now
+          amount: cardData.asset_data.price, // Payment amount taken from cardData
+        }
+      );
+
+      console.log("Payment Response:", paymentResponse.data);
+
+      // Check if the payment was successful
+      if (paymentResponse.data.success) {
+        console.log(
+          "Payment successful. Proceeding to add asset to library..."
+        );
+        const updatedCredits = paymentResponse.data.newCredits;
+        setExaCredits(updatedCredits); // Update state in AppContext
+        const updatedUser = { ...user, exaCredits: updatedCredits };
+        setUser(updatedUser); // Update user object in context
+
+        sessionStorage.setItem("user", JSON.stringify(updatedUser));
+        // Call the add-to-library API
+        await axios.post(
+          "http://172.16.15.155:5000/update-user-assets-library",
+          {
+            useremail,
+            assetTitle: title,
+          }
+        );
+
+        console.log(`Asset "${title}" added to library successfully.`);
+        setIsOwned(true); // Update ownership state after purchase
+      } else {
+        console.error("Payment failed:", paymentResponse.data.message);
+        alert(`Payment Failed: ${paymentResponse.data.message}`);
+      }
     } catch (error) {
-      console.error("Error adding asset to library:", error);
+      console.error("Error during payment or adding asset to library:", error);
+      alert("An error occurred during the process. Please try again.");
     }
   };
   useEffect(() => {

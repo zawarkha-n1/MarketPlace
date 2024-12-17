@@ -24,11 +24,11 @@
 
 //   useEffect(() => {
 //     const fetchUserAssets = async () => {
-//       const user = JSON.parse(localStorage.getItem("user"));
+//       const user = JSON.parse(sessionStorage.getItem("user"));
 //       const useremail = user?.email;
 
 //       if (!useremail) {
-//         console.error("User email not found in localStorage.");
+//         console.error("User email not found in sessionStorage.");
 //         setLoading(false);
 //         return;
 //       }
@@ -223,11 +223,11 @@ const SavedProducts = () => {
 
   useEffect(() => {
     const fetchUserSavedAssets = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user = JSON.parse(sessionStorage.getItem("user"));
       const useremail = user?.email;
 
       if (!useremail) {
-        console.error("User email not found in localStorage.");
+        console.error("User email not found in sessionStorage.");
         setLoading(false);
         return;
       }
@@ -281,11 +281,11 @@ const SavedProducts = () => {
   }, [isActive, filteredAssets]);
 
   const handleUnsave = async (assetTitle) => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(sessionStorage.getItem("user"));
     const useremail = user?.email;
 
     if (!useremail) {
-      console.error("User email not found in localStorage.");
+      console.error("User email not found in sessionStorage.");
       return;
     }
 
