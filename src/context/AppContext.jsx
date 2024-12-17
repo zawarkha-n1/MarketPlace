@@ -129,30 +129,60 @@ export const AppProvider = ({ children }) => {
     console.log("Updated Assets with Saved Status:", updatedAssets);
   };
 
+  // const handleLoginSuccess = async (credentialResponse) => {
+  //   const token = credentialResponse.credential;
+
+  //   try {
+  //     const response = await axios.post(
+  //       `http://172.16.15.155:5000/verify-token`,
+  //       {
+  //         token,
+  //       }
+  //     );
+  //     const newAuthToken = response.data.token;
+  //     const userData = response.data.user;
+
+  //     // Store auth token in sessionStorage
+  //     sessionStorage.setItem("authToken", newAuthToken);
+  //     sessionStorage.setItem("user", JSON.stringify(userData));
+
+  //     setAuthToken(newAuthToken);
+  //     setUser(userData);
+  //     setIsLogin(true);
+  //     setExaCredits(userData.exaCredits);
+
+  //     await fetchCartAssets(userData.email);
+  //     const fetchedAssets = await axios.get(`http://172.16.15.155:5000/assets`);
+  //     const savedAssetIds = await fetchUserAssets(userData.email);
+  //     updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
+  //   } catch (error) {
+  //     console.error("Error verifying user:", error);
+  //   }
+  // };
+
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
 
     try {
       const response = await axios.post(
         `http://172.16.15.155:5000/verify-token`,
-        {
-          token,
-        }
+        { token }
       );
       const newAuthToken = response.data.token;
       const userData = response.data.user;
 
-      // Store auth token in sessionStorage
+      // Store the auth token and user data
       sessionStorage.setItem("authToken", newAuthToken);
       sessionStorage.setItem("user", JSON.stringify(userData));
 
-      setAuthToken(newAuthToken);
-      setUser(userData);
-      setIsLogin(true);
-      setExaCredits(userData.exaCredits);
+      setAuthToken(newAuthToken); // Update the authToken state
+      setUser(userData); // Update the user state
+      setIsLogin(true); // Set login status to true
+      setExaCredits(userData.exaCredits); // Update exa credits
 
+      // Optionally fetch the cart and other data after login
       await fetchCartAssets(userData.email);
-      const fetchedAssets = await axios.get(`http://172.16.15.155:5000/assets`);
+      const fetchedAssets = await axios.get("http://172.16.15.155:5000/assets");
       const savedAssetIds = await fetchUserAssets(userData.email);
       updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {

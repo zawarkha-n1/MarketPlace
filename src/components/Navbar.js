@@ -6,7 +6,7 @@ import DropDownMenu from "./common/menus/DropDownMenu";
 import LoginModal from "./modals/LoginModal";
 import { useAppData } from "../context/AppContext";
 import CartModal from "./modals/CartModal";
-
+import axios from "axios";
 const menuItems = [
   { name: "All Products", type: "All" },
   { name: "3D Models", type: "3d" },
@@ -16,11 +16,13 @@ const menuItems = [
 
 const Navbar = () => {
   const navigate = useNavigate();
+
   const {
     user,
     isLogin,
     exaCredits,
     cartAssets,
+    setExaCredits,
     setIsCartModalOpen,
     isCartModalOpen,
     handleCloseModal,
@@ -30,6 +32,25 @@ const Navbar = () => {
   const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  useEffect(() => {
+    const fetchExaCredits = async () => {
+      if (isLogin && user) {
+        try {
+          const response = await axios.get(
+            `http://172.16.15.155:5000/get-exa-credits/${user.email}`
+          );
+          if (response.data && response.data.exaCredits !== undefined) {
+            setExaCredits(response.data.exaCredits); // Set global exaCredits state
+          }
+        } catch (error) {
+          console.error("Error fetching exa credits:", error);
+        }
+      }
+    };
+
+    fetchExaCredits();
+  }, [isLogin, user, setExaCredits]); // This effect will run when isLogin or user changes
 
   const plans = () => {
     navigate("/plans");

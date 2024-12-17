@@ -93,8 +93,6 @@ const ModelDetails = () => {
       return;
     }
 
-    console.log("Button clicked: handleBuyNowClick is called"); // Debug log
-    console.log("User fetched from context:", user); // Debug log
     const useremail = user?.email;
 
     if (!useremail) {
@@ -102,12 +100,10 @@ const ModelDetails = () => {
       return;
     }
 
-    // Display a confirmation alert with the product price
     const confirmPurchase = window.confirm(
       `You want to confirm buy for this product? ${cardData.asset_data.price} Exas will be cut from your account.`
     );
 
-    // Exit function if user cancels
     if (!confirmPurchase) {
       console.log("User cancelled the purchase.");
       return;
@@ -120,36 +116,39 @@ const ModelDetails = () => {
       const paymentResponse = await axios.post(
         "http://172.16.15.155:5000/process-payment",
         {
-          email: useremail, // Assuming useremail is already defined
-          paymentType: "onetime", // Hardcoded as onetime for now
-          amount: cardData.asset_data.price, // Payment amount taken from cardData
+          email: useremail,
+          paymentType: "onetime",
+          amount: cardData.asset_data.price,
         }
       );
 
       console.log("Payment Response:", paymentResponse.data);
 
-      // Check if the payment was successful
       if (paymentResponse.data.success) {
         console.log(
           "Payment successful. Proceeding to add asset to library..."
         );
         const updatedCredits = paymentResponse.data.newCredits;
-        setExaCredits(updatedCredits); // Update state in AppContext
+        setExaCredits(updatedCredits);
         const updatedUser = { ...user, exaCredits: updatedCredits };
-        setUser(updatedUser); // Update user object in context
-
+        setUser(updatedUser);
         sessionStorage.setItem("user", JSON.stringify(updatedUser));
-        // Call the add-to-library API
-        await axios.post(
+
+        // Proceed with adding the asset to the library
+        const addLibraryResponse = await axios.post(
           "http://172.16.15.155:5000/update-user-assets-library",
           {
             useremail,
-            assetTitle: title,
+            assetTitles: [cardData.asset_data.title], // Make sure to send an array of titles
           }
         );
 
-        console.log(`Asset "${title}" added to library successfully.`);
-        setIsOwned(true); // Update ownership state after purchase
+        if (addLibraryResponse.status === 200) {
+          console.log(
+            `Asset "${cardData.asset_data.title}" added to library successfully.`
+          );
+          setIsOwned(true);
+        }
       } else {
         console.error("Payment failed:", paymentResponse.data.message);
         alert(`Payment Failed: ${paymentResponse.data.message}`);

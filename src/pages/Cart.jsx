@@ -3,10 +3,19 @@ import { useAppData } from "../context/AppContext";
 import Headingpage from "../components/HeadingPage";
 import CartCard from "../components/common/cart-card/CartCard";
 import SummaryCard from "../components/common/cart-card/SummaryCard";
-
+import axios from "axios";
 const Cart = () => {
-  const { cartAssets, removeFromCart, setIsCartModalOpen, setTotalPrice } =
-    useAppData();
+  const {
+    cartAssets,
+    setIsCartModalOpen,
+    setTotalPrice,
+    isLogin,
+    user,
+    removeFromCart,
+    setExaCredits,
+    exaCredits,
+    setUser,
+  } = useAppData();
 
   setIsCartModalOpen(false);
   const calculateTotal = () => {
@@ -22,6 +31,88 @@ const Cart = () => {
   console.log("Total Price: ", calculateTotal());
   setTotalPrice(calculateTotal());
 
+  const onCheckout = async () => {
+    const useremail = user?.email;
+    if (!useremail) {
+      console.error("User email not found.");
+      return;
+    }
+
+    // Calculate total price
+    const totalPrice = cartAssets.reduce(
+      (acc, asset) => acc + asset.asset_data.price,
+      0
+    );
+
+    const confirmPurchase = window.confirm(
+      `You want to confirm checkout? ${totalPrice} Exas will be cut from your account.`
+    );
+
+    if (!confirmPurchase) return;
+
+    try {
+      // Process payment first
+      const paymentResponse = await axios.post(
+        "http://172.16.15.155:5000/process-payment",
+        {
+          email: useremail,
+          paymentType: "onetime",
+          amount: totalPrice,
+        }
+      );
+
+      if (paymentResponse.data.success) {
+        console.log("Payment successful. Adding assets to library...");
+
+        const updatedCredits = paymentResponse.data.newCredits;
+        setExaCredits(updatedCredits); // Set the updated EXA credits globally
+        const updatedUser = { ...user, exaCredits: updatedCredits };
+        setUser(updatedUser);
+        sessionStorage.setItem("user", JSON.stringify(updatedUser));
+
+        console.log(`Updated EXA Credits: ${updatedCredits}`);
+        // Collect all asset titles for the API
+        const assetTitles = cartAssets.map((asset) => asset.asset_data.title);
+
+        // Ensure assetTitles is a valid array
+        if (!Array.isArray(assetTitles) || assetTitles.length === 0) {
+          console.error("No asset titles found.");
+          alert("Error: No assets to add to the library.");
+          return;
+        }
+
+        // Call the bulk add-to-library API
+        const response = await axios.post(
+          "http://172.16.15.155:5000/update-user-assets-library",
+          {
+            useremail,
+            assetTitles,
+          }
+        );
+
+        if (response.status === 200) {
+          console.log("Assets added to library successfully.");
+          alert("Checkout successful! Your assets are added to the library.");
+
+          // Remove all items from the cart after successful checkout
+          for (const asset of cartAssets) {
+            await removeFromCart(asset.id); // Remove each asset from cart
+          }
+
+          // Optionally clear the cart state (if needed)
+        } else {
+          console.error("Error adding assets to library:", response.data.error);
+          alert("Error adding assets to library.");
+        }
+      } else {
+        console.error("Payment failed:", paymentResponse.data.message);
+        alert(`Payment failed: ${paymentResponse.data.message}`);
+      }
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      alert("An error occurred during checkout. Please try again.");
+    }
+  };
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
       <Headingpage pagename={"Cart"} secondheading={"Explore"} />
@@ -45,6 +136,7 @@ const Cart = () => {
               { label: "Price", value: `${calculateTotal()} EXA` },
               { label: "Taxes", value: "0.00 EXA" }, // Static shipping
             ]}
+            onCheckout={onCheckout}
           />
         </div>
       </div>
