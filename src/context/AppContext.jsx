@@ -35,6 +35,7 @@ export const AppProvider = ({ children }) => {
   const handleCloseModal = () => {
     setIsCartModalOpen(false);
   };
+
   useEffect(() => {
     const initializeCart = async () => {
       try {
@@ -105,7 +106,7 @@ export const AppProvider = ({ children }) => {
 
   const fetchUserAssets = async (useremail) => {
     try {
-      const response = await axios.get("http://172.16.15.155:5000/user-assets");
+      const response = await axios.get("http://localhost:5000/user-assets");
       const userAssetsData = response.data;
 
       const currentUserAssets = userAssetsData.find(
@@ -133,10 +134,9 @@ export const AppProvider = ({ children }) => {
     const token = credentialResponse.credential;
 
     try {
-      const response = await axios.post(
-        `http://172.16.15.155:5000/verify-token`,
-        { token }
-      );
+      const response = await axios.post(`http://localhost:5000/verify-token`, {
+        token,
+      });
       const newAuthToken = response.data.token;
       const userData = response.data.user;
 
@@ -151,7 +151,7 @@ export const AppProvider = ({ children }) => {
 
       // Optionally fetch the cart and other data after login
       await fetchCartAssets(userData.email);
-      const fetchedAssets = await axios.get("http://172.16.15.155:5000/assets");
+      const fetchedAssets = await axios.get("http://localhost:5000/assets");
       const savedAssetIds = await fetchUserAssets(userData.email);
       updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {
@@ -172,7 +172,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const fetchedAssets = await axios
-        .get("http://172.16.15.155:5000/assets")
+        .get("http://localhost:5000/assets")
         .then((res) => res.data);
 
       const updatedAssets = fetchedAssets.map((asset) => ({
@@ -198,7 +198,7 @@ export const AppProvider = ({ children }) => {
 
       try {
         const fetchedAssets = await axios
-          .get("http://172.16.15.155:5000/assets")
+          .get("http://localhost:5000/assets")
           .then((res) => res.data);
 
         if (token && userData) {
@@ -233,6 +233,51 @@ export const AppProvider = ({ children }) => {
     initializeApp();
   }, []);
 
+  const handleSaveClick = async (assetId, isSaved, title) => {
+    const useremail = user?.email;
+
+    if (!useremail) {
+      console.error("User is not logged in.");
+      return;
+    }
+
+    try {
+      // Optimistically update the UI
+      const newSavedStatus = !isSaved;
+
+      // Make the API call to update the saved status
+      await axios.post("http://localhost:5000/update-user-assets-saved", {
+        useremail,
+        assetId,
+        status: newSavedStatus,
+      });
+
+      // Update global state with the updated assets
+      const updatedAssets = assets.map((asset) =>
+        asset.id === assetId ? { ...asset, isSaved: newSavedStatus } : asset
+      );
+
+      setAssets(updatedAssets); // Update global state
+      sessionStorage.setItem("assets", JSON.stringify(updatedAssets)); // Store updated assets in session storage
+
+      console.log(
+        `Asset ${newSavedStatus ? "saved" : "unsaved"} successfully.`
+      );
+
+      // Optionally re-fetch assets from the backend to ensure consistency
+      fetchUserAssets();
+      await fetchCartAssets(user.email);
+      const fetchedAssets = await axios.get("http://localhost:5000/assets");
+      const savedAssetIds = await fetchUserAssets(user.email);
+      updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
+    } catch (error) {
+      console.error("Error updating saved status in backend:", error);
+
+      // Revert UI state if the API call fails
+      // Handle error states here if needed
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -256,6 +301,7 @@ export const AppProvider = ({ children }) => {
         handleCloseModal,
         setTotalPrice,
         totalPrice,
+        handleSaveClick,
       }}
     >
       {children}

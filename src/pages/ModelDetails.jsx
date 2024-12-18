@@ -61,9 +61,7 @@ const ModelDetails = () => {
 
       try {
         // Fetch user assets
-        const response = await axios.get(
-          `http://172.16.15.155:5000/user-assets`
-        );
+        const response = await axios.get(`http://localhost:5000/user-assets`);
         const userAssetsData = response.data.find(
           (item) => item.useremail === user.email
         );
@@ -114,7 +112,7 @@ const ModelDetails = () => {
 
       // Call the payment API first
       const paymentResponse = await axios.post(
-        "http://172.16.15.155:5000/process-payment",
+        "http://localhost:5000/process-payment",
         {
           email: useremail,
           paymentType: "onetime",
@@ -136,7 +134,7 @@ const ModelDetails = () => {
 
         // Proceed with adding the asset to the library
         const addLibraryResponse = await axios.post(
-          "http://172.16.15.155:5000/update-user-assets-library",
+          "http://localhost:5000/update-user-assets-library",
           {
             useremail,
             assetIds: [cardData.id], // Make sure to send an array of titles
@@ -162,9 +160,7 @@ const ModelDetails = () => {
 
       try {
         if (isLogin && user) {
-          const response = await axios.get(
-            `http://172.16.15.155:5000/user-assets`
-          );
+          const response = await axios.get(`http://localhost:5000/user-assets`);
           const userAssetsData = response.data.find(
             (item) => item.useremail === user.email
           );

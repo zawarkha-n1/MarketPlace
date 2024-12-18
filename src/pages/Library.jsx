@@ -34,9 +34,7 @@ const Library = () => {
       }
 
       try {
-        const response = await axios.get(
-          "http://172.16.15.155:5000/user-assets"
-        );
+        const response = await axios.get("http://localhost:5000/user-assets");
         const userAssetsData = response.data;
 
         // Filter data for the current user

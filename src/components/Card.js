@@ -18,10 +18,9 @@ const Card = ({
   creatorImage,
   creatorName,
   saved,
-  onSaveToggle,
 }) => {
   const [isSaved, setIsSaved] = useState(saved);
-  const { fetchUserAssets, user } = useAppData();
+  const { fetchUserAssets, user, handleSaveClick } = useAppData();
   const [localSavedCount, setLocalSavedCount] = useState(savedcount);
   const [localStarCount, setLocalStarCount] = useState(starcount);
   const [localHeartCount, setLocalHeartCount] = useState(heartcount);
@@ -48,7 +47,7 @@ const Card = ({
       }
 
       // Make the backend API call
-      await axios.post("http://172.16.15.155:5000/update-asset-action", {
+      await axios.post("http://localhost:5000/update-asset-action", {
         assetId: id,
         actionType,
       });
@@ -69,54 +68,60 @@ const Card = ({
     }
   };
 
-  const handleSaveClick = async (event) => {
+  // const handleSaveClick = async (event) => {
+  //   event.stopPropagation();
+
+  //   if (!user) {
+  //     console.error("User is not logged in.");
+  //     return;
+  //   }
+
+  //   const useremail = user.email;
+
+  //   try {
+  //     // Optimistically update the UI
+  //     const newSavedStatus = !isSaved;
+  //     setIsSaved(newSavedStatus);
+  //     setLocalSavedCount((prevCount) =>
+  //       newSavedStatus ? prevCount + 1 : Math.max(prevCount - 1, 0)
+  //     );
+
+  //     // Notify the parent component if needed (e.g., to remove unsaved items)
+  //     if (onSaveToggle) {
+  //       onSaveToggle(newSavedStatus, title);
+  //     }
+
+  //     // Make the API call to update the saved status
+  //     await axios.post("http://localhost:5000/update-user-assets-saved", {
+  //       useremail,
+  //       assetId: id, // Pass assetId instead of assetTitle
+  //       status: newSavedStatus,
+  //     });
+
+  //     console.log(
+  //       `Asset ${newSavedStatus ? "saved" : "unsaved"} successfully.`
+  //     );
+  //   } catch (error) {
+  //     console.error("Error updating saved status in backend:", error);
+
+  //     // Revert the UI state if the API call fails
+  //     setIsSaved((prevSaved) => !prevSaved);
+  //     setLocalSavedCount((prevCount) =>
+  //       !isSaved ? prevCount - 1 : prevCount + 1
+  //     );
+
+  //     if (onSaveToggle) {
+  //       onSaveToggle(!isSaved, title);
+  //     }
+  //   }
+  // };
+
+  const handleSaveClickLocal = (event) => {
     event.stopPropagation();
-
-    if (!user) {
-      console.error("User is not logged in.");
-      return;
-    }
-
-    const useremail = user.email;
-
-    try {
-      // Optimistically update the UI
-      const newSavedStatus = !isSaved;
-      setIsSaved(newSavedStatus);
-      setLocalSavedCount((prevCount) =>
-        newSavedStatus ? prevCount + 1 : Math.max(prevCount - 1, 0)
-      );
-
-      // Notify the parent component if needed (e.g., to remove unsaved items)
-      if (onSaveToggle) {
-        onSaveToggle(newSavedStatus, title);
-      }
-
-      // Make the API call to update the saved status
-      await axios.post("http://172.16.15.155:5000/update-user-assets-saved", {
-        useremail,
-        assetId: id, // Pass assetId instead of assetTitle
-        status: newSavedStatus,
-      });
-
-      console.log(
-        `Asset ${newSavedStatus ? "saved" : "unsaved"} successfully.`
-      );
-    } catch (error) {
-      console.error("Error updating saved status in backend:", error);
-
-      // Revert the UI state if the API call fails
-      setIsSaved((prevSaved) => !prevSaved);
-      setLocalSavedCount((prevCount) =>
-        !isSaved ? prevCount - 1 : prevCount + 1
-      );
-
-      if (onSaveToggle) {
-        onSaveToggle(!isSaved, title);
-      }
-    }
+    handleSaveClick(id, isSaved, title); // Call global save function
+    setIsSaved(!isSaved); // Toggle local state
+    setLocalSavedCount(isSaved ? localSavedCount - 1 : localSavedCount + 1); // Update local saved count
   };
-
   return (
     <div
       onClick={onClick}
@@ -140,7 +145,7 @@ const Card = ({
               background: "#42425a", // Apply background color
               opacity: 0.7, // Apply opacity
             }}
-            onClick={handleSaveClick} // Toggle saved state on click
+            onClick={handleSaveClickLocal} // Toggle saved state on click
           >
             {/* Use filled or empty heart depending on isSaved state */}
 

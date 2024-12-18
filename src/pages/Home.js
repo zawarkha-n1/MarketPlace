@@ -198,7 +198,7 @@ const Home = () => {
 
     try {
       // Make an API call to update the user_assets table
-      await axios.post("http://172.16.15.155:5000/update-user-assets-recent", {
+      await axios.post("http://localhost:5000/update-user-assets-recent", {
         useremail,
         assetId,
       });
