@@ -12,12 +12,45 @@ const Home = () => {
   const [popularIndex, setPopularIndex] = useState(0);
   const [textureIndex, setTextureIndex] = useState(0);
   const [experienceIndex, setExperienceIndex] = useState(0);
-  const { assets, fetchUserAssets, isLogin, fetchUserData } = useAppData();
+  const { assets, fetchUserAssets, isLogin, setUser, setExaCredits } =
+    useAppData();
 
   useEffect(() => {
-    // Fetch user data when the home page is loaded
+    const fetchUserData = async () => {
+      try {
+        const token = sessionStorage.getItem("authToken");
+        if (!token) {
+          console.error("No token found in session storage.");
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5001/get-user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const userData = response.data;
+        sessionStorage.setItem("user", JSON.stringify(userData)); // Update session storage
+        setUser(userData); // Update global state
+        setExaCredits(userData.exaCredits); // Update EXA credits in global state
+      } catch (error) {
+        console.error("Error fetching user data on home page:", error);
+        if (error.response?.status === 401) {
+          console.log("Token expired or unauthorized. Logging out...");
+          sessionStorage.clear();
+          window.location.reload(); // Optionally redirect to login
+        }
+      }
+    };
+    const hasReloaded = sessionStorage.getItem("homePageReloaded");
+    if (!hasReloaded) {
+      fetchUserData();
+      sessionStorage.setItem("homePageReloaded", "true"); // Mark home page as reloaded
+    }
+
     fetchUserData();
-  }, []);
+  }, [setUser, setExaCredits]);
 
   let inlibrary = false;
   const [filter, setFilter] = useState("All");
