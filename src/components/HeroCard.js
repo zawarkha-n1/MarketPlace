@@ -68,6 +68,13 @@ const HeroCard = () => {
               src="/platform.png" // Image path from the public folder
               alt="Platform 3" // Alt text for accessibility
               className="w-full h-full object-contain" // Set a fixed width and height for the image
+              onClick={() =>
+                window.open(
+                  "https://odyssey-independent-platform.vercel.app/",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
             />
           </button>
           <button

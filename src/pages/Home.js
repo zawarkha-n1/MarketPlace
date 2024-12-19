@@ -435,7 +435,16 @@ const Home = () => {
           <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
             Top Immersive Experiences from Odyssey3D
           </h2>
-          <div className="relative">
+          <div
+            className="relative cursor-pointer"
+            onClick={() =>
+              window.open(
+                "https://odyssey-independent-platform.vercel.app/",
+                "_blank",
+                "noopener,noreferrer"
+              )
+            }
+          >
             <img
               src="/platform3.png" // Replace with your image path
               alt="Explore Now"
@@ -542,28 +551,44 @@ const Home = () => {
 
         <div className="flex gap-4 mt-6 mb-8">
           <button
-            className="bg-[#5750A2] text-[#fff] py-2 px-6 rounded-full font-normal hover:bg-[#343444] transition duration-300 font-poppins text-[17.811px] leading-normal flex items-center"
+            className={`${
+              filter === "All"
+                ? "bg-[#5750A2] text-[#fff]"
+                : "bg-[#343444] text-[#888B93] hover:bg-[#5750A2]"
+            } text-[#fff] py-2 px-6 rounded-full font-normal transition duration-300 font-poppins text-[17.811px] leading-normal flex items-center`}
             onClick={() => handleFilterChange("All")} // Set filter to "All"
           >
             <img src="/all.png" alt="All" className="w-auto h-auto mr-2" /> All
           </button>
 
           <button
-            className="bg-[#343444] text-[#888B93] py-2 px-6 rounded-full font-normal hover:bg-[#5750A2] transition duration-300 font-poppins text-[17.811px] leading-normal"
+            className={`${
+              filter === "3d"
+                ? "bg-[#5750A2] text-[#fff]"
+                : "bg-[#343444] text-[#888B93] hover:bg-[#5750A2]"
+            } text-[#fff] py-2 px-6 rounded-full font-normal transition duration-300 font-poppins text-[17.811px] leading-normal flex items-center`}
             onClick={() => handleFilterChange("3d")} // Set filter to "3D"
           >
             3D Models
           </button>
 
           <button
-            className="bg-[#343444] text-[#888B93] py-2 px-6 rounded-full font-normal hover:bg-[#5750A2] transition duration-300 font-poppins text-[17.811px] leading-normal"
+            className={`${
+              filter === "texture"
+                ? "bg-[#5750A2] text-[#fff]"
+                : "bg-[#343444] text-[#888B93] hover:bg-[#5750A2]"
+            } text-[#fff] py-2 px-6 rounded-full font-normal transition duration-300 font-poppins text-[17.811px] leading-normal flex items-center`}
             onClick={() => handleFilterChange("texture")} // Set filter to "Textures"
           >
             Textures
           </button>
 
           <button
-            className="bg-[#343444] text-[#888B93] py-2 px-6 rounded-full font-normal hover:bg-[#5750A2] transition duration-300 font-poppins text-[17.811px] leading-normal"
+            className={`${
+              filter === "experience"
+                ? "bg-[#5750A2] text-[#fff]"
+                : "bg-[#343444] text-[#888B93] hover:bg-[#5750A2]"
+            } text-[#fff] py-2 px-6 rounded-full font-normal transition duration-300 font-poppins text-[17.811px] leading-normal flex items-center`}
             onClick={() => handleFilterChange("experience")} // Set filter to "Environments"
           >
             Environments

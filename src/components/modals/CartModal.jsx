@@ -69,8 +69,11 @@ const CartModal = ({
               title="This is the title of the card.."
               style={{ maxWidth: "70%" }} // Ensure it truncates without changing width
             >
-              {`"${
-                lastAsset.asset_data.title || "This is the title of the card..."
+              {`"${(
+                lastAsset?.asset_data?.title ||
+                "This is the title of the card..."
+              ).slice(0, 18)}${
+                (lastAsset?.asset_data?.title || "").length > 18 ? "..." : ""
               }"`}
             </h3>
             <button
