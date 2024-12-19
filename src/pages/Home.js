@@ -256,6 +256,7 @@ const Home = () => {
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
                 saved={card.isSaved}
+                views={card.asset_data.metadata.views}
               />
             ))}
         </div>
@@ -345,6 +346,7 @@ const Home = () => {
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
                 saved={card.isSaved}
+                views={card.asset_data.metadata.views}
               />
             ))}
         </div>
@@ -439,6 +441,7 @@ const Home = () => {
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
                 saved={card.isSaved}
+                views={card.asset_data.metadata.views}
               />
             ))}
         </div>
@@ -567,6 +570,7 @@ const Home = () => {
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
                 saved={card.isSaved}
+                views={card.asset_data.metadata.views}
               />
             ))}
         </div>
@@ -653,6 +657,7 @@ const Home = () => {
                 creatorName={card.asset_data.creatorName}
                 onClick={() => handleCardClick(card)}
                 saved={card.isSaved}
+                views={card.asset_data.metadata.views}
               />
             ))}
         </div>

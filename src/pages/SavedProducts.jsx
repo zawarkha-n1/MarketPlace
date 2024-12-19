@@ -196,26 +196,30 @@ const SavedProducts = () => {
 
           <div className="flex justify-center mb-8 w-[70%] 2xl:min-h-[600px]">
             <div className="grid grid-rows-2 grid-cols-4 gap-10">
-              {displayedAssets.slice(0, visibleCards).map((card, index) => (
-                <Card
-                  key={card.id}
-                  id={card.id}
-                  title={card.asset_data.title}
-                  discount={card.asset_data.discount}
-                  price={card.asset_data.price}
-                  starcount={card.asset_data.metadata.stars}
-                  heartcount={card.asset_data.metadata.favourite}
-                  savedcount={card.asset_data.metadata.bookmark}
-                  smileycount={card.asset_data.metadata.smiley}
-                  inlibrary={false}
-                  bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
-                  image={card.asset_data.url}
-                  creatorImage={card.asset_data.creatorLogo}
-                  creatorName={card.asset_data.creatorName}
-                  saved={card.isSaved}
-                  // onSaveToggle={() => handleUnsave(card.id)}
-                />
-              ))}
+              {displayedAssets
+                .sort((a, b) => a.id - b.id)
+                .slice(0, visibleCards)
+                .map((card, index) => (
+                  <Card
+                    key={card.id}
+                    id={card.id}
+                    title={card.asset_data.title}
+                    discount={card.asset_data.discount}
+                    price={card.asset_data.price}
+                    starcount={card.asset_data.metadata.stars}
+                    heartcount={card.asset_data.metadata.favourite}
+                    savedcount={card.asset_data.metadata.bookmark}
+                    smileycount={card.asset_data.metadata.smiley}
+                    inlibrary={false}
+                    bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
+                    image={card.asset_data.url}
+                    creatorImage={card.asset_data.creatorLogo}
+                    creatorName={card.asset_data.creatorName}
+                    saved={card.isSaved}
+                    // onSaveToggle={() => handleUnsave(card.id)}
+                    views={card.asset_data.metadata.views}
+                  />
+                ))}
             </div>
           </div>
 

@@ -198,6 +198,7 @@ const Explore = () => {
               creatorImage={card.asset_data.creatorLogo}
               creatorName={card.asset_data.creatorName}
               onClick={() => handleCardClick(card)}
+              views={card.asset_data.metadata.views}
             />
           ))}
         </div>

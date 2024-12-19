@@ -33,6 +33,7 @@ const ModelDetails = () => {
   const [recentAssets, setRecentAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOwned, setIsOwned] = useState(false); // New state to track ownership
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     // Check if the asset is already in the cart
@@ -71,6 +72,15 @@ const ModelDetails = () => {
           userAssetsData?.userassetsdata?.libraryassets || [];
         const assetId = cardData.id; // Assuming cardData has the asset's ID
 
+        if (userAssetsData) {
+          // Get saved assets of the user
+          const savedAssets = userAssetsData?.userassetsdata?.savedassets || [];
+
+          // Check if the current assetId is in savedAssets
+          setIsSaved(savedAssets.includes(cardData.id));
+        } else {
+          setIsSaved(false); // If user data not found, assume not saved
+        }
         if (libraryAssets.includes(assetId)) {
           setIsOwned(true); // Asset is already owned
         } else {
@@ -239,10 +249,17 @@ const ModelDetails = () => {
             <div className="absolute top-4 right-4 flex gap-4">
               <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
                 <img src="/eye.png" alt="icon1" className="w-5 h-4" />
-                <span className="font-semibold">5</span>
+                <span className="font-semibold">
+                  {cardData.asset_data.metadata.views}
+                </span>
               </div>
               <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
-                <img src="/save-filled.png" alt="icon2" className="w-4 h-4" />
+                {isSaved && (
+                  <img src="/save-filled.png" alt="icon2" className="w-4 h-4" />
+                )}
+                {!isSaved && (
+                  <img src="/save.png" alt="icon2" className="w-4 h-4" />
+                )}
                 <span className="font-semibold">
                   {cardData.asset_data.metadata.bookmark}
                 </span>

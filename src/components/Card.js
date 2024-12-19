@@ -18,6 +18,7 @@ const Card = ({
   creatorImage,
   creatorName,
   saved,
+  views,
 }) => {
   const [isSaved, setIsSaved] = useState(saved);
   const { fetchUserAssets, user, handleSaveClick } = useAppData();
@@ -94,35 +95,64 @@ const Card = ({
       >
         {/* Box Positioned at Top Right */}
         {!inlibrary && (
-          <div
-            className="absolute top-2 right-4 w-[50px] h-[32px] min-w-[38px] rounded-[8px] flex justify-between items-center cursor-pointer"
-            style={{
-              background: "#42425a", // Apply background color
-              opacity: 0.7, // Apply opacity
-            }}
-            onClick={handleSaveClickLocal} // Toggle saved state on click
-          >
-            {/* Use filled or empty heart depending on isSaved state */}
-
-            <img
-              src={isSaved ? "/filledsaved.png" : "/save.png"} // Toggle between filled and empty heart
-              alt="Save"
-              className="w-[16px] h-[16px] ml-2"
-            />
-
-            <span
-              className="text-white mr-2"
+          <>
+            <div
+              className="absolute top-2 right-16 min-w-[50px] h-[32px] rounded-[8px] flex justify-center gap-1.5 items-center"
               style={{
-                fontFamily: "Urbanist",
-                fontSize: "14px",
-                fontWeight: 700,
-                lineHeight: "24px",
-                textTransform: "uppercase",
+                background: "#42425a", // Apply background color
+                opacity: 0.7, // Apply opacity
               }}
             >
-              {localSavedCount}
-            </span>
-          </div>
+              {/* Eye icon with view count */}
+              <img
+                src="/eye.png" // Eye icon
+                alt="Eye"
+                className="w-4 h-3 ml-2"
+              />
+
+              <span
+                className="text-white mr-2"
+                style={{
+                  fontFamily: "Urbanist",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  lineHeight: "24px",
+                  textTransform: "uppercase",
+                }}
+              >
+                {views}
+              </span>
+            </div>
+
+            <div
+              className="absolute top-2 right-2 min-w-[50px] h-[32px] rounded-[8px] flex justify-center gap-1.5 items-center cursor-pointer"
+              style={{
+                background: "#42425a", // Apply background color
+                opacity: 0.7, // Apply opacity
+              }}
+              onClick={handleSaveClickLocal} // Toggle saved state on click
+            >
+              {/* Save icon and saved count */}
+              <img
+                src={isSaved ? "/filledsaved.png" : "/save.png"} // Toggle between filled and empty heart
+                alt="Save"
+                className="w-[16px] h-[16px] ml-2"
+              />
+
+              <span
+                className="text-white mr-2"
+                style={{
+                  fontFamily: "Urbanist",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  lineHeight: "24px",
+                  textTransform: "uppercase",
+                }}
+              >
+                {localSavedCount}
+              </span>
+            </div>
+          </>
         )}
 
         {/* Boxes Positioned at Bottom Left */}
