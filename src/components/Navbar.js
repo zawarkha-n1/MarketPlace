@@ -38,7 +38,7 @@ const Navbar = () => {
       if (isLogin && user) {
         try {
           const response = await axios.get(
-            `http://localhost:5000/get-exa-credits/${user.email}`
+            `http://localhost:5001/get-exa-credits/${user.email}`
           );
           if (response.data && response.data.exaCredits !== undefined) {
             setExaCredits(response.data.exaCredits); // Set global exaCredits state

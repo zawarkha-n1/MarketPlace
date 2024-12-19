@@ -32,6 +32,39 @@ export const AppProvider = ({ children }) => {
     }
   );
 
+  const fetchUserData = async () => {
+    const token = sessionStorage.getItem("authToken");
+    const userData = sessionStorage.getItem("user");
+
+    if (!token || !userData) {
+      console.log("No user token or data found in sessionStorage.");
+      return;
+    }
+
+    try {
+      const response = await axios.get("http://localhost:5001/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data) {
+        const updatedUser = response.data;
+        setUser(updatedUser); // Update global state
+        setExaCredits(updatedUser.exaCredits); // Update EXA credits
+        sessionStorage.setItem("user", JSON.stringify(updatedUser)); // Update sessionStorage
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+
+      // Handle token expiration or user logout
+      if (error.response?.status === 401) {
+        console.log("Token expired or unauthorized. Logging out...");
+        handleLogout();
+      }
+    }
+  };
+
   const handleCloseModal = () => {
     setIsCartModalOpen(false);
   };
@@ -55,14 +88,14 @@ export const AppProvider = ({ children }) => {
 
   const fetchCartAssets = async (useremail) => {
     try {
-      const response = await axios.get("http://localhost:5000/user-assets");
+      const response = await axios.get("http://localhost:5001/user-assets");
       const userAssetsData = response.data.find(
         (item) => item.useremail === useremail
       );
       const cartAssetIds = userAssetsData?.userassetsdata?.cartassets || [];
 
       // Fetch full asset details
-      const assetsResponse = await axios.get("http://localhost:5000/assets");
+      const assetsResponse = await axios.get("http://localhost:5001/assets");
       const allAssets = assetsResponse.data;
 
       const cartAssetsDetails = allAssets.filter((asset) =>
@@ -78,7 +111,7 @@ export const AppProvider = ({ children }) => {
 
   const addToCart = async (asset) => {
     try {
-      const response = await axios.post("http://localhost:5000/add-to-cart", {
+      const response = await axios.post("http://localhost:5001/add-to-cart", {
         useremail: user.email,
         assetId: asset.id,
       });
@@ -92,7 +125,7 @@ export const AppProvider = ({ children }) => {
 
   const removeFromCart = async (assetId) => {
     try {
-      await axios.post("http://localhost:5000/remove-from-cart", {
+      await axios.post("http://localhost:5001/remove-from-cart", {
         useremail: user.email,
         assetId,
       });
@@ -106,7 +139,7 @@ export const AppProvider = ({ children }) => {
 
   const fetchUserAssets = async (useremail) => {
     try {
-      const response = await axios.get("http://localhost:5000/user-assets");
+      const response = await axios.get("http://localhost:5001/user-assets");
       const userAssetsData = response.data;
 
       const currentUserAssets = userAssetsData.find(
@@ -134,7 +167,7 @@ export const AppProvider = ({ children }) => {
     const token = credentialResponse.credential;
 
     try {
-      const response = await axios.post(`http://localhost:5000/verify-token`, {
+      const response = await axios.post(`http://localhost:5001/verify-token`, {
         token,
       });
       const newAuthToken = response.data.token;
@@ -151,7 +184,7 @@ export const AppProvider = ({ children }) => {
 
       // Optionally fetch the cart and other data after login
       await fetchCartAssets(userData.email);
-      const fetchedAssets = await axios.get("http://localhost:5000/assets");
+      const fetchedAssets = await axios.get("http://localhost:5001/assets");
       const savedAssetIds = await fetchUserAssets(userData.email);
       updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {
@@ -172,7 +205,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const fetchedAssets = await axios
-        .get("http://localhost:5000/assets")
+        .get("http://localhost:5001/assets")
         .then((res) => res.data);
 
       const updatedAssets = fetchedAssets.map((asset) => ({
@@ -198,7 +231,7 @@ export const AppProvider = ({ children }) => {
 
       try {
         const fetchedAssets = await axios
-          .get("http://localhost:5000/assets")
+          .get("http://localhost:5001/assets")
           .then((res) => res.data);
 
         if (token && userData) {
@@ -246,7 +279,7 @@ export const AppProvider = ({ children }) => {
       const newSavedStatus = !isSaved;
 
       // Make the API call to update the saved status
-      await axios.post("http://localhost:5000/update-user-assets-saved", {
+      await axios.post("http://localhost:5001/update-user-assets-saved", {
         useremail,
         assetId,
         status: newSavedStatus,
@@ -267,7 +300,7 @@ export const AppProvider = ({ children }) => {
       // Optionally re-fetch assets from the backend to ensure consistency
       fetchUserAssets();
       await fetchCartAssets(user.email);
-      const fetchedAssets = await axios.get("http://localhost:5000/assets");
+      const fetchedAssets = await axios.get("http://localhost:5001/assets");
       const savedAssetIds = await fetchUserAssets(user.email);
       updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {
@@ -302,6 +335,7 @@ export const AppProvider = ({ children }) => {
         setTotalPrice,
         totalPrice,
         handleSaveClick,
+        fetchUserData,
       }}
     >
       {children}

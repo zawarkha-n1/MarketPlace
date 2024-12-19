@@ -1,30 +1,53 @@
 import React, { useState } from "react";
 import RoundedOutlineButton from "../buttons/RoundedOutlineButton";
 import { useAppData } from "../../../context/AppContext";
-
-// const pricingOptions = [
-//   { id: 1, credits: 100, price: 10.0 },
-//   { id: 2, credits: 200, price: 20.0 },
-//   { id: 3, credits: 500, price: 50.0 },
-// ];
+import axios from "axios";
 
 const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
+  axios.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("token"); // Example of retrieving the token
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
   const [selectedOption, setSelectedOption] = useState(1); // Default selected option is the first one
   const { user } = useAppData();
   // This function will handle the Buy Now button click
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     if (!user) {
-      alert("User is not logedin");
+      alert("User is not logged in");
       return;
     }
-    const selectedPlan = pricingOptions.find(
-      (option) => option.id === selectedOption
-    );
-    alert(
-      `You selected: ${selectedPlan.credits} EXA for $${selectedPlan.price}`
-    );
-  };
 
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/one-time-payment-exas",
+        {
+          useremail: user.email,
+          selectedOption,
+        }
+      );
+
+      const data = response.data; // axios handles JSON parsing
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Error: Couldn't process the payment");
+      }
+    } catch (error) {
+      console.error(
+        "Error during payment process:",
+        error.response || error.message
+      );
+      alert("There was an issue with your payment. Please try again.");
+    }
+  };
   return (
     <div className="py-6 px-5 bg-[#343444] text-white rounded-[21.26px] min-w-[90%] sm:min-w-[45%] md:min-w-[34%] lg:min-w-[32%] xl:min-w-[34%] max-w-[100%] sm:max-w-[45%] md:max-w-[34%] lg:max-w-[32%] xl:max-w-[34%]">
       <div>

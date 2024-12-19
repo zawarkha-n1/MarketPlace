@@ -48,7 +48,7 @@ const Card = ({
       }
 
       // Make the backend API call
-      await axios.post("http://localhost:5000/update-asset-action", {
+      await axios.post("http://localhost:5001/update-asset-action", {
         assetId: id,
         actionType,
       });

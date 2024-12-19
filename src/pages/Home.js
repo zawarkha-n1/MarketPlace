@@ -12,18 +12,13 @@ const Home = () => {
   const [popularIndex, setPopularIndex] = useState(0);
   const [textureIndex, setTextureIndex] = useState(0);
   const [experienceIndex, setExperienceIndex] = useState(0);
-  const { assets, fetchUserAssets, isLogin } = useAppData();
+  const { assets, fetchUserAssets, isLogin, fetchUserData } = useAppData();
 
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     // Re-fetch user assets or any other necessary data
-  //     fetchUserAssets();
-  //     // setVisibleCards(8);
-  //   } else {
-  //     // Handle the case when user logs out, e.g., reset data
-  //     fetchUserAssets();
-  //   }
-  // }, [isLogin]);
+  useEffect(() => {
+    // Fetch user data when the home page is loaded
+    fetchUserData();
+  }, []);
+
   let inlibrary = false;
   const [filter, setFilter] = useState("All");
 
@@ -198,7 +193,7 @@ const Home = () => {
 
     try {
       // Make an API call to update the user_assets table
-      await axios.post("http://localhost:5000/update-user-assets-recent", {
+      await axios.post("http://localhost:5001/update-user-assets-recent", {
         useremail,
         assetId,
       });
