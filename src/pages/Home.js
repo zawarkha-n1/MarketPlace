@@ -234,6 +234,9 @@ const Home = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
           {/* Slice the `toppicks` array based on the `topPicksIndex` */}
           {shuffledTopPicks
+            .sort((a, b) =>
+              a.asset_data.title.localeCompare(b.asset_data.title)
+            )
             .slice(topPicksIndex, topPicksIndex + 4)
             .map((card, index) => (
               <Card
@@ -320,6 +323,9 @@ const Home = () => {
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
           {shuffledTopDeals
+            .sort((a, b) =>
+              a.asset_data.title.localeCompare(b.asset_data.title)
+            )
             .slice(topDealsIndex, topDealsIndex + 4)
             .map((card, index) => (
               <Card
@@ -412,6 +418,7 @@ const Home = () => {
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
           {assets
+            .sort((a, b) => a.id - b.id)
             .filter((card) => card.asset_data.type === "experience") // Filter for experience cards
             .slice(experienceIndex, experienceIndex + 4) // Paginate with experienceIndex
             .map((card, index) => (
@@ -535,6 +542,9 @@ const Home = () => {
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
           {assets
+            .sort((a, b) =>
+              a.asset_data.title.localeCompare(b.asset_data.title)
+            )
             .filter(
               (card) => filter === "All" || card.asset_data.type === filter
             ) // Filter by current filter value
@@ -622,6 +632,7 @@ const Home = () => {
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
           {assets
+            .sort((a, b) => a.id - b.id)
             .filter((card) => card.asset_data.type === "texture") // Filter for only "Experience" type
             .slice(textureIndex, textureIndex + 4)
             .map((card, index) => (
