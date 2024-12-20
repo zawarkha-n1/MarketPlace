@@ -194,19 +194,6 @@ const Navbar = () => {
                   />
                 </svg>
               </button>
-              <div className="absolute hidden group-hover:block mt-2 w-48 bg-[#8A8AA0] text-black rounded-md shadow-md z-10">
-                <ul>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                    Category 1
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                    Category 2
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                    Category 3
-                  </li>
-                </ul>
-              </div>
             </div>
 
             {/* Search Input */}
