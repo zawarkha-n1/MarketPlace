@@ -131,7 +131,7 @@ const SavedProducts = () => {
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-center">
-      <div className="text-white font-Urbanist">
+      <div className="text-white font-urbanist">
         <Headingpage pagename={"Saved Products"} secondheading={"Pages"} />
       </div>
 

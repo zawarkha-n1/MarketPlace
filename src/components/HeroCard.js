@@ -90,15 +90,15 @@ const HeroCard = () => {
       <div className="absolute bottom-4 right-4 flex flex-row items-center space-x-4 z-20">
         <button
           onClick={prevContent}
-          className="bg-white p-1 rounded-full text-[#14141F] hover:bg-gray-200 transition"
+          className="bg-white p-2 rounded-full text-[#14141F] hover:bg-gray-200 transition"
         >
-          <img src="/arrow-left.png" alt="" />
+          <img src="/arrow-left.png" alt="" className="w-5 h-5" />
         </button>
         <button
           onClick={nextContent}
-          className="bg-white p-1 rounded-full text-[#14141F] hover:bg-gray-200 transition"
+          className="bg-white p-2 rounded-full text-[#14141F] hover:bg-gray-200 transition"
         >
-          <img src="/arrow-right.png" alt="" />
+          <img src="/arrow-right.png" alt="" className="w-5 h-5" />
         </button>
       </div>
     </div>

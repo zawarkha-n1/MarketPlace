@@ -253,7 +253,7 @@ const Home = () => {
       <div className="w-full max-w-screen-xl">
         {/*Top Picks */}
         <div className="w-[60%] text-left mb-8 mt-32">
-          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize font-urbanist">
             Today's Picks
           </h2>
         </div>
@@ -344,7 +344,7 @@ const Home = () => {
 
         {/* Top Deals */}
         <div className="w-[60%] text-left mb-8 mt-32">
-          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize font-urbanist">
             Top deals
           </h2>
         </div>
@@ -432,7 +432,7 @@ const Home = () => {
 
         {/*Oddyssey experiencesd*/}
         <div className="w-[100%] text-left mb-8 mt-32 flex items-center justify-between">
-          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize font-urbanist">
             Top Immersive Experiences from Odyssey3D
           </h2>
           <div
@@ -536,13 +536,13 @@ const Home = () => {
 
         {/**Popular collections */}
         <div className="w-[100%] text-left mb-8 mt-32 flex items-center justify-between">
-          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize font-urbanist">
             Popular Collections
           </h2>
           <div className="relative">
             <Link
               to={"/explore/All"}
-              className="text-white text-[14px] font-bold leading-[44px] font-urbanist tracking-[1.4px] uppercase custom-underline hover:text-[#5750A2]"
+              className="text-white text-[14px] font-bold leading-[44px] pb-1 font-urbanist tracking-[1.4px] uppercase custom-underline hover:text-[#5750A2]"
             >
               EXPLORE MORE
             </Link>
@@ -681,7 +681,7 @@ const Home = () => {
 
         {/*Textures*/}
         <div className="w-[60%] text-left mb-8 mt-32">
-          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize">
+          <h2 className="text-white text-[36px] font-bold leading-[44px] capitalize font-urbanist">
             Textures
           </h2>
         </div>
@@ -771,13 +771,13 @@ const Home = () => {
           style={{ backgroundImage: "url('/zenivabackground.png')" }}
         >
           <div className="absolute inset-y-0 left-0 flex flex-col justify-center pl-6 md:pl-8 lg:pl-12 xl:pl-16 pr-6 md:pr-12 lg:pr-16 xl:pr-20">
-            <h2 className="text-white text-[22px] sm:text-[36px] md:text-[46px] xl:text-[64px] font-normal leading-[38px] sm:leading-[46px] md:leading-[60px] lg:leading-[70px] font-publicSans mb-4">
-              Zeniva Coming Soon To
+            <h2 className="text-white text-[22px] sm:text-[28px] md:text-[34px] xl:text-[46px] 2xl:text-[64px] font-normal leading-[38px] sm:leading-[46px] md:leading-[60px] lg:leading-[70px] font-publicSans mb-4">
+              Zeniva Coming
             </h2>
-            <h2 className="text-white text-[20px] sm:text-[28px] md:text-[36px] xl:text-[64px] leading-[40px] sm:leading-[46px] md:leading-[58px] lg:leading-[70px] font-publicSans tracking-[1.2px] sm:tracking-[1.4px]">
-              The Digital <span className="font-bold ">Bazar</span>
+            <h2 className="text-white text-[22px] sm:text-[28px] md:text-[34px] xl:text-[46px] 2xl:text-[64px] leading-[40px] sm:leading-[46px] md:leading-[58px] lg:leading-[70px] font-publicSans tracking-[1.2px] sm:tracking-[1.4px]">
+              Soon to <span className="font-bold ">Bazar</span>
             </h2>
-            <h4 className="2xl:text-[26px] leading-7 mt-3">
+            <h4 className="2xl:text-[26px] leading-7 mt-2">
               Currently available on Shopify
             </h4>
             <a
@@ -785,8 +785,8 @@ const Home = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button className="w-[130px] sm:w-[150px] text-white py-2 px-4 rounded-full font-semibold border-2 border-white hover:text-black hover:border-black transition duration-300 mt-6 sm:mt-10">
-                Learn More
+              <button className="  text-white py-2 px-5  rounded-full font-semibold border-2 border-white hover:text-black hover:border-black transition duration-300 mt-8 sm:mt-10">
+                Go to the website
               </button>
             </a>
           </div>

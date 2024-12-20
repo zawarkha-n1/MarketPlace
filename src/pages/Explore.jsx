@@ -117,14 +117,14 @@ const Explore = () => {
   };
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-center">
-      <div className="text-white font-Urbanist">
+      <div className="text-white font-urbanist">
         <Headingpage pagename={"Explore"} secondheading={"Pages"} />
       </div>
 
       {/* Category and Network Buttons */}
       <div className="w-[70%] mb-8 flex justify-between">
         <div
-          className="font-Urbanist text-white font-bold text-[43px] leading-[36px] 
+          className="font-urbanist text-white font-bold text-[43px] leading-[36px] 
        sm:text-[36px] sm:leading-[32px] 
        md:text-[40px] md:leading-[34px] 
        lg:text-[43px] lg:leading-[36px]"

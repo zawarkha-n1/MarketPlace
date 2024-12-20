@@ -32,38 +32,6 @@ export const AppProvider = ({ children }) => {
     }
   );
 
-  // const fetchUserData = async () => {
-  //   const token = sessionStorage.getItem("authToken");
-  //   const userData = sessionStorage.getItem("user");
-
-  //   if (!token || !userData) {
-  //     console.log("No user token or data found in sessionStorage.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.get("http://localhost:5001/user", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     if (response.data) {
-  //       const updatedUser = response.data;
-  //       setUser(updatedUser); // Update global state
-  //       setExaCredits(updatedUser.exaCredits); // Update EXA credits
-  //       sessionStorage.setItem("user", JSON.stringify(updatedUser)); // Update sessionStorage
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching user data:", error);
-
-  //     // Handle token expiration or user logout
-  //     if (error.response?.status === 401) {
-  //       console.log("Token expired or unauthorized. Logging out...");
-  //       handleLogout();
-  //     }
-  //   }
-  // };
 
   const handleCloseModal = () => {
     setIsCartModalOpen(false);
@@ -336,6 +304,7 @@ export const AppProvider = ({ children }) => {
         totalPrice,
         handleSaveClick,
         // fetchUserData,
+
       }}
     >
       {children}

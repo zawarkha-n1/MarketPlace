@@ -320,7 +320,7 @@ const ModelDetails = () => {
                   <img src="/assets/icons/send/send-regular.png" alt="" />
                 </button>
                 <button className="bg-[#343444] w-8 h-8 rounded-full flex items-center justify-center text-justify">
-                  <span className="text-center">...</span>
+                  <img src="/assets/icons/dots/option.png" alt="" />
                 </button>
               </div>
             </div>

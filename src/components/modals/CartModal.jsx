@@ -6,15 +6,19 @@ import { useAppData } from "../../context/AppContext";
 const CartModal = ({
   summaryTitle = "Summary",
   checkoutLabel = "Checkout",
-  onCheckout = () => {},
   className = "",
   buttonClassName = " text-md rounded-3xl px-3 py-1.5 mt-3 text-white w-[40%]  rounded-3xl cursor-pointer",
   price = 20,
 }) => {
   const navigate = useNavigate();
 
-  const { cartAssets, totalPrice, removeFromCart, setIsCartModalOpen } =
-    useAppData();
+  const {
+    cartAssets,
+    totalPrice,
+    removeFromCart,
+    setIsCartModalOpen,
+    onCheckout,
+  } = useAppData();
 
   console.log(cartAssets, "Final cart");
   const lastAsset = cartAssets.length

@@ -72,7 +72,6 @@ const Cart = () => {
 
         console.log(`Updated EXA Credits: ${updatedCredits}`);
         // Collect all asset titles for the API
-        const assetTitles = cartAssets.map((asset) => asset.asset_data.title);
         const assetIds = cartAssets.map((asset) => asset.id);
 
         if (!Array.isArray(assetIds) || assetIds.length === 0) {
