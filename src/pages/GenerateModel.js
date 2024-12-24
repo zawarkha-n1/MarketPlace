@@ -251,7 +251,7 @@ const GenerateModel = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
+    <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start pb-8">
       {/* Heading Section */}
       <Headingpage
         pagename={"Generate 3D Model with AI"}
@@ -339,38 +339,54 @@ const GenerateModel = () => {
         </div>
 
         {/* Generate Button and Credits */}
-        <div className="flex justify-end items-center mt-4">
-          {uploadedImage && (
-            <span className="text-white font-urbanist mr-4 mt-1">
-              Credits Used: 10 EXA
-            </span>
-          )}
-
-          {/* Show Generate Button Only When Regenerate Button is Not Visible */}
-          {!isRegenerating && (
-            <button
-              className="py-2 px-6 rounded-[50px] bg-[#A19CD2] text-[#595959] font-bold"
-              onClick={handleGenerateClick}
-              disabled={isGenerating || isRegenerating}
-            >
-              Generate
+        <div
+          className={`flex ${
+            showCanvas ? "justify-between" : "justify-end"
+          } items-center mt-4`}
+        >
+          {showCanvas && (
+            <button className="bg-[#5750A2] text-white rounded-3xl flex items-center text-center gap-2 px-6 py-3">
+              <img src="/assets/icons/library/library.png" alt="" /> Add to My
+              Library
             </button>
           )}
+          <div className="flex items-center justify-end">
+            {uploadedImage && (
+              <span className="text-white font-urbanist mr-4 mt-1">
+                Credits Used: 10 EXA
+              </span>
+            )}
 
-          {/* Regenerate Button */}
-          {isRegenerating && !isGenerating && (
-            <button
-              className="py-2 px-6 rounded-[50px] bg-[#343444] text-white font-bold flex items-center ml-4"
-              onClick={handleRegenerateClick}
-            >
-              <img
-                src="/refresh.jpg"
-                alt="Regenerate"
-                className="w-4 h-4 mr-2"
-              />
-              Regenerate
-            </button>
-          )}
+            {/* Show Generate Button Only When Regenerate Button is Not Visible */}
+            {!isRegenerating && (
+              <button
+                className={`${
+                  uploadedImage
+                    ? "bg-[#5750A2] text-white"
+                    : "bg-[#A19CD2] text-[#595959]"
+                }  rounded-3xl flex items-center text-center gap-2 px-8 py-3`}
+                onClick={handleGenerateClick}
+                disabled={isGenerating || isRegenerating}
+              >
+                Generate
+              </button>
+            )}
+
+            {/* Regenerate Button */}
+            {isRegenerating && !isGenerating && (
+              <button
+                className="bg-[#343444] text-white rounded-3xl flex items-center text-center gap-2 px-8 py-3"
+                onClick={handleRegenerateClick}
+              >
+                <img
+                  src="/refresh.jpg"
+                  alt="Regenerate"
+                  className="w-4 h-4 mr-2"
+                />
+                Regenerate
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="w-full max-w-4xl mt-12 px-0">
