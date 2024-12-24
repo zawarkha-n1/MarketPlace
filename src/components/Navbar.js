@@ -7,6 +7,7 @@ import LoginModal from "./modals/LoginModal";
 import { useAppData } from "../context/AppContext";
 import CartModal from "./modals/CartModal";
 import axios from "axios";
+import MyProfileModal from "./modals/MyProfile";
 const menuItems = [
   { name: "All Products", type: "All" },
   { name: "3D Models", type: "3d" },
@@ -26,6 +27,8 @@ const Navbar = () => {
     setIsCartModalOpen,
     isCartModalOpen,
     handleCloseModal,
+    isMyProfileModalOpen,
+    setIsMyProfileModalOpen,
   } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -386,6 +389,10 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      <MyProfileModal
+        isOpen={isMyProfileModalOpen}
+        onClose={() => setIsMyProfileModalOpen(false)}
+      />
     </nav>
   );
 };

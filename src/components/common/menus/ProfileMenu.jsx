@@ -7,7 +7,7 @@ const ProfileMenu = ({
   plan = "Free",
   setIsProfileMenuOpen,
 }) => {
-  const { handleLogout, user } = useAppData();
+  const { handleLogout, user, handleClickOnMyProfile } = useAppData();
 
   const handleClick = () => {
     handleLogout();
@@ -19,6 +19,12 @@ const ProfileMenu = ({
     setIsProfileMenuOpen(false);
     navigate("/saved-products");
   };
+
+  const handleClickOnMyProfileButton = () => {
+    handleClickOnMyProfile();
+    setIsProfileMenuOpen(false);
+  };
+
   return (
     <div className="bg-[#343444] rounded-[20px] lg:w-[327px] flex flex-col gap-3">
       <div className="flex items-center justify-between px-3 pt-4">
@@ -30,7 +36,10 @@ const ProfileMenu = ({
         </div>
       </div>
       <hr className="border-gray-500" />
-      <div className="flex gap-3 justify-start items-center px-3 py-2 cursor-pointer hover:bg-[#4f4f66]">
+      <div
+        className="flex gap-3 justify-start items-center px-3 py-2 cursor-pointer hover:bg-[#4f4f66]"
+        onClick={handleClickOnMyProfileButton}
+      >
         <img src="/assets/icons/profile-logos/profile.png" alt="icon" />
         <h3 className="font-urbanist font-normal text-[14px] leading-[22px]">
           My Profile

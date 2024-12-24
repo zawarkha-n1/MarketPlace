@@ -18,6 +18,7 @@ export const AppProvider = ({ children }) => {
   const [cartAssets, setCartAssets] = useState([]);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0.0);
+  const [isMyProfileModalOpen, setIsMyProfileModalOpen] = useState(false);
 
   axios.interceptors.request.use(
     (config) => {
@@ -286,6 +287,9 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const handleClickOnMyProfile = () => {
+    setIsMyProfileModalOpen(true); // Open the modal
+  };
   return (
     <AppContext.Provider
       value={{
@@ -311,6 +315,9 @@ export const AppProvider = ({ children }) => {
         totalPrice,
         handleSaveClick,
         // fetchUserData,
+        isMyProfileModalOpen,
+        setIsMyProfileModalOpen,
+        handleClickOnMyProfile,
       }}
     >
       {children}
