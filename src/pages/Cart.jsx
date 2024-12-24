@@ -115,7 +115,7 @@ const Cart = () => {
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
       <Headingpage pagename={"Cart"} secondheading={"Explore"} />
       <div className="w-full max-w-6xl px-4 lg:px-8 py-6 flex flex-col md:flex-row gap-6">
-        <div className="flex flex-col gap-6 md:w-2/3 mb-8">
+        <div className="flex flex-col gap-6 md:w-2/3 mb-8 overflow-y-auto max-h-[60vh] custom-scrollbar">
           {cartAssets.map((asset) => (
             <CartCard
               key={asset.id}
