@@ -9,6 +9,8 @@ import { useParams, useLocation } from "react-router-dom";
 import { useAppData } from "../context/AppContext";
 import LoginModal from "../components/modals/LoginModal";
 import { useNavigate } from "react-router-dom";
+import BuyProductModal from "../components/modals/BuyProductModal";
+import ConfirmationModal from "../components/modals/ConfirmationModal";
 
 const ModelDetails = () => {
   const navigate = useNavigate();
@@ -34,6 +36,18 @@ const ModelDetails = () => {
   const [loading, setLoading] = useState(true);
   const [isOwned, setIsOwned] = useState(false); // New state to track ownership
   const [isSaved, setIsSaved] = useState(false);
+  const [isBuyProductModalOpen, setIsBuyProductModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
+  const handleBuy = () => {
+    if (!isLogin || !user) {
+      setIsOwned(false); // User is not logged in, no ownership
+      setIsLoginModalOpen(true);
+      return;
+    }
+
+    setIsBuyProductModalOpen(true);
+  };
 
   const handleOwned = () => {
     navigate("/library");
@@ -52,6 +66,8 @@ const ModelDetails = () => {
   function closeLoginModal() {
     setIsLoginModalOpen(false);
   }
+
+  const closeBuyProductModal = () => setIsBuyProductModalOpen(false);
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top-left corner of the page
@@ -114,14 +130,14 @@ const ModelDetails = () => {
       return;
     }
 
-    const confirmPurchase = window.confirm(
-      `You want to confirm buy for this product? ${cardData.asset_data.price} Exas will be cut from your account.`
-    );
+    // const confirmPurchase = window.confirm(
+    //   `You want to confirm buy for this product? ${cardData.asset_data.price} Exas will be cut from your account.`
+    // );
 
-    if (!confirmPurchase) {
-      console.log("User cancelled the purchase.");
-      return;
-    }
+    // if (!confirmPurchase) {
+    //   console.log("User cancelled the purchase.");
+    //   return;
+    // }
 
     try {
       console.log("Starting payment process...");
@@ -161,6 +177,8 @@ const ModelDetails = () => {
           console.log(`Asset "${cardData.id}" added to library successfully.`);
           setIsOwned(true);
         }
+        closeBuyProductModal();
+        setIsConfirmModalOpen(true);
       } else {
         console.error("Payment failed:", paymentResponse.data.message);
         alert(`Payment Failed: ${paymentResponse.data.message}`);
@@ -352,7 +370,8 @@ const ModelDetails = () => {
                     flexProp="flex-1"
                     buttonName="Buy Now"
                     customPaddingY="12px"
-                    onClick={handleBuyNowClick}
+                    // onClick={handleBuyNowClick}
+                    onClick={handleBuy}
                   />
                   <RoundedOutlineButton
                     onClick={handleAddToCart}
@@ -427,6 +446,23 @@ const ModelDetails = () => {
         <LoginModal
           modalIsOpen={isLoginModalOpen}
           closeModal={closeLoginModal}
+        />
+      )}
+
+      {isBuyProductModalOpen && (
+        <BuyProductModal
+          productData={cardData} // Pass cardData to modal
+          onCheckout={handleBuyNowClick} // Pass checkout function
+          // Pass close modal function
+          modalIsOpen={isBuyProductModalOpen}
+          closeModal={closeBuyProductModal}
+        />
+      )}
+      {isConfirmModalOpen && (
+        <ConfirmationModal
+          handleNavigation={handleOwned}
+          modalIsOpen={isConfirmModalOpen}
+          closeModal={() => setIsConfirmModalOpen(false)}
         />
       )}
     </div>
