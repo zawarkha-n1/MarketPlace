@@ -53,7 +53,7 @@ const Cart = () => {
     try {
       // Process payment first
       const paymentResponse = await axios.post(
-        "http://localhost:5001/process-payment",
+        "http://172.16.15.171:5001/process-payment",
         {
           email: useremail,
           paymentType: "onetime",
@@ -82,7 +82,7 @@ const Cart = () => {
 
         // Call the bulk add-to-library API
         const response = await axios.post(
-          "http://localhost:5001/update-user-assets-library",
+          "http://172.16.15.171:5001/update-user-assets-library",
           {
             useremail,
             assetIds,

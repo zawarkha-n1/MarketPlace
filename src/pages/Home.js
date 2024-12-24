@@ -24,7 +24,7 @@ const Home = () => {
           return;
         }
 
-        const response = await axios.get("http://localhost:5001/get-user", {
+        const response = await axios.get("http://172.16.15.171:5001/get-user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -226,7 +226,7 @@ const Home = () => {
 
     try {
       // Make an API call to update the user_assets table
-      await axios.post("http://localhost:5001/update-user-assets-recent", {
+      await axios.post("http://172.16.15.171:5001/update-user-assets-recent", {
         useremail,
         assetId,
       });
