@@ -35,6 +35,10 @@ const ModelDetails = () => {
   const [isOwned, setIsOwned] = useState(false); // New state to track ownership
   const [isSaved, setIsSaved] = useState(false);
 
+  const handleOwned = () => {
+    navigate("/library");
+  };
+
   useEffect(() => {
     // Check if the asset is already in the cart
     const isInCart = cartAssets.some((item) => item.id === cardData.id);
@@ -361,15 +365,15 @@ const ModelDetails = () => {
                 <RoundedOutlineButton
                   buttonBG="#343444"
                   flexProp="flex-1"
-                  buttonName="Owned"
+                  buttonName="Check in My Library"
                   customPaddingY="12px"
-                  disabled // Make the button non-clickable
+                  onClick={handleOwned}
                 />
               )}
             </div>
 
             <div className="pt-4 w-full">
-              <div className="flex gap-6 border-b border-custbg-[#70598C]">
+              <div className="flex gap-6 border-b border-[#1F1F2C]">
                 <button
                   className={`pb-2 ${
                     activeTab === "details"
@@ -388,7 +392,7 @@ const ModelDetails = () => {
                   }`}
                   onClick={() => setActiveTab("offers")}
                 >
-                  Offers
+                  Rate Product
                 </button>
               </div>
 

@@ -89,7 +89,7 @@ const Footer = () => {
             Subscribe Us
           </h1>
 
-          <div className="relative border-[1px] border-[#343444] bg-black rounded-[10px] ">
+          <div className="relative border-[1px] rounded-r-[12px] border-[#343444] bg-black rounded-[10px] ">
             <input
               type="text"
               placeholder="Info@yourgmail.com"

@@ -140,9 +140,9 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-gradient-to-l from-[#1E1a39] via-[#14141F] to-[#14141F] text-white px-12 py-6 border-b border-[#4A4763]">
-      <div className="flex justify-between items-center w-full">
-        <div className="flex items-center space-x-12 w-1/3  ml-20">
+    <nav className="bg-gradient-to-l from-[#1E1a39] via-[#14141F] w-full to-[#14141F] flex items-center justify-center text-white px-12 py-6 border-b border-[#4A4763]">
+      <div className="flex justify-between items-center w-[96%]">
+        <div className="flex items-center space-x-24 w-1/3  ml-4">
           <Link to="/">
             <img
               src="/bazaar.png"
@@ -174,12 +174,12 @@ const Navbar = () => {
           </div>
         </div> */}
 
-          <div className="flex items-center bg-transparent rounded-md px-2">
+          <div className="flex items-center bg-transparent rounded-md px-2 broder border-white ml-">
             {/* Dropdown */}
             <div className="relative group">
-              <button className="bg-[#343444] text-[#8A7FFF] px-3 py-1 rounded-l-md flex items-center">
+              <button className="bg-[#343444] flex gap-2 text-[#8A7FFF] text-nowrap px-3 2xl:px-3 lg:px-4 lg:text-nowrap py-3 rounded-l-md items-center border-r border-r-[#484859] ">
                 All Products
-                <svg
+                {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -192,12 +192,13 @@ const Navbar = () => {
                     strokeLinejoin="round"
                     d="M19 9l-7 7-7-7"
                   />
-                </svg>
+                </svg> */}
+                <img src="/assets/icons/dropdown/dropdown.png" alt="" />
               </button>
             </div>
 
             {/* Search Input */}
-            <div className="flex-grow relative">
+            <div className="flex-grow relative ">
               {/* Search Icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -217,13 +218,13 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search products"
-                className="bg-[#343444] text-[#8A8AA085] rounded-r-md pl-10 py-1 focus:outline-none w-full"
+                className="bg-[#343444] text-[#8A8AA085] rounded-r-md pl-10 py-3 focus:outline-none w-full"
               />
             </div>
           </div>
         </div>
 
-        <div className="flex items-center space-x-6 text-white w-auto  ml-20">
+        <div className="flex items-center space-x-16 text-white w-auto  ml-20">
           <div
             ref={exploreMenuRef}
             className="font-urbanist font-bold text-[18px] hover:text-gray-400 transition-all duration-300 flex items-center relative cursor-pointer"
@@ -330,7 +331,7 @@ const Navbar = () => {
 
           {isLogin && (
             <button
-              className="w-12 h-12  rounded-full flex items-center justify-center bg-[#8A8AA0] relative "
+              className="w-12 h-12  rounded-full flex items-center justify-center bg-[#3e3e58] relative "
               onClick={() => navigate("/cart")}
             >
               <img src="/Cart.png" alt="Platform" className="w-6 h-6" />

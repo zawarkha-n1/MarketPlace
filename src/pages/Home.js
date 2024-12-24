@@ -775,7 +775,7 @@ const Home = () => {
               Zeniva Coming
             </h2>
             <h2 className="text-white text-[22px] sm:text-[28px] md:text-[34px] xl:text-[46px] 2xl:text-[64px] leading-[40px] sm:leading-[46px] md:leading-[58px] lg:leading-[70px] font-publicSans tracking-[1.2px] sm:tracking-[1.4px]">
-              Soon to <span className="font-bold ">Bazar</span>
+              Soon to <span className="font-bold ">Bazaar</span>
             </h2>
             <h4 className="2xl:text-[26px] leading-7 mt-2">
               Currently available on Shopify
