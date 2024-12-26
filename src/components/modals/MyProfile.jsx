@@ -57,7 +57,7 @@ export default function MyProfileModal({ isOpen, onClose }) {
         <h2 className="text-xl text-white font-medium">My Profile</h2>
         <button
           onClick={onClose}
-          className="p-2 hover:bg-slate-400 rounded-full bg-[#42425A] -mr-2"
+          className="p-2 hover:bg-[#252538] bg-[#42425A] rounded-full -mr-2"
         >
           <img
             src="/assets/icons/cross/cross.png"
@@ -185,11 +185,11 @@ export default function MyProfileModal({ isOpen, onClose }) {
               <div className="text-white text-sm">Muhammad sufia..</div>
             </div>
           </div>
-          <button className="p-2 hover:bg-slate-600 rounded-full">
-            <button className="bottom-0 right-0 bg-[#42425A] p-2 rounded-full hover:bg-slate-600">
+          <button className="p-2 hover:bg-[#252538] rounded-full">
+            <button className="bottom-0 right-0 bg-[#42425A] p-2 rounded-full hover:bg-[#252538]">
               <img
                 src="/assets/icons/detach/detach.png"
-                alt="Settings"
+                alt="detach"
                 className="h-4 w-4"
               />
             </button>
@@ -199,7 +199,7 @@ export default function MyProfileModal({ isOpen, onClose }) {
 
       {/* Delete Account Button */}
       <div className="px-6">
-        <button className="w-full  bg-[#42425A] text-white py-3 rounded-lg hover:bg-slate-600 transition-colors">
+        <button className="w-full  bg-[#42425A] text-white py-3 rounded-lg hover:bg-[#252538] transition-colors">
           Delete my account
         </button>
       </div>

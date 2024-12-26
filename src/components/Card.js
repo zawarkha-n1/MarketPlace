@@ -136,7 +136,7 @@ const Card = ({
               <img
                 src={isSaved ? "/filledsaved.png" : "/save.png"} // Toggle between filled and empty heart
                 alt="Save"
-                className="w-[16px] h-[16px] ml-2"
+                className={`${isSaved ? "w-[12px]" : "w-[16px]"} h-[16px] ml-2`}
               />
 
               <span
