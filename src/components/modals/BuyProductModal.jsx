@@ -34,7 +34,7 @@ const BuyProductModal = ({
         <div className="flex items-center justify-between px-6 absolute top-0 right-0">
           <button
             onClick={closeModal}
-            className="p-2 hover:bg-slate-400 rounded-full bg-[#252538] -mr-2"
+            className="p-2 hover:bg-[#252538] bg-[#42425A] rounded-full -mr-2"
           >
             <img
               src="/assets/icons/cross/cross.png"

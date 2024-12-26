@@ -290,6 +290,87 @@ export const AppProvider = ({ children }) => {
   const handleClickOnMyProfile = () => {
     setIsMyProfileModalOpen(true); // Open the modal
   };
+
+  const onCheckout = async () => {
+    const useremail = user?.email;
+    if (!useremail) {
+      console.error("User email not found.");
+      return;
+    }
+
+    // Calculate total price
+    const totalPrice = cartAssets.reduce(
+      (acc, asset) => acc + asset.asset_data.price,
+      0
+    );
+
+    const confirmPurchase = window.confirm(
+      `You want to confirm checkout? ${totalPrice} Exas will be cut from your account.`
+    );
+
+    if (!confirmPurchase) return;
+
+    try {
+      // Process payment first
+      const paymentResponse = await axios.post(
+        "http://172.16.15.171:5001/process-payment",
+        {
+          email: useremail,
+          paymentType: "onetime",
+          amount: totalPrice,
+        }
+      );
+
+      if (paymentResponse.data.success) {
+        console.log("Payment successful. Adding assets to library...");
+
+        const updatedCredits = paymentResponse.data.newCredits;
+        setExaCredits(updatedCredits); // Set the updated EXA credits globally
+        const updatedUser = { ...user, exaCredits: updatedCredits };
+        setUser(updatedUser);
+        sessionStorage.setItem("user", JSON.stringify(updatedUser));
+
+        console.log(`Updated EXA Credits: ${updatedCredits}`);
+        // Collect all asset titles for the API
+        const assetIds = cartAssets.map((asset) => asset.id);
+
+        if (!Array.isArray(assetIds) || assetIds.length === 0) {
+          console.error("No asset Ids found.");
+          alert("Error: No assets to add to the library.");
+          return;
+        }
+
+        // Call the bulk add-to-library API
+        const response = await axios.post(
+          "http://172.16.15.171:5001/update-user-assets-library",
+          {
+            useremail,
+            assetIds,
+          }
+        );
+
+        if (response.status === 200) {
+          console.log("Assets added to library successfully.");
+          alert("Checkout successful! Your assets are added to the library.");
+
+          // Remove all items from the cart after successful checkout
+          for (const asset of cartAssets) {
+            await removeFromCart(asset.id); // Remove each asset from cart
+          }
+          window.location.reload();
+        } else {
+          console.error("Error adding assets to library:", response.data.error);
+          alert("Error adding assets to library.");
+        }
+      } else {
+        console.error("Payment failed:", paymentResponse.data.message);
+        alert(`Payment failed: ${paymentResponse.data.message}`);
+      }
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      alert("An error occurred during checkout. Please try again.");
+    }
+  };
   return (
     <AppContext.Provider
       value={{
@@ -318,6 +399,7 @@ export const AppProvider = ({ children }) => {
         isMyProfileModalOpen,
         setIsMyProfileModalOpen,
         handleClickOnMyProfile,
+        onCheckout,
       }}
     >
       {children}
