@@ -141,7 +141,7 @@ const SavedProducts = () => {
         <p className="text-white">Loading...</p>
       ) : (
         <>
-          <div className="w-[65%] mb-8 flex justify-between">
+          <div className="w-[70%] mb-8 flex justify-between">
             <div className="flex space-x-4 w-auto">
               {["All", "3d", "experience", "texture"].map((btn, index) => (
                 <button
@@ -158,7 +158,7 @@ const SavedProducts = () => {
                 </button>
               ))}
             </div>
-            <div className="flex gap-3 text-white text-[15px] font-400 relative">
+            <div className="flex gap-3 text-white text-[15px] -mr-4 font-400 relative">
               <div
                 className="bg-[#343444] px-4 py-2 rounded-lg flex gap-2 items-center justify-center"
                 onClick={() =>
@@ -168,7 +168,7 @@ const SavedProducts = () => {
                 All Artworks{" "}
                 <img
                   src="/assets/icons/drop-down/drop-down.png"
-                  className="w-2 h-2"
+                  className="w-[10px] h-[5.7px]"
                   alt=""
                 />
                 {isAllNetworkMenuOpen && (
@@ -184,7 +184,7 @@ const SavedProducts = () => {
                 Sort by
                 <img
                   src="/assets/icons/drop-down/drop-down.png"
-                  className="w-2 h-2"
+                  className="w-[10px] h-[5.7px]"
                   alt=""
                 />
                 {isSortMenuOpen && (
