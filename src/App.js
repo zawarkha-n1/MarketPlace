@@ -12,6 +12,7 @@ import ModelDetails from "./pages/ModelDetails";
 import Cart from "./pages/Cart";
 import Explore from "./pages/Explore";
 import SavedProducts from "./pages/SavedProducts";
+import Search from "./pages/Search";
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/saved-products" element={<SavedProducts />} />
             <Route path="/product/:title" element={<ModelDetails />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/search" element={<Search />} />
           </Routes>
         </div>
         <Footer />

@@ -81,13 +81,13 @@ const Card = ({
   return (
     <div
       onClick={onClick}
-      className={`w-[280px] ${
+      className={`w-[320px] ${
         inlibrary ? "h-[342px]" : "h-[442px]"
       } bg-[#343444] rounded-[20px] p-4 relative flex flex-col`}
     >
       {/* Main Image Container with White Border */}
       <div
-        className="w-full h-[297px] bg-cover bg-center rounded-[15px] mb-4 relative"
+        className="w-full h-[288px] bg-cover bg-center rounded-[15px] mb-4 relative"
         style={{
           backgroundColor: bgcolor,
           backgroundImage: `url(${image})`,

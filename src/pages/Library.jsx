@@ -100,7 +100,7 @@ const Library = () => {
       ) : (
         <>
           {/* Category Buttons */}
-          <div className="w-[65%]  mb-8 flex justify-between">
+          <div className="w-[70%]  mb-8 flex justify-between">
             <div className="flex space-x-4 w-auto">
               {["All", "3d", "experience", "texture"].map((btn, index) => (
                 <button
@@ -128,7 +128,7 @@ const Library = () => {
                 All Artworks{" "}
                 <img
                   src="/assets/icons/drop-down/drop-down.png"
-                  className="w-2 h-2"
+                  className="w-[10px] h-[5.7px]"
                   alt=""
                 />
                 {isAllNetworkMenuOpen && (
@@ -144,7 +144,7 @@ const Library = () => {
                 Sort by
                 <img
                   src="/assets/icons/drop-down/drop-down.png"
-                  className="w-2 h-2"
+                  className="w-[10px] h-[5.7px]"
                   alt=""
                 />
                 {isSortMenuOpen && (

@@ -19,6 +19,8 @@ export const AppProvider = ({ children }) => {
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0.0);
   const [isMyProfileModalOpen, setIsMyProfileModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchInput, setSearchInput] = useState("");
 
   axios.interceptors.request.use(
     (config) => {
@@ -400,6 +402,10 @@ export const AppProvider = ({ children }) => {
         setIsMyProfileModalOpen,
         handleClickOnMyProfile,
         onCheckout,
+        selectedCategory,
+        setSelectedCategory,
+        searchInput,
+        setSearchInput,
       }}
     >
       {children}

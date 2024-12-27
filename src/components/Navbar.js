@@ -29,12 +29,42 @@ const Navbar = () => {
     handleCloseModal,
     isMyProfileModalOpen,
     setIsMyProfileModalOpen,
+    setSelectedCategory,
+    setSearchInput,
+    selectedCategory,
   } = useAppData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isExploreMenuOpen, setIsExploreMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleCategorySelect = (item) => {
+    setSelectedCategory(item.name); // Update global state
+    setIsDropdownOpen(false); // Close the dropdown
+  };
+
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false); // Close dropdown
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  const handleSearch = (e) => {
+    const inputValue = e.target.value;
+    setSearchInput(inputValue); // Update global state
+    navigate("/search");
+  };
 
   useEffect(() => {
     const fetchExaCredits = async () => {
@@ -177,32 +207,16 @@ const Navbar = () => {
           </div>
         </div> */}
 
-          <div className="flex items-center bg-transparent rounded-md px-2 broder border-white ml-">
-            {/* Dropdown */}
+          {/* <div className="flex items-center bg-transparent rounded-md px-2 broder border-white ml-">
             <div className="relative group">
               <button className="bg-[#343444] flex gap-2 text-[#8A7FFF] text-nowrap px-3 2xl:px-3 lg:px-4 lg:text-nowrap py-3 rounded-l-md items-center border-r border-r-[#484859] ">
                 All Products
-                {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-4 h-4 ml-2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg> */}
+              
                 <img src="/assets/icons/dropdown/dropdown.png" alt="" />
               </button>
             </div>
 
-            {/* Search Input */}
             <div className="flex-grow relative ">
-              {/* Search Icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -217,11 +231,64 @@ const Navbar = () => {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-              {/* Input Field */}
               <input
                 type="text"
                 placeholder="Search products"
                 className="bg-[#343444] text-[#8A8AA085] rounded-r-md pl-10 py-3 focus:outline-none w-full"
+              />
+            </div>
+          </div> */}
+
+          <div className="flex items-center bg-transparent rounded-md px-2 ">
+            {/* Dropdown */}
+            <div className="relative group" ref={dropdownRef}>
+              <button
+                className="bg-[#343444] flex gap-2 min-w-[120px] text-[#8A7FFF] text-nowrap px-3 py-3 rounded-l-md items-center border-r border-r-[#484859]"
+                onClick={() => setIsDropdownOpen((prevState) => !prevState)} // Toggle dropdown
+              >
+                {selectedCategory}
+                <img src="/assets/icons/dropdown/dropdown.png" alt="" />
+              </button>
+              {isDropdownOpen && ( // Conditional rendering of the dropdown
+                <div className="absolute bg-[#343444] rounded-md mt-2 w-full z-10">
+                  {menuItems.map((item) => (
+                    <div
+                      key={item.name}
+                      className="px-4 py-2 hover:bg-[#5750A2] cursor-pointer"
+                      onClick={() => {
+                        handleCategorySelect(item); // Update global category
+                        setIsDropdownOpen(false); // Close dropdown
+                      }}
+                    >
+                      {item.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Search Input */}
+            <div className="flex-grow relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#8A8AA085]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search products"
+                className="bg-[#343444] text-[#8A8AA085] rounded-r-md pl-10 py-3 focus:outline-none w-full"
+                onKeyDown={handleSearch}
+                onChange={(e) => setSearchInput(e.target.value)} // Update global input state
               />
             </div>
           </div>
