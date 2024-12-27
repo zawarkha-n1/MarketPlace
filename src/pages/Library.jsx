@@ -120,24 +120,6 @@ const Library = () => {
             </div>
             <div className="flex gap-3 text-white text-[15px] font-400 relative">
               <div
-                className="bg-[#343444] px-4 py-2 rounded-lg flex gap-2 items-center justify-center"
-                onClick={() =>
-                  setIsAllNetworkMenuOpen((prevState) => !prevState)
-                }
-              >
-                All Artworks{" "}
-                <img
-                  src="/assets/icons/drop-down/drop-down.png"
-                  className="w-[10px] h-[5.7px]"
-                  alt=""
-                />
-                {isAllNetworkMenuOpen && (
-                  <div className="absolute top-11 left-0 rounded-[20px] z-10">
-                    <DropDownMenu items={menuItems} />
-                  </div>
-                )}
-              </div>
-              <div
                 className="bg-[#343444] px-4 py-2 rounded-lg flex gap-2 items-center justify-center relative"
                 onClick={handleSortClick}
               >

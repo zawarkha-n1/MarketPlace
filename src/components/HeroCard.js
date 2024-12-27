@@ -4,19 +4,19 @@ import { useNavigate } from "react-router-dom";
 // Define an array of content for the HeroCard
 const heroContent = [
   {
-    title:
-      "Everything you need to shape your own universe, unlocking endless possibilities. ",
+    title: "Shape your own world with assets that bring your vision to life.",
     description:
-      "Transform ideas into reality with tools designed to help you create immersive spaces and innovative experiences. Redefine what's possible and build a universe that's uniquely yours.",
+      "Dive into a curated collection of 3D assets, textures, and tools designed to fuel your creativity. Whether you’re building a virtual store, interactive experience, or unique environment, Bazaar has everything you need to bring your ideas to life.",
   },
   {
     title: "Join Our Community",
     description:
-      "Be part of the largest community of tech enthusiasts. jrnejbdn ejndbejhdb ehjbdhebdh",
+      "Be a part of our community and gain access to resources, support, insights, and exciting events.",
   },
   {
-    title: "New Arrivals Are Here",
-    description: "Check out the latest tech products in our marketplace.",
+    title: "Discover the latest assets",
+    description:
+      "Check out the recent assets we’ve added—designed to help you innovate, grow, and succeed in today’s fast-moving world.",
   },
 ];
 
@@ -50,7 +50,7 @@ const HeroCard = () => {
       {/* Content Container */}
       <div className="text-left max-w-3xl z-10 p-6 space-y-6">
         {/* Title */}
-        <h1 className="text-[38px] font-inter font-extrabold text-white !text-white mb-4 md:text-[38px] lg:text-[38px] leading-[55px]">
+        <h1 className="text-[38px] font-extrabold text-white font-urbanist mb-4 md:text-[38px] lg:text-[38px] leading-[55px]">
           {heroContent[currentIndex].title}
         </h1>
 
@@ -78,7 +78,7 @@ const HeroCard = () => {
             />
           </button>
           <button
-            className="px-6 py-3 text-white bg-transparent border-2 border-white font-inter font-medium text-[16px] leading-normal rounded-full hover:bg-[#5750A2] hover:text-white transition-all duration-300 flex items-center justify-center"
+            className="px-6 py-3 text-white bg-transparent border-2 border-white font-urbanist font-medium text-[16px] leading-normal rounded-full hover:bg-[#5750A2] hover:text-white transition-all duration-300 flex items-center justify-center"
             onClick={handleClick}
           >
             Generate with AI
