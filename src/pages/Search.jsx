@@ -137,7 +137,7 @@ const Search = () => {
       </div>
 
       {/* Category and Network Buttons */}
-      <div className="w-[70%] mb-8 flex justify-between">
+      <div className="w-[72%] mb-8 flex justify-between">
         <div
           className="font-urbanist text-white font-bold text-[43px] leading-[36px] 
        sm:text-[36px] sm:leading-[32px] 

@@ -1,26 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Headingpage from "../components/HeadingPage";
 import Card from "../components/Card";
 import { useAppData } from "../context/AppContext";
-import DropDownMenu from "../components/common/menus/DropDownMenu";
 import axios from "axios";
+import SortMenu from "../components/common/menus/SortMenu";
 
 const menuItems = [
-  { name: "Sort by" },
-  { name: "Top rate" },
-  { name: "Mid rate" },
-  { name: "Low rate" },
+  { name: "Alphabetical", sortKey: "alphabetical" },
+  { name: "Exa High to Low", sortKey: "highToLow" },
+  { name: "Exa Low to High", sortKey: "lowToHigh" },
 ];
 
 const Library = () => {
   const [visibleCards, setVisibleCards] = useState(8);
   const [isActive, setIsActive] = useState("All");
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
-  const [isAllNetworkMenuOpen, setIsAllNetworkMenuOpen] = useState(false);
-  const [filteredAssets, setFilteredAssets] = useState([]); // Fetched and filtered assets
-  const [displayedAssets, setDisplayedAssets] = useState([]); // Assets based on the active filter
+  const [sortOption, setSortOption] = useState("");
+  const [filteredAssets, setFilteredAssets] = useState([]);
+  const [displayedAssets, setDisplayedAssets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { assets } = useAppData(); // Fetch all assets from context
+  const { assets } = useAppData();
+
+  const dropDownRef = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+        setIsSortMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserAssets = async () => {
@@ -39,7 +53,6 @@ const Library = () => {
         );
         const userAssetsData = response.data;
 
-        // Filter data for the current user
         const currentUserAssets = userAssetsData.find(
           (item) => item.useremail === useremail
         );
@@ -48,15 +61,14 @@ const Library = () => {
           const libraryAssetIds =
             currentUserAssets.userassetsdata.libraryassets || [];
 
-          // Filter assets based on libraryAssetIds
           const userFilteredAssets = assets.filter((asset) =>
             libraryAssetIds.includes(asset.id)
           );
 
-          setFilteredAssets(userFilteredAssets); // Store fetched assets
-          setDisplayedAssets(userFilteredAssets); // Initially display all assets
+          setFilteredAssets(userFilteredAssets);
+          setDisplayedAssets(userFilteredAssets);
         } else {
-          setFilteredAssets([]); // No library assets for this user
+          setFilteredAssets([]);
           setDisplayedAssets([]);
         }
 
@@ -71,22 +83,36 @@ const Library = () => {
   }, [assets]);
 
   useEffect(() => {
-    // Filter displayed assets based on isActive
     const updatedAssets =
       isActive === "All"
         ? filteredAssets
         : filteredAssets.filter((asset) => asset.asset_data.type === isActive);
 
-    setDisplayedAssets(updatedAssets);
-  }, [isActive, filteredAssets]);
+    let sortedAssets = [...updatedAssets];
+    if (sortOption === "alphabetical") {
+      sortedAssets.sort((a, b) =>
+        a.asset_data.title.localeCompare(b.asset_data.title)
+      );
+    } else if (sortOption === "highToLow") {
+      sortedAssets.sort((a, b) => b.asset_data.price - a.asset_data.price);
+    } else if (sortOption === "lowToHigh") {
+      sortedAssets.sort((a, b) => a.asset_data.price - b.asset_data.price);
+    }
+
+    setDisplayedAssets(sortedAssets);
+  }, [isActive, filteredAssets, sortOption]);
 
   const handleShowMore = () => {
-    setVisibleCards(visibleCards + 4); // Show 4 more cards
+    setVisibleCards(visibleCards + 4);
   };
 
-  const handleSortClick = (e) => {
-    e.stopPropagation(); // Prevent the click event from propagating to the parent element
-    setIsSortMenuOpen((prevState) => !prevState);
+  const handleSortClick = (sortKey) => {
+    setSortOption(sortKey);
+    setIsSortMenuOpen(false);
+  };
+
+  const closeSortMenu = () => {
+    setIsSortMenuOpen(false);
   };
 
   return (
@@ -99,8 +125,7 @@ const Library = () => {
         <p className="text-white">Loading...</p>
       ) : (
         <>
-          {/* Category Buttons */}
-          <div className="w-[70%]  mb-8 flex justify-between">
+          <div className="w-[71%] mb-8 flex justify-between">
             <div className="flex space-x-4 w-auto">
               {["All", "3d", "experience", "texture"].map((btn, index) => (
                 <button
@@ -110,28 +135,40 @@ const Library = () => {
                   }`}
                   onClick={() => {
                     setIsActive(btn);
-                    setVisibleCards(8); // Reset to initial 8 cards when a new category is selected
+                    setVisibleCards(8);
                   }}
                 >
-                  {btn.charAt(0).toUpperCase() + btn.slice(1)}{" "}
-                  {/* Capitalize first letter */}
+                  {btn.charAt(0).toUpperCase() + btn.slice(1)}
                 </button>
               ))}
             </div>
             <div className="flex gap-3 text-white text-[15px] font-400 relative">
               <div
-                className="bg-[#343444] px-4 py-2 rounded-lg flex gap-2 items-center justify-center relative"
-                onClick={handleSortClick}
+                className="bg-[#343444] px-4 py-2 rounded-lg flex gap-2 items-center justify-center relative cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsSortMenuOpen((prevState) => !prevState);
+                }}
               >
-                Sort by
+                {menuItems.find((item) => item.sortKey === sortOption)?.name ||
+                  "Sort by"}
                 <img
                   src="/assets/icons/drop-down/drop-down.png"
                   className="w-[10px] h-[5.7px]"
                   alt=""
                 />
                 {isSortMenuOpen && (
-                  <div className="absolute top-11 left-0 rounded-[20px] z-10">
-                    <DropDownMenu items={menuItems} />
+                  <div
+                    className="absolute top-11 left-0 rounded-[20px] z-10"
+                    ref={dropDownRef}
+                  >
+                    <SortMenu
+                      items={menuItems.map((item) => ({
+                        ...item,
+                        onClick: () => handleSortClick(item.sortKey),
+                      }))}
+                      closeDropdown={closeSortMenu}
+                    />
                   </div>
                 )}
               </div>
@@ -140,31 +177,27 @@ const Library = () => {
 
           <div className="flex justify-center mb-8 w-[70%] 2xl:min-h-[600px]">
             <div className="grid grid-rows-2 grid-cols-4 gap-10">
-              {displayedAssets
-                .sort((a, b) => a.id - b.id)
-                .slice(0, visibleCards)
-                .map((card, index) => (
-                  <Card
-                    key={index}
-                    id={card.id}
-                    title={card.asset_data.title}
-                    discount={card.asset_data.discount}
-                    price={card.asset_data.price}
-                    starcount={card.asset_data.metadata.stars}
-                    heartcount={card.asset_data.metadata.favourite}
-                    savedcount={card.asset_data.metadata.bookmark}
-                    smileycount={card.asset_data.metadata.smiley}
-                    inlibrary={true}
-                    bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
-                    image={card.asset_data.url}
-                    creatorImage={card.asset_data.creatorLogo}
-                    creatorName={card.asset_data.creatorName}
-                  />
-                ))}
+              {displayedAssets.slice(0, visibleCards).map((card, index) => (
+                <Card
+                  key={index}
+                  id={card.id}
+                  title={card.asset_data.title}
+                  discount={card.asset_data.discount}
+                  price={card.asset_data.price}
+                  starcount={card.asset_data.metadata.stars}
+                  heartcount={card.asset_data.metadata.favourite}
+                  savedcount={card.asset_data.metadata.bookmark}
+                  smileycount={card.asset_data.metadata.smiley}
+                  inlibrary={true}
+                  bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
+                  image={card.asset_data.url}
+                  creatorImage={card.asset_data.creatorLogo}
+                  creatorName={card.asset_data.creatorName}
+                />
+              ))}
             </div>
           </div>
 
-          {/* Show More Button */}
           {visibleCards < displayedAssets.length && (
             <div className="flex justify-center mb-8">
               <button
