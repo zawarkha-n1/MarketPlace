@@ -40,6 +40,11 @@ const Navbar = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const profileButtonRef = useRef(null); // New ref for the profile button
+  const handleProfileClick = (e) => {
+    e.stopPropagation();
+    setIsProfileMenuOpen((prevState) => !prevState);
+  };
   const handleCategorySelect = (item) => {
     setSelectedCategory(item.name); // Update global state
     setIsDropdownOpen(false); // Close the dropdown
@@ -71,7 +76,7 @@ const Navbar = () => {
       if (isLogin && user) {
         try {
           const response = await axios.get(
-            `http://172.16.15.171:5001/get-exa-credits/${user.email}`
+            `http://172.16.15.155:5001/get-exa-credits/${user.email}`
           );
           if (response.data && response.data.exaCredits !== undefined) {
             setExaCredits(response.data.exaCredits); // Set global exaCredits state
@@ -183,61 +188,6 @@ const Navbar = () => {
               className="h-auto object-contain"
             />
           </Link>
-
-          {/* <div className="flex items-center bg-[#343444] rounded-md w-full max-w-[400px] px-2 py-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-5 h-5 text-[#8A8AA085] mr-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search products"
-              className="bg-[#343444] text-white w-full py-1 rounded-md focus:outline-none pl-2"
-            />
-          </div>
-        </div> */}
-
-          {/* <div className="flex items-center bg-transparent rounded-md px-2 broder border-white ml-">
-            <div className="relative group">
-              <button className="bg-[#343444] flex gap-2 text-[#8A7FFF] text-nowrap px-3 2xl:px-3 lg:px-4 lg:text-nowrap py-3 rounded-l-md items-center border-r border-r-[#484859] ">
-                All Products
-              
-                <img src="/assets/icons/dropdown/dropdown.png" alt="" />
-              </button>
-            </div>
-
-            <div className="flex-grow relative ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#8A8AA085]"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search products"
-                className="bg-[#343444] text-[#8A8AA085] rounded-r-md pl-10 py-3 focus:outline-none w-full"
-              />
-            </div>
-          </div> */}
 
           <div className="flex items-center bg-transparent rounded-md px-2 ">
             {/* Dropdown */}
@@ -364,7 +314,7 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-6 ml-auto">
           {isLogin && (
-            <button className="flex items-center text-[#8A7FFF] font-urbanist font-bold text-[15px] leading-[22px] border border-[#3E3E52] rounded-[24px] px-2 py-2 hover:text-gray-400 transition-all duration-300">
+            <button className="flex items-center text-[#8A7FFF] font-urbanist font-bold text-[15px] leading-[22px] border border-[#3E3E52] rounded-[24px] px-2 py-2 hover: transition-all duration-300">
               <img src="/coin.png" alt="Coin" className="w-full h-full mr-1" />
               <div className="text-center flex-grow">{exaCredits}</div>{" "}
               {/* Replace with dynamic number */}
@@ -411,7 +361,7 @@ const Navbar = () => {
                 </span>
               )}
               <div
-                className="absolute top-20 -right-10"
+                className="absolute top-20 -right-10 z-50"
                 ref={cartmodalref}
                 onClick={(e) => e.stopPropagation()} // Stop event propagation
               >
@@ -421,7 +371,11 @@ const Navbar = () => {
           )}
 
           {isLogin && (
-            <button className="w-12 h-12 rounded-full flex items-center justify-center bg-[#8A8AA0] relative">
+            <button
+              className="w-12 h-12 rounded-full flex items-center justify-center bg-[#8A8AA0] relative"
+              ref={profileButtonRef} // Add ref to the button
+              onClick={handleProfileClick}
+            >
               <img
                 src={
                   JSON.parse(sessionStorage.getItem("user"))?.picture ||
@@ -429,7 +383,6 @@ const Navbar = () => {
                 } // Use user.picture if available, otherwise fallback to woman.png
                 alt={user?.name || "User Profile"} // Use user's name for accessibility
                 className="w-full h-full rounded-full" // Ensure the image is styled as a circle
-                onClick={() => setIsProfileMenuOpen((prevState) => !prevState)}
               />
             </button>
           )}

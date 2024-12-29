@@ -35,7 +35,7 @@ const SavedProducts = () => {
 
       try {
         const response = await axios.get(
-          "http://172.16.15.171:5001/user-assets"
+          "http://172.16.15.155:5001/user-assets"
         );
         const userAssetsData = response.data;
 
@@ -98,7 +98,7 @@ const SavedProducts = () => {
   //       prevAssets.filter((asset) => asset.asset_data.title !== assetId)
   //     );
 
-  //     await axios.post("http://172.16.15.171:5001/update-user-assets-saved", {
+  //     await axios.post("http://172.16.15.155:5001/update-user-assets-saved", {
   //       useremail,
   //       assetId,
   //       status: false,

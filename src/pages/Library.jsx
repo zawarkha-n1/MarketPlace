@@ -35,7 +35,7 @@ const Library = () => {
 
       try {
         const response = await axios.get(
-          "http://172.16.15.171:5001/user-assets"
+          "http://172.16.15.155:5001/user-assets"
         );
         const userAssetsData = response.data;
 

@@ -228,6 +228,7 @@ const GenerateModel = () => {
   //       console.error("Error uploading image:", error);
   //     }
   //   };
+
   const handleExampleClick = (imageSrc) => {
     // Prevent example click if generating or regenerating
     if (isGenerating || isRegenerating) return;

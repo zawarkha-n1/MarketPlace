@@ -183,25 +183,28 @@ const Explore = () => {
       {/* Display Cards */}
       <div className="flex items-center justify-center mb-8 w-[70%]">
         <div className="grid grid-rows-1 grid-cols-4 gap-16">
-          {filteredCards.slice(0, visibleCards).map((card, index) => (
-            <Card
-              key={index}
-              id={card.id}
-              title={card.asset_data.title}
-              discount={card.asset_data.discount}
-              price={card.asset_data.price}
-              starcount={card.asset_data.metadata.stars}
-              heartcount={card.asset_data.metadata.favourite}
-              savedcount={card.asset_data.metadata.bookmark}
-              smileycount={card.asset_data.metadata.smiley}
-              bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
-              image={card.asset_data.url}
-              creatorImage={card.asset_data.creatorLogo}
-              creatorName={card.asset_data.creatorName}
-              onClick={() => handleCardClick(card)}
-              views={card.asset_data.metadata.views}
-            />
-          ))}
+          {filteredCards
+            .slice(0, visibleCards)
+            .sort((a, b) => a.id - b.id)
+            .map((card, index) => (
+              <Card
+                key={index}
+                id={card.id}
+                title={card.asset_data.title}
+                discount={card.asset_data.discount}
+                price={card.asset_data.price}
+                starcount={card.asset_data.metadata.stars}
+                heartcount={card.asset_data.metadata.favourite}
+                savedcount={card.asset_data.metadata.bookmark}
+                smileycount={card.asset_data.metadata.smiley}
+                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
+                image={card.asset_data.url}
+                creatorImage={card.asset_data.creatorLogo}
+                creatorName={card.asset_data.creatorName}
+                onClick={() => handleCardClick(card)}
+                views={card.asset_data.metadata.views}
+              />
+            ))}
         </div>
       </div>
 

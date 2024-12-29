@@ -58,7 +58,7 @@ export const AppProvider = ({ children }) => {
 
   const fetchCartAssets = async (useremail) => {
     try {
-      const response = await axios.get("http://172.16.15.171:5001/user-assets");
+      const response = await axios.get("http://172.16.15.155:5001/user-assets");
       const userAssetsData = response.data.find(
         (item) => item.useremail === useremail
       );
@@ -66,7 +66,7 @@ export const AppProvider = ({ children }) => {
 
       // Fetch full asset details
       const assetsResponse = await axios.get(
-        "http://172.16.15.171:5001/assets"
+        "http://172.16.15.155:5001/assets"
       );
       const allAssets = assetsResponse.data;
 
@@ -84,7 +84,7 @@ export const AppProvider = ({ children }) => {
   const addToCart = async (asset) => {
     try {
       const response = await axios.post(
-        "http://172.16.15.171:5001/add-to-cart",
+        "http://172.16.15.155:5001/add-to-cart",
         {
           useremail: user.email,
           assetId: asset.id,
@@ -100,7 +100,7 @@ export const AppProvider = ({ children }) => {
 
   const removeFromCart = async (assetId) => {
     try {
-      await axios.post("http://172.16.15.171:5001/remove-from-cart", {
+      await axios.post("http://172.16.15.155:5001/remove-from-cart", {
         useremail: user.email,
         assetId,
       });
@@ -114,7 +114,7 @@ export const AppProvider = ({ children }) => {
 
   const fetchUserAssets = async (useremail) => {
     try {
-      const response = await axios.get("http://172.16.15.171:5001/user-assets");
+      const response = await axios.get("http://172.16.15.155:5001/user-assets");
       const userAssetsData = response.data;
 
       const currentUserAssets = userAssetsData.find(
@@ -143,7 +143,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const response = await axios.post(
-        `http://172.16.15.171:5001/verify-token`,
+        `http://172.16.15.155:5001/verify-token`,
         {
           token,
         }
@@ -162,7 +162,7 @@ export const AppProvider = ({ children }) => {
 
       // Optionally fetch the cart and other data after login
       await fetchCartAssets(userData.email);
-      const fetchedAssets = await axios.get("http://172.16.15.171:5001/assets");
+      const fetchedAssets = await axios.get("http://172.16.15.155:5001/assets");
       const savedAssetIds = await fetchUserAssets(userData.email);
       updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {
@@ -183,7 +183,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const fetchedAssets = await axios
-        .get("http://172.16.15.171:5001/assets")
+        .get("http://172.16.15.155:5001/assets")
         .then((res) => res.data);
 
       const updatedAssets = fetchedAssets.map((asset) => ({
@@ -209,7 +209,7 @@ export const AppProvider = ({ children }) => {
 
       try {
         const fetchedAssets = await axios
-          .get("http://172.16.15.171:5001/assets")
+          .get("http://172.16.15.155:5001/assets")
           .then((res) => res.data);
 
         if (token && userData) {
@@ -257,7 +257,7 @@ export const AppProvider = ({ children }) => {
       const newSavedStatus = !isSaved;
 
       // Make the API call to update the saved status
-      await axios.post("http://172.16.15.171:5001/update-user-assets-saved", {
+      await axios.post("http://172.16.15.155:5001/update-user-assets-saved", {
         useremail,
         assetId,
         status: newSavedStatus,
@@ -278,7 +278,7 @@ export const AppProvider = ({ children }) => {
       // Optionally re-fetch assets from the backend to ensure consistency
       fetchUserAssets();
       await fetchCartAssets(user.email);
-      const fetchedAssets = await axios.get("http://172.16.15.171:5001/assets");
+      const fetchedAssets = await axios.get("http://172.16.15.155:5001/assets");
       const savedAssetIds = await fetchUserAssets(user.email);
       updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {
@@ -315,7 +315,7 @@ export const AppProvider = ({ children }) => {
     try {
       // Process payment first
       const paymentResponse = await axios.post(
-        "http://172.16.15.171:5001/process-payment",
+        "http://172.16.15.155:5001/process-payment",
         {
           email: useremail,
           paymentType: "onetime",
@@ -344,7 +344,7 @@ export const AppProvider = ({ children }) => {
 
         // Call the bulk add-to-library API
         const response = await axios.post(
-          "http://172.16.15.171:5001/update-user-assets-library",
+          "http://172.16.15.155:5001/update-user-assets-library",
           {
             useremail,
             assetIds,

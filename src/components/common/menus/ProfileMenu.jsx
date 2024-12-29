@@ -25,11 +25,18 @@ const ProfileMenu = ({
     setIsProfileMenuOpen(false);
   };
 
+  const capitalizeTitle = (title) => {
+    return title
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+
   return (
     <div className="bg-[#343444] rounded-[20px] lg:w-[327px] flex flex-col gap-3">
       <div className="flex items-center justify-between px-3 pt-4">
         <h1 className="flex-1 font-urbanist font-bold text-[16px] leading-[22px]">
-          {user.name}
+          {capitalizeTitle(user.name)}
         </h1>
         <div className="bg-customIndigo text-white text-center px-2 py-1 rounded-2xl">
           {plan}

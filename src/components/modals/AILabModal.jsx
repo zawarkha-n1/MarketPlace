@@ -18,7 +18,7 @@ const AILabModal = ({ modalIsOpen, closeModal }) => {
     >
       <div className="space-y-2 bg-[#343444] py-3">
         <button
-          className="w-full bg-[#343444] hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group"
+          className="w-full bg-[#343444] hover: transition-colors rounded-xl p-4 flex items-center gap-4 group"
           onClick={handleNavigate}
         >
           <div className="w-10 h-10 bg-[#5750A2] rounded-lg flex items-center justify-center">
@@ -33,7 +33,7 @@ const AILabModal = ({ modalIsOpen, closeModal }) => {
         </button>
         <hr className="border-gray-500" />
         <button
-          className="w-full  hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group"
+          className="w-full  hover: transition-colors rounded-xl p-4 flex items-center gap-4 group"
           disabled
         >
           <div className="w-10 h-10 bg-[#5750A2] rounded-lg flex items-center justify-center">
@@ -53,7 +53,7 @@ const AILabModal = ({ modalIsOpen, closeModal }) => {
         </button>
         <hr className="border-gray-500" />
         <button
-          className="w-full  hover:bg-slate-700 transition-colors rounded-xl p-4 flex items-center gap-4 group"
+          className="w-full  hover: transition-colors rounded-xl p-4 flex items-center gap-4 group"
           disabled
         >
           <div className="w-10 h-10 bg-[#5750A2] rounded-lg flex items-center justify-center">

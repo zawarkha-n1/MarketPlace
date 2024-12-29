@@ -11,7 +11,15 @@ import LoginModal from "../components/modals/LoginModal";
 import { useNavigate } from "react-router-dom";
 import BuyProductModal from "../components/modals/BuyProductModal";
 import ConfirmationModal from "../components/modals/ConfirmationModal";
+import { Canvas, useLoader } from "@react-three/fiber"; // <-- Make sure useLoader is imported
+import { OrbitControls } from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
+const Model = ({ glbUrl }) => {
+  // Load and render the GLB file using useLoader
+  const gltf = useLoader(GLTFLoader, glbUrl);
+  return <primitive object={gltf.scene} scale={1} />;
+};
 const ModelDetails = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
@@ -19,9 +27,34 @@ const ModelDetails = () => {
   const { title } = useParams(); // Extract title from URL
   const location = useLocation();
   const cardData = location.state || {}; // Use the state passed from navigation
+  console.log(cardData);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
 
+  const renderContent = () => {
+    if (cardData.asset_data && cardData.asset_data.glbUrl) {
+      // Render 3D model (GLB file)
+      return (
+        <Canvas style={{ height: "400px", width: "100%" }}>
+          <ambientLight intensity={0.5} />
+          <spotLight position={[10, 10, 10]} angle={0.15} intensity={1} />
+          <Model glbUrl={cardData.asset_data.glbUrl} />
+          <OrbitControls />
+        </Canvas>
+      );
+    } else if (cardData.asset_data && cardData.asset_data.url) {
+      // Render the image if GLB URL is not available
+      return (
+        <img
+          src={cardData.asset_data.url}
+          alt={cardData.asset_data.title}
+          className="w-full rounded-lg"
+        />
+      );
+    } else {
+      return null; // Return nothing if there's no URL or GLB URL
+    }
+  };
   const {
     isLogin,
     user,
@@ -83,7 +116,7 @@ const ModelDetails = () => {
       try {
         // Fetch user assets
         const response = await axios.get(
-          `http://172.16.15.171:5001/user-assets`
+          `http://172.16.15.155:5001/user-assets`
         );
         const userAssetsData = response.data.find(
           (item) => item.useremail === user.email
@@ -130,21 +163,12 @@ const ModelDetails = () => {
       return;
     }
 
-    // const confirmPurchase = window.confirm(
-    //   `You want to confirm buy for this product? ${cardData.asset_data.price} Exas will be cut from your account.`
-    // );
-
-    // if (!confirmPurchase) {
-    //   console.log("User cancelled the purchase.");
-    //   return;
-    // }
-
     try {
       console.log("Starting payment process...");
 
       // Call the payment API first
       const paymentResponse = await axios.post(
-        "http://172.16.15.171:5001/process-payment",
+        "http://172.16.15.155:5001/process-payment",
         {
           email: useremail,
           paymentType: "onetime",
@@ -166,7 +190,7 @@ const ModelDetails = () => {
 
         // Proceed with adding the asset to the library
         const addLibraryResponse = await axios.post(
-          "http://172.16.15.171:5001/update-user-assets-library",
+          "http://172.16.15.155:5001/update-user-assets-library",
           {
             useremail,
             assetIds: [cardData.id], // Make sure to send an array of titles
@@ -195,7 +219,7 @@ const ModelDetails = () => {
       try {
         if (isLogin && user) {
           const response = await axios.get(
-            `http://172.16.15.171:5001/user-assets`
+            `http://172.16.15.155:5001/user-assets`
           );
           const userAssetsData = response.data.find(
             (item) => item.useremail === user.email
@@ -207,7 +231,9 @@ const ModelDetails = () => {
           if (recentAssets.length >= 4) {
             // Display recent assets if 4 or more exist
             setRecentAssets(
-              assets.filter((asset) => recentAssets.includes(asset.id))
+              assets
+                .filter((asset) => recentAssets.includes(asset.id))
+                .filter((asset) => asset.id !== cardData.id)
             );
           } else {
             // Display 6 random assets if recent assets are fewer than 4
@@ -266,11 +292,7 @@ const ModelDetails = () => {
       <div className="w-full flex items-center justify-center text-white">
         <div className="w-full sm:w-[80%] md:w-[70%] lg:w-[66%] flex flex-col md:flex-row items-start gap-28">
           <div className="relative flex-1 bg-[#DC90FF] rounded-lg">
-            <img
-              src={cardData.asset_data.url}
-              alt=""
-              className="w-full rounded-xl"
-            />
+            {renderContent()}
 
             <div className="absolute top-4 right-4 flex gap-4">
               <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">

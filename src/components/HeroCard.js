@@ -63,7 +63,7 @@ const HeroCard = () => {
         <div className="flex space-x-8">
           {" "}
           {/* Use flex to align buttons in a row */}
-          <button className="px-8 py-3 text-white bg-gradient-to-r from-[#1F3AA8] to-[#801CCC] font-montserrat font-semibold text-[16px] leading-normal rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 flex items-center justify-center">
+          <button className="px-8 py-3 text-white bg-gradient-to-r from-[#1F3AA8] to-[#801CCC] font-montserrat font-semibold text-[16px] leading-normal rounded-full shadow-lg transform transition-transform duration-300 hover:scale-100 flex items-center justify-center">
             <img
               src="/platform.png" // Image path from the public folder
               alt="Platform 3" // Alt text for accessibility
