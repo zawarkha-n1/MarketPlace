@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import RoundedOutlineButton from "../buttons/RoundedOutlineButton";
 import { useAppData } from "../../../context/AppContext";
 import axios from "axios";
+import LoginModal from "../../modals/LoginModal";
 
 const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  function closeLoginModal() {
+    setIsLoginModalOpen(false);
+  }
+
   axios.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("token"); // Example of retrieving the token
@@ -21,7 +27,7 @@ const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
   // This function will handle the Buy Now button click
   const handleBuyNow = async () => {
     if (!user) {
-      alert("User is not logged in");
+      setIsLoginModalOpen(true);
       return;
     }
 
@@ -115,6 +121,12 @@ const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
           onClick={handleBuyNow} // Trigger the buy now action
         />
       </div>
+      {isLoginModalOpen && (
+        <LoginModal
+          modalIsOpen={isLoginModalOpen}
+          closeModal={closeLoginModal}
+        />
+      )}
     </div>
   );
 };
