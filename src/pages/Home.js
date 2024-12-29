@@ -12,6 +12,8 @@ const Home = () => {
   const [popularIndex, setPopularIndex] = useState(0);
   const [textureIndex, setTextureIndex] = useState(0);
   const [experienceIndex, setExperienceIndex] = useState(0);
+  const [topPicks, setTopPicks] = useState([]);
+  const [topDeals, setTopDeals] = useState([]);
   const { assets, fetchUserAssets, isLogin, setUser, setExaCredits } =
     useAppData();
 
@@ -56,28 +58,42 @@ const Home = () => {
   const [filter, setFilter] = useState("All");
 
   // State to store shuffled cards for Top Picks and Top Deals
-  const [shuffledTopPicks, setShuffledTopPicks] = useState([]);
-  const [shuffledTopDeals, setShuffledTopDeals] = useState([]);
-
-  // Shuffle cards function (this will be used only once to shuffle the data)
-  const shuffleCards = (cards) => {
-    const shuffledCards = [...cards];
-    for (let i = shuffledCards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledCards[i], shuffledCards[j]] = [
-        shuffledCards[j],
-        shuffledCards[i],
-      ];
-    }
-    return shuffledCards;
-  };
+  const [TopPicksAssets, setTopPicksAssets] = useState([]);
+  const [TopDealsAssets, setTopDealsAssets] = useState([]);
+  const [popularAssets, setPopularAssets] = useState([]);
 
   // Shuffle cards once when the component mounts or when the filter changes
   useEffect(() => {
     console.log(assets);
     if (assets.length > 0) {
-      setShuffledTopPicks(shuffleCards(assets));
-      setShuffledTopDeals(shuffleCards(assets));
+      setTopPicksAssets(
+        assets
+          .sort(
+            (a, b) =>
+              b.asset_data.metadata.promotion.topPicks -
+              a.asset_data.metadata.promotion.topPicks
+          )
+          .slice(0, 10)
+      );
+      setTopDealsAssets(
+        assets
+          .sort(
+            (a, b) =>
+              b.asset_data.metadata.promotion.topDeals -
+              a.asset_data.metadata.promotion.topDeals
+          )
+          .slice(0, 10)
+      );
+
+      setPopularAssets(
+        assets
+          .sort(
+            (a, b) =>
+              b.asset_data.metadata.promotion.popular -
+              a.asset_data.metadata.promotion.popular
+          )
+          .slice(0, 20)
+      );
     }
   }, [assets]); // Dependency on filter so that it reshuffles when the filter is changed
 
@@ -87,15 +103,15 @@ const Home = () => {
     switch (section) {
       case "topPicks":
         index = topPicksIndex;
-        maxLength = shuffledTopPicks.length;
+        maxLength = TopPicksAssets.length;
         break;
       case "topDeals":
         index = topDealsIndex;
-        maxLength = shuffledTopDeals.length;
+        maxLength = TopDealsAssets.length;
         break;
       case "popular":
         index = popularIndex;
-        maxLength = assets.filter(
+        maxLength = popularAssets.filter(
           (card) => filter === "All" || card.asset_data.type === filter
         ).length; // Filter based on the current filter value
         break;
@@ -183,13 +199,13 @@ const Home = () => {
     let totalItems;
     switch (section) {
       case "topPicks":
-        totalItems = shuffledTopPicks.length;
+        totalItems = TopPicksAssets.length;
         break;
       case "topDeals":
-        totalItems = shuffledTopDeals.length;
+        totalItems = TopDealsAssets.length;
         break;
       case "popular":
-        totalItems = assets.filter(
+        totalItems = popularAssets.filter(
           (card) => filter === "All" || card.asset_data.type === filter
         ).length;
         break;
@@ -261,10 +277,9 @@ const Home = () => {
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
           {/* Slice the `toppicks` array based on the `topPicksIndex` */}
-          {shuffledTopPicks
-            .sort((a, b) =>
-              a.asset_data.title.localeCompare(b.asset_data.title)
-            )
+          {TopPicksAssets.sort((a, b) =>
+            a.asset_data.title.localeCompare(b.asset_data.title)
+          )
             .slice(topPicksIndex, topPicksIndex + 4)
             .map((card, index) => (
               <Card
@@ -351,10 +366,9 @@ const Home = () => {
 
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
-          {shuffledTopDeals
-            .sort((a, b) =>
-              a.asset_data.title.localeCompare(b.asset_data.title)
-            )
+          {TopDealsAssets.sort((a, b) =>
+            a.asset_data.title.localeCompare(b.asset_data.title)
+          )
             .slice(topDealsIndex, topDealsIndex + 4)
             .map((card, index) => (
               <Card
@@ -597,7 +611,7 @@ const Home = () => {
 
         {/* Card Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
-          {assets
+          {popularAssets
             .sort((a, b) =>
               a.asset_data.title.localeCompare(b.asset_data.title)
             )

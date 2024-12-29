@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import CheckoutPopup from "../../modals/CheckoutPopup";
 
 const SummaryCard = ({
   summaryTitle = "Summary",
@@ -14,6 +15,8 @@ const SummaryCard = ({
   className = "",
   buttonClassName = "bg-customIndigo text-md rounded-3xl px-3 py-1.5 mt-3 text-white w-[90%] ",
 }) => {
+  const [isCheckOutPopupOpen, setIsCheckOutPopupOpen] = useState(false);
+
   return (
     <div
       className={`bg-[#42425A] rounded-lg py-3 md:py-4 space-y-3 xl:space-y-4 text-white xl:min-w-[350px] ${className} h-fit`}
@@ -43,11 +46,20 @@ const SummaryCard = ({
       <div className="w-full flex items-center justify-center">
         <button
           className={`transition duration-300 ${buttonClassName}`}
-          onClick={onCheckout}
+          onClick={() => setIsCheckOutPopupOpen((state) => !state)}
         >
           {checkoutLabel}
         </button>
       </div>
+      {isCheckOutPopupOpen && (
+        <CheckoutPopup
+          modalIsOpen={isCheckOutPopupOpen}
+          closeModal={() => setIsCheckOutPopupOpen(false)}
+          text={`You want to confirm checkout?
+${totalValue} will be cut from your account`}
+          onCheckout={onCheckout}
+        />
+      )}
     </div>
   );
 };

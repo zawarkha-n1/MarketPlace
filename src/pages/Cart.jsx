@@ -45,12 +45,6 @@ const Cart = () => {
       0
     );
 
-    const confirmPurchase = window.confirm(
-      `You want to confirm checkout? ${totalPrice} Exas will be cut from your account.`
-    );
-
-    if (!confirmPurchase) return;
-
     try {
       // Process payment first
       const paymentResponse = await axios.post(
@@ -91,9 +85,6 @@ const Cart = () => {
         );
 
         if (response.status === 200) {
-          console.log("Assets added to library successfully.");
-          alert("Checkout successful! Your assets are added to the library.");
-
           // Remove all items from the cart after successful checkout
           for (const asset of cartAssets) {
             await removeFromCart(asset.id); // Remove each asset from cart
