@@ -60,8 +60,9 @@ const ModelDetails = () => {
             style={{ height: "580px", width: "100%" }}
             camera={{ position: [0, 0, 3], fov: 50 }}
           >
-            <ambientLight intensity={0.5} />
+            <ambientLight intensity={2.8} />
             <spotLight position={[10, 10, 10]} angle={0.15} intensity={1} />
+
             <Model glbUrl={glbObjectUrl} />
             <OrbitControls />
           </Canvas>
@@ -386,6 +387,9 @@ const ModelDetails = () => {
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
+      {!glbObjectUrl && cardData.asset_data.glbUrl && (
+        <div class="fixed inset-0 bg-black bg-opacity-80 z-50"></div>
+      )}
       <Headingpage pagename={"Model Details"} secondheading={"Explore"} />
       <div className="w-full flex items-center justify-center text-white">
         <div className="w-full sm:w-[80%] md:w-[70%] lg:w-[66%] flex flex-col md:flex-row items-start gap-28">
