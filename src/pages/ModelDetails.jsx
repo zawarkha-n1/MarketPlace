@@ -44,72 +44,109 @@ const ModelDetails = () => {
       fetchGlb();
     }
   }, [cardData]);
-  // const renderContent = () => {
-  //   if (!cardData.asset_data) return null;
-
-  //   // Check if there's a GLB URL in the cardData
-  //   if (cardData.asset_data.glbUrl) {
-  //     // Wait until we have the actual object URL from the proxy
-  //     if (!glbObjectUrl) {
-  //       return <div className="text-white">Loading 3D Model...</div>;
-  //     }
-
-  //     return (
-  //       <Canvas
-  //         style={{ height: "580px", width: "100%" }}
-  //         camera={{ position: [0, 0, 2], fov: 50 }} // closer position, narrower FOV
-  //       >
-  //         <ambientLight intensity={0.5} />
-  //         <spotLight position={[10, 10, 10]} angle={0.15} intensity={1} />
-  //         <Model glbUrl={glbObjectUrl} />
-  //         <OrbitControls />
-  //       </Canvas>
-  //     );
-  //   }
-  //   if (cardData.asset_data && cardData.asset_data.url) {
-  //     // Render the image if GLB URL is not available
-  //     return (
-  //       <img
-  //         src={cardData.asset_data.url}
-  //         alt={cardData.asset_data.title}
-  //         className="w-full rounded-lg"
-  //       />
-  //     );
-  //   } else {
-  //     return null; // Return nothing if there's no URL or GLB URL
-  //   }
-  // };
 
   const renderContent = () => {
     if (!cardData.asset_data) return null;
 
     if (cardData.asset_data.glbUrl) {
       if (!glbObjectUrl) {
-        return <div className="text-white">Loading 3D Model...</div>;
+        return <span>Model is being loaded</span>;
       }
 
       return (
-        <Canvas
-          key={glbObjectUrl} // Force re-mount when glb changes
-          style={{ height: "580px", width: "100%" }}
-          camera={{ position: [0, 0, 3], fov: 50 }}
-        >
-          <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} intensity={1} />
-          <Model glbUrl={glbObjectUrl} />
-          <OrbitControls />
-        </Canvas>
+        <div className="relative flex-1 bg-[#DC90FF] rounded-lg">
+          <Canvas
+            key={glbObjectUrl} // Force re-mount when glb changes
+            style={{ height: "580px", width: "100%" }}
+            camera={{ position: [0, 0, 3], fov: 50 }}
+          >
+            <ambientLight intensity={0.5} />
+            <spotLight position={[10, 10, 10]} angle={0.15} intensity={1} />
+            <Model glbUrl={glbObjectUrl} />
+            <OrbitControls />
+          </Canvas>
+
+          <div className="absolute top-4 right-4 flex gap-4">
+            <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
+              <img src="/eye.png" alt="icon1" className="w-5 h-4" />
+              <span className="font-semibold">
+                {cardData.asset_data.metadata.views}
+              </span>
+            </div>
+            <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
+              {isSaved && (
+                <img src="/save-filled.png" alt="icon2" className="w-4 h-4" />
+              )}
+              {!isSaved && (
+                <img src="/save.png" alt="icon2" className="w-4 h-4" />
+              )}
+              <span className="font-semibold">
+                {cardData.asset_data.metadata.bookmark}
+              </span>
+            </div>
+          </div>
+
+          <div className="absolute bottom-4 right-4 bg-[#70598C] text-white p-3 rounded-lg flex items-center gap-2">
+            <img
+              src={cardData.asset_data.creatorLogo}
+              alt="Powered By"
+              className="w-12"
+            />
+            <span className="font-700 text-[14px]">
+              <span className="text-[#8A8AA0] text-[13px] font-400 block">
+                Powered
+              </span>{" "}
+              By {cardData.asset_data.creatorName}
+            </span>
+          </div>
+        </div>
       );
     }
 
     // Fallback: if no glb, show an image
     if (cardData.asset_data.url) {
       return (
-        <img
-          src={cardData.asset_data.url}
-          alt={cardData.asset_data.title}
-          className="w-full rounded-lg"
-        />
+        <div className="relative flex-1 bg-[#DC90FF] rounded-lg">
+          <img
+            src={cardData.asset_data.url}
+            alt={cardData.asset_data.title}
+            className="w-full rounded-lg"
+          />
+
+          <div className="absolute top-4 right-4 flex gap-4">
+            <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
+              <img src="/eye.png" alt="icon1" className="w-5 h-4" />
+              <span className="font-semibold">
+                {cardData.asset_data.metadata.views}
+              </span>
+            </div>
+            <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
+              {isSaved && (
+                <img src="/save-filled.png" alt="icon2" className="w-4 h-4" />
+              )}
+              {!isSaved && (
+                <img src="/save.png" alt="icon2" className="w-4 h-4" />
+              )}
+              <span className="font-semibold">
+                {cardData.asset_data.metadata.bookmark}
+              </span>
+            </div>
+          </div>
+
+          <div className="absolute bottom-4 right-4 bg-[#70598C] text-white p-3 rounded-lg flex items-center gap-2">
+            <img
+              src={cardData.asset_data.creatorLogo}
+              alt="Powered By"
+              className="w-12"
+            />
+            <span className="font-700 text-[14px]">
+              <span className="text-[#8A8AA0] text-[13px] font-400 block">
+                Powered
+              </span>{" "}
+              By {cardData.asset_data.creatorName}
+            </span>
+          </div>
+        </div>
       );
     }
     return null;
@@ -299,6 +336,7 @@ const ModelDetails = () => {
             // Display 6 random assets if recent assets are fewer than 4
             const randomAssets = assets
               .sort(() => 0.5 - Math.random())
+              .filter((asset) => asset.id !== cardData.id)
               .slice(0, 6);
             setRecentAssets(randomAssets);
           }
@@ -351,43 +389,12 @@ const ModelDetails = () => {
       <Headingpage pagename={"Model Details"} secondheading={"Explore"} />
       <div className="w-full flex items-center justify-center text-white">
         <div className="w-full sm:w-[80%] md:w-[70%] lg:w-[66%] flex flex-col md:flex-row items-start gap-28">
-          <div className="relative flex-1 bg-[#DC90FF] rounded-lg">
-            {renderContent()}
-
-            <div className="absolute top-4 right-4 flex gap-4">
-              <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
-                <img src="/eye.png" alt="icon1" className="w-5 h-4" />
-                <span className="font-semibold">
-                  {cardData.asset_data.metadata.views}
-                </span>
-              </div>
-              <div className="bg-[#70598C] text-white px-3 py-2 rounded-lg flex items-center gap-2">
-                {isSaved && (
-                  <img src="/save-filled.png" alt="icon2" className="w-4 h-4" />
-                )}
-                {!isSaved && (
-                  <img src="/save.png" alt="icon2" className="w-4 h-4" />
-                )}
-                <span className="font-semibold">
-                  {cardData.asset_data.metadata.bookmark}
-                </span>
-              </div>
+          {!cardData.asset_data.glbUrl && (
+            <div className="relative flex-1 bg-[#DC90FF] rounded-lg">
+              {renderContent()}
             </div>
-
-            <div className="absolute bottom-4 right-4 bg-[#70598C] text-white p-3 rounded-lg flex items-center gap-2">
-              <img
-                src={cardData.asset_data.creatorLogo}
-                alt="Powered By"
-                className="w-12"
-              />
-              <span className="font-700 text-[14px]">
-                <span className="text-[#8A8AA0] text-[13px] font-400 block">
-                  Powered
-                </span>{" "}
-                By {cardData.asset_data.creatorName}
-              </span>
-            </div>
-          </div>
+          )}
+          {cardData.asset_data.glbUrl && <>{renderContent()}</>}
 
           <div className="flex flex-col flex-1 items-start gap-6">
             <div className="text-white text-3xl sm:text-4xl md:text-[36px]">
