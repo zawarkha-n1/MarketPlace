@@ -13,13 +13,8 @@ import BuyProductModal from "../components/modals/BuyProductModal";
 import ConfirmationModal from "../components/modals/ConfirmationModal";
 import { Canvas, useLoader } from "@react-three/fiber"; // <-- Make sure useLoader is imported
 import { OrbitControls } from "@react-three/drei";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import Model from "./Model";
 
-const Model = ({ glbUrl }) => {
-  // Load and render the GLB file using useLoader
-  const gltf = useLoader(GLTFLoader, glbUrl);
-  return <primitive object={gltf.scene} scale={1} />;
-};
 const ModelDetails = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
@@ -30,20 +25,85 @@ const ModelDetails = () => {
   console.log(cardData);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const [glbObjectUrl, setGlbObjectUrl] = useState(null);
+
+  useEffect(() => {
+    if (cardData.asset_data.glbUrl) {
+      const fetchGlb = async () => {
+        const response = await fetch("http://172.16.15.155:5001/proxy-file", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: cardData.asset_data.glbUrl }),
+        });
+        if (!response.ok)
+          throw new Error(`Proxy fetch failed: ${response.status}`);
+        const glbBlob = await response.blob();
+        const objectUrl = URL.createObjectURL(glbBlob);
+        setGlbObjectUrl(objectUrl);
+      };
+      fetchGlb();
+    }
+  }, [cardData]);
+  // const renderContent = () => {
+  //   if (!cardData.asset_data) return null;
+
+  //   // Check if there's a GLB URL in the cardData
+  //   if (cardData.asset_data.glbUrl) {
+  //     // Wait until we have the actual object URL from the proxy
+  //     if (!glbObjectUrl) {
+  //       return <div className="text-white">Loading 3D Model...</div>;
+  //     }
+
+  //     return (
+  //       <Canvas
+  //         style={{ height: "580px", width: "100%" }}
+  //         camera={{ position: [0, 0, 2], fov: 50 }} // closer position, narrower FOV
+  //       >
+  //         <ambientLight intensity={0.5} />
+  //         <spotLight position={[10, 10, 10]} angle={0.15} intensity={1} />
+  //         <Model glbUrl={glbObjectUrl} />
+  //         <OrbitControls />
+  //       </Canvas>
+  //     );
+  //   }
+  //   if (cardData.asset_data && cardData.asset_data.url) {
+  //     // Render the image if GLB URL is not available
+  //     return (
+  //       <img
+  //         src={cardData.asset_data.url}
+  //         alt={cardData.asset_data.title}
+  //         className="w-full rounded-lg"
+  //       />
+  //     );
+  //   } else {
+  //     return null; // Return nothing if there's no URL or GLB URL
+  //   }
+  // };
 
   const renderContent = () => {
-    if (cardData.asset_data && cardData.asset_data.glbUrl) {
-      // Render 3D model (GLB file)
+    if (!cardData.asset_data) return null;
+
+    if (cardData.asset_data.glbUrl) {
+      if (!glbObjectUrl) {
+        return <div className="text-white">Loading 3D Model...</div>;
+      }
+
       return (
-        <Canvas style={{ height: "400px", width: "100%" }}>
+        <Canvas
+          key={glbObjectUrl} // Force re-mount when glb changes
+          style={{ height: "580px", width: "100%" }}
+          camera={{ position: [0, 0, 3], fov: 50 }}
+        >
           <ambientLight intensity={0.5} />
           <spotLight position={[10, 10, 10]} angle={0.15} intensity={1} />
-          <Model glbUrl={cardData.asset_data.glbUrl} />
+          <Model glbUrl={glbObjectUrl} />
           <OrbitControls />
         </Canvas>
       );
-    } else if (cardData.asset_data && cardData.asset_data.url) {
-      // Render the image if GLB URL is not available
+    }
+
+    // Fallback: if no glb, show an image
+    if (cardData.asset_data.url) {
       return (
         <img
           src={cardData.asset_data.url}
@@ -51,10 +111,10 @@ const ModelDetails = () => {
           className="w-full rounded-lg"
         />
       );
-    } else {
-      return null; // Return nothing if there's no URL or GLB URL
     }
+    return null;
   };
+
   const {
     isLogin,
     user,

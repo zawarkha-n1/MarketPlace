@@ -177,58 +177,6 @@ const GenerateModel = () => {
     }
   };
 
-  //   const uploadImage = async (imageFile) => {
-  //     const formData = new FormData();
-
-  //     if (typeof imageFile === "string") {
-  //       // Handle case where imageFile is a URL (e.g., selected example)
-  //       try {
-  //         const response = await fetch(imageFile); // Fetch the image as a Blob
-  //         const blob = await response.blob(); // Convert to Blob
-  //         formData.append("file", blob, "example.png"); // Append the Blob as a file
-  //       } catch (error) {
-  //         console.error("Error fetching or uploading example image:", error);
-  //         return;
-  //       }
-  //     } else {
-  //       // Normal file upload
-  //       formData.append("file", imageFile); // Append the image file to FormData
-  //     }
-
-  //     try {
-  //       console.log("Uploading image to API...");
-  //       const response = await fetch("http://172.16.15.209:8000/get_mesh", {
-  //         method: "POST",
-  //         body: formData,
-  //       });
-
-  //       if (response.ok) {
-  //         const fileBlob = await response.blob(); // Get the file as a Blob
-  //         const fileUrl = URL.createObjectURL(fileBlob); // Create a URL for the Blob
-
-  //         // Log the GLB file URL
-  //         console.log("GLB file URL:", fileUrl);
-
-  //         // Trigger file download
-  //         saveAs(fileBlob, "generated_model.glb"); // Trigger download with FileSaver.js
-
-  //         // Only update the GLB URL if it's different from the previous one
-  //         if (fileUrl !== previousGlbFileUrl) {
-  //           setGlbFileUrl(fileUrl); // Update GLB URL state with the new file
-  //           setPreviousGlbFileUrl(fileUrl); // Track the previous GLB URL
-  //         } else {
-  //           console.log(
-  //             "The model is the same as the previous one, skipping update."
-  //           );
-  //         }
-  //       } else {
-  //         console.error("Error uploading image:", response.statusText);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error uploading image:", error);
-  //     }
-  //   };
-
   const handleExampleClick = (imageSrc) => {
     // Prevent example click if generating or regenerating
     if (isGenerating || isRegenerating) return;
