@@ -14,6 +14,7 @@ import ConfirmationModal from "../components/modals/ConfirmationModal";
 import { Canvas, useLoader } from "@react-three/fiber"; // <-- Make sure useLoader is imported
 import { OrbitControls } from "@react-three/drei";
 import Model from "./Model";
+import LowBalance from "../components/modals/LowBalancePopup";
 
 const ModelDetails = () => {
   const navigate = useNavigate();
@@ -30,11 +31,14 @@ const ModelDetails = () => {
   useEffect(() => {
     if (cardData.asset_data.glbUrl) {
       const fetchGlb = async () => {
-        const response = await fetch("http://172.16.15.155:5001/proxy-file", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: cardData.asset_data.glbUrl }),
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_BASE_URL}/proxy-file`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: cardData.asset_data.glbUrl }),
+          }
+        );
         if (!response.ok)
           throw new Error(`Proxy fetch failed: ${response.status}`);
         const glbBlob = await response.blob();
@@ -54,7 +58,7 @@ const ModelDetails = () => {
       }
 
       return (
-        <div className="relative flex-1 bg-[#DC90FF] rounded-lg">
+        <div className="relative flex-1 bg-[#2A2A37] rounded-lg">
           <Canvas
             key={glbObjectUrl} // Force re-mount when glb changes
             style={{ height: "580px", width: "100%" }}
@@ -162,6 +166,7 @@ const ModelDetails = () => {
     cartAssets,
     setIsCartModalOpen,
     setExaCredits,
+    exaCredits,
   } = useAppData();
   const [recentAssets, setRecentAssets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -170,6 +175,8 @@ const ModelDetails = () => {
   const [isBuyProductModalOpen, setIsBuyProductModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
+  const [isLowBalanceModalOpen, setIsLowBalanceModalOpen] = useState(false);
+
   const handleBuy = () => {
     if (!isLogin || !user) {
       setIsOwned(false); // User is not logged in, no ownership
@@ -177,7 +184,13 @@ const ModelDetails = () => {
       return;
     }
 
-    setIsBuyProductModalOpen(true);
+    console.log(exaCredits);
+    console.log(cardData.asset_data.price);
+    if (exaCredits < cardData.asset_data.price) {
+      setIsLowBalanceModalOpen(true);
+    } else {
+      setIsBuyProductModalOpen(true);
+    }
   };
 
   const handleOwned = () => {
@@ -214,7 +227,7 @@ const ModelDetails = () => {
       try {
         // Fetch user assets
         const response = await axios.get(
-          `http://172.16.15.155:5001/user-assets`
+          `${process.env.REACT_APP_BASE_URL}/user-assets`
         );
         const userAssetsData = response.data.find(
           (item) => item.useremail === user.email
@@ -240,7 +253,7 @@ const ModelDetails = () => {
           setIsOwned(false); // Asset is not owned
         }
       } catch (error) {
-        console.error("Error fetching library status:", error);
+        console.log("Error fetching library status:", error);
         setIsOwned(false); // Fallback in case of an error
       }
     };
@@ -257,7 +270,7 @@ const ModelDetails = () => {
     const useremail = user?.email;
 
     if (!useremail) {
-      console.error("User email not found.");
+      console.log("User email not found.");
       return;
     }
 
@@ -266,7 +279,7 @@ const ModelDetails = () => {
 
       // Call the payment API first
       const paymentResponse = await axios.post(
-        "http://172.16.15.155:5001/process-payment",
+        `${process.env.REACT_APP_BASE_URL}/process-payment`,
         {
           email: useremail,
           paymentType: "onetime",
@@ -288,7 +301,7 @@ const ModelDetails = () => {
 
         // Proceed with adding the asset to the library
         const addLibraryResponse = await axios.post(
-          "http://172.16.15.155:5001/update-user-assets-library",
+          `${process.env.REACT_APP_BASE_URL}/update-user-assets-library`,
           {
             useremail,
             assetIds: [cardData.id], // Make sure to send an array of titles
@@ -302,12 +315,10 @@ const ModelDetails = () => {
         closeBuyProductModal();
         setIsConfirmModalOpen(true);
       } else {
-        console.error("Payment failed:", paymentResponse.data.message);
-        alert(`Payment Failed: ${paymentResponse.data.message}`);
+        console.log("Payment failed:", paymentResponse.data.message);
       }
     } catch (error) {
-      console.error("Error during payment or adding asset to library:", error);
-      alert("An error occurred during the process. Please try again.");
+      console.log("Error during payment or adding asset to library:", error);
     }
   };
   useEffect(() => {
@@ -317,7 +328,7 @@ const ModelDetails = () => {
       try {
         if (isLogin && user) {
           const response = await axios.get(
-            `http://172.16.15.155:5001/user-assets`
+            `${process.env.REACT_APP_BASE_URL}/user-assets`
           );
           const userAssetsData = response.data.find(
             (item) => item.useremail === user.email
@@ -349,7 +360,7 @@ const ModelDetails = () => {
           setRecentAssets(randomAssets);
         }
       } catch (error) {
-        console.error("Error fetching recent assets:", error);
+        console.log("Error fetching recent assets:", error);
       } finally {
         setLoading(false);
       }
@@ -384,13 +395,16 @@ const ModelDetails = () => {
       setIsCartModalOpen(true);
     }, 1000);
   };
+  const handleLowBalanceClose = () => {
+    setIsLowBalanceModalOpen(false); // Close low balance modal
+  };
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
       {!glbObjectUrl && cardData.asset_data.glbUrl && (
-        <div class="fixed inset-0 bg-black bg-opacity-80 z-50"></div>
+        <div className="fixed inset-0 bg-black bg-opacity-80 z-50"></div>
       )}
-      <Headingpage pagename={"Model Details"} secondheading={"Explore"} />
+      <Headingpage pagename={"Model Details"} />
       <div className="w-full flex items-center justify-center text-white">
         <div className="w-full sm:w-[80%] md:w-[70%] lg:w-[66%] flex flex-col md:flex-row items-start gap-28">
           {!cardData.asset_data.glbUrl && (
@@ -556,6 +570,13 @@ const ModelDetails = () => {
           handleNavigation={handleOwned}
           modalIsOpen={isConfirmModalOpen}
           closeModal={() => setIsConfirmModalOpen(false)}
+        />
+      )}
+      {isLowBalanceModalOpen && (
+        <LowBalance
+          modalIsOpen={isLowBalanceModalOpen}
+          closeModal={handleLowBalanceClose}
+          text={`You want to Purchase more EXA's?`}
         />
       )}
     </div>

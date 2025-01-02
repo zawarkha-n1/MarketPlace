@@ -1,16 +1,15 @@
 import React from "react";
 import Modal from "react-modal";
-
-const CheckoutPopup = ({
-  handleNavigation,
-  modalIsOpen,
-  closeModal,
-  text,
-  onCheckout,
-}) => {
+import { useNavigate } from "react-router-dom";
+const LowBalance = ({ modalIsOpen, closeModal, text }) => {
+  const navigate = useNavigate();
   const handleCansel = () => {
     closeModal();
     return;
+  };
+  const handleConfirm = () => {
+    closeModal();
+    navigate("/plans");
   };
   return (
     <Modal
@@ -23,10 +22,10 @@ const CheckoutPopup = ({
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="bg-[#343444] rounded-3xl px-12 py-12 text-center max-w-md w-full relative">
           <h2 className="text-[#FFFFFF] font-urbanist text-[29.22px] font-bold mb-4">
-            Are You Sure?
+            Low Balance
           </h2>
           <p className="text-[#FFFFFF] font-urbanist text-[18px] mb-10 w-full justify-center">
-            {text}
+            You want to Purchase more EXA's ?
           </p>
           <div className="flex gap-4">
             <button
@@ -37,7 +36,7 @@ const CheckoutPopup = ({
             </button>
             <button
               className="bg-[#5750A2] text-white font-urbanist text-[20.46px] py-3 px-6 w-[100%] text-center rounded-[30px]"
-              onClick={onCheckout}
+              onClick={handleConfirm}
             >
               Confirm
             </button>
@@ -58,4 +57,4 @@ const CheckoutPopup = ({
   );
 };
 
-export default CheckoutPopup;
+export default LowBalance;

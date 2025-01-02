@@ -49,7 +49,7 @@ export const AppProvider = ({ children }) => {
           await fetchCartAssets(savedUser.email);
         }
       } catch (error) {
-        console.error("Error initializing cart:", error);
+        console.log("Error initializing cart:", error);
       }
     };
 
@@ -58,7 +58,9 @@ export const AppProvider = ({ children }) => {
 
   const fetchCartAssets = async (useremail) => {
     try {
-      const response = await axios.get("http://172.16.15.155:5001/user-assets");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/user-assets`
+      );
       const userAssetsData = response.data.find(
         (item) => item.useremail === useremail
       );
@@ -66,7 +68,7 @@ export const AppProvider = ({ children }) => {
 
       // Fetch full asset details
       const assetsResponse = await axios.get(
-        "http://172.16.15.155:5001/assets"
+        `${process.env.REACT_APP_BASE_URL}/assets`
       );
       const allAssets = assetsResponse.data;
 
@@ -77,14 +79,14 @@ export const AppProvider = ({ children }) => {
       setCartAssets(cartAssetsDetails);
       sessionStorage.setItem("cartAssets", JSON.stringify(cartAssetsDetails)); // Persist in sessionStorage
     } catch (error) {
-      console.error("Error fetching cart assets:", error);
+      console.log("Error fetching cart assets:", error);
     }
   };
 
   const addToCart = async (asset) => {
     try {
       const response = await axios.post(
-        "http://172.16.15.155:5001/add-to-cart",
+        `${process.env.REACT_APP_BASE_URL}/add-to-cart`,
         {
           useremail: user.email,
           assetId: asset.id,
@@ -94,13 +96,13 @@ export const AppProvider = ({ children }) => {
       setCartAssets(updatedCart);
       sessionStorage.setItem("cartAssets", JSON.stringify(updatedCart)); // Update sessionStorage
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      console.log("Error adding to cart:", error);
     }
   };
 
   const removeFromCart = async (assetId) => {
     try {
-      await axios.post("http://172.16.15.155:5001/remove-from-cart", {
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/remove-from-cart`, {
         useremail: user.email,
         assetId,
       });
@@ -108,13 +110,15 @@ export const AppProvider = ({ children }) => {
       setCartAssets(updatedCart);
       sessionStorage.setItem("cartAssets", JSON.stringify(updatedCart)); // Update sessionStorage
     } catch (error) {
-      console.error("Error removing from cart:", error);
+      console.log("Error removing from cart:", error);
     }
   };
 
   const fetchUserAssets = async (useremail) => {
     try {
-      const response = await axios.get("http://172.16.15.155:5001/user-assets");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/user-assets`
+      );
       const userAssetsData = response.data;
 
       const currentUserAssets = userAssetsData.find(
@@ -123,7 +127,7 @@ export const AppProvider = ({ children }) => {
 
       return currentUserAssets?.userassetsdata.savedassets || [];
     } catch (error) {
-      console.error("Error fetching user assets:", error);
+      console.log("Error fetching user assets:", error);
       return [];
     }
   };
@@ -143,7 +147,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const response = await axios.post(
-        `http://172.16.15.155:5001/verify-token`,
+        `${process.env.REACT_APP_BASE_URL}/verify-token`,
         {
           token,
         }
@@ -162,11 +166,13 @@ export const AppProvider = ({ children }) => {
 
       // Optionally fetch the cart and other data after login
       await fetchCartAssets(userData.email);
-      const fetchedAssets = await axios.get("http://172.16.15.155:5001/assets");
+      const fetchedAssets = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/assets`
+      );
       const savedAssetIds = await fetchUserAssets(userData.email);
       updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {
-      console.error("Error verifying user:", error);
+      console.log("Error verifying user:", error);
     }
   };
 
@@ -183,7 +189,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const fetchedAssets = await axios
-        .get("http://172.16.15.155:5001/assets")
+        .get(`${process.env.REACT_APP_BASE_URL}/assets`)
         .then((res) => res.data);
 
       const updatedAssets = fetchedAssets.map((asset) => ({
@@ -198,7 +204,7 @@ export const AppProvider = ({ children }) => {
       );
       window.location.reload();
     } catch (error) {
-      console.error("Error fetching assets after logout:", error);
+      console.log("Error fetching assets after logout:", error);
     }
   };
 
@@ -209,7 +215,7 @@ export const AppProvider = ({ children }) => {
 
       try {
         const fetchedAssets = await axios
-          .get("http://172.16.15.155:5001/assets")
+          .get(`${process.env.REACT_APP_BASE_URL}/assets`)
           .then((res) => res.data);
 
         if (token && userData) {
@@ -234,7 +240,7 @@ export const AppProvider = ({ children }) => {
           setAssets(fetchedAssets);
         }
       } catch (err) {
-        console.error("Error during app initialization:", err);
+        console.log("Error during app initialization:", err);
         handleLogout();
       } finally {
         setLoadingAssets(false);
@@ -248,7 +254,7 @@ export const AppProvider = ({ children }) => {
     const useremail = user?.email;
 
     if (!useremail) {
-      console.error("User is not logged in.");
+      console.log("User is not logged in.");
       return;
     }
 
@@ -257,11 +263,14 @@ export const AppProvider = ({ children }) => {
       const newSavedStatus = !isSaved;
 
       // Make the API call to update the saved status
-      await axios.post("http://172.16.15.155:5001/update-user-assets-saved", {
-        useremail,
-        assetId,
-        status: newSavedStatus,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/update-user-assets-saved`,
+        {
+          useremail,
+          assetId,
+          status: newSavedStatus,
+        }
+      );
 
       // Update global state with the updated assets
       const updatedAssets = assets.map((asset) =>
@@ -278,11 +287,13 @@ export const AppProvider = ({ children }) => {
       // Optionally re-fetch assets from the backend to ensure consistency
       fetchUserAssets();
       await fetchCartAssets(user.email);
-      const fetchedAssets = await axios.get("http://172.16.15.155:5001/assets");
+      const fetchedAssets = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/assets`
+      );
       const savedAssetIds = await fetchUserAssets(user.email);
       updateAssetsWithSavedStatus(fetchedAssets.data, savedAssetIds);
     } catch (error) {
-      console.error("Error updating saved status in backend:", error);
+      console.log("Error updating saved status ", error);
 
       // Revert UI state if the API call fails
       // Handle error states here if needed
@@ -296,7 +307,7 @@ export const AppProvider = ({ children }) => {
   const onCheckout = async () => {
     const useremail = user?.email;
     if (!useremail) {
-      console.error("User email not found.");
+      console.log("User email not found.");
       return;
     }
 
@@ -315,7 +326,7 @@ export const AppProvider = ({ children }) => {
     try {
       // Process payment first
       const paymentResponse = await axios.post(
-        "http://172.16.15.155:5001/process-payment",
+        `${process.env.REACT_APP_BASE_URL}/process-payment`,
         {
           email: useremail,
           paymentType: "onetime",
@@ -337,14 +348,13 @@ export const AppProvider = ({ children }) => {
         const assetIds = cartAssets.map((asset) => asset.id);
 
         if (!Array.isArray(assetIds) || assetIds.length === 0) {
-          console.error("No asset Ids found.");
-          alert("Error: No assets to add to the library.");
+          console.log("No asset  found.");
           return;
         }
 
         // Call the bulk add-to-library API
         const response = await axios.post(
-          "http://172.16.15.155:5001/update-user-assets-library",
+          `${process.env.REACT_APP_BASE_URL}/update-user-assets-library`,
           {
             useremail,
             assetIds,
@@ -361,16 +371,13 @@ export const AppProvider = ({ children }) => {
           }
           window.location.reload();
         } else {
-          console.error("Error adding assets to library:", response.data.error);
-          alert("Error adding assets to library.");
+          console.log("Error adding assets to library:", response.data.error);
         }
       } else {
-        console.error("Payment failed:", paymentResponse.data.message);
-        alert(`Payment failed: ${paymentResponse.data.message}`);
+        console.log("Payment failed:", paymentResponse.data.message);
       }
     } catch (error) {
-      console.error("Error during checkout:", error);
-      alert("An error occurred during checkout. Please try again.");
+      console.log("Error during checkout:", error);
     }
   };
   return (

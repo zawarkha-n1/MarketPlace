@@ -8,8 +8,9 @@ const Footer = () => {
         <div className="flex flex-col items-center justify-center lg:w-[25%] lg:items-start p-2 lg:p-4 gap-1">
           <img src="/bazaar.png" alt="" className="mb-4" />
           <p className="font-urbanist font-normal text-[14px] leading-[22px] text-center lg:text-start w-full lg:w-[70%] mb-6">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis non,
-            fugit totam vel laboriosam vitae.
+            Your one-stop virtual design and digital asset marketplace, Explore
+            a wide range of high-quality, ready-to-use assets to elevate your
+            online presence.
           </p>
           <div className="flex items-start justify-center lg:justify-start">
             <SocialIcon
@@ -36,16 +37,13 @@ const Footer = () => {
               My Account
             </h1>
             <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Authors
+              My Profile
             </p>
             <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Collection
+              Saved Products
             </p>
             <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Author Profile
-            </p>
-            <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Create Collection
+              Generate with AI
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 w-auto  p-4">
@@ -53,16 +51,13 @@ const Footer = () => {
               Resources
             </h1>
             <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Help & Support
+              User Manuals
             </p>
             <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Live Auctions
+              Our Blogs
             </p>
             <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Author Profile
-            </p>
-            <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Activity
+              FAQ's
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 w-auto  p-4">
@@ -76,10 +71,7 @@ const Footer = () => {
               Contact Us
             </p>
             <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Our Blog
-            </p>
-            <p className="font-urbanist font-normal text-[14px] leading-[22px]">
-              Discover
+              Terms of Use
             </p>
           </div>
         </div>

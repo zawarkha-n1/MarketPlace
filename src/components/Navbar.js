@@ -76,13 +76,13 @@ const Navbar = () => {
       if (isLogin && user) {
         try {
           const response = await axios.get(
-            `http://172.16.15.155:5001/get-exa-credits/${user.email}`
+            `${process.env.REACT_APP_BASE_URL}/get-exa-credits/${user.email}`
           );
           if (response.data && response.data.exaCredits !== undefined) {
             setExaCredits(response.data.exaCredits); // Set global exaCredits state
           }
         } catch (error) {
-          console.error("Error fetching exa credits:", error);
+          console.log("Error fetching exa credits:", error);
         }
       }
     };
@@ -328,14 +328,14 @@ const Navbar = () => {
             className="flex items-center text-[#8A7FFF] rounded-[24px]"
             onClick={() =>
               window.open(
-                "https://odyssey-independent-platform.vercel.app/",
+                "https://platform3.tenant-7654b5-plat3.ord1.ingress.coreweave.cloud/",
                 "_blank",
                 "noopener,noreferrer"
               )
             }
           >
             <img
-              src="/platformm.png"
+              src="https://i.ibb.co/BLy5vDX/Platformm.png"
               alt="Platform"
               className="w-full h-full"
             />

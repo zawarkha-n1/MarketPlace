@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAppData } from "../context/AppContext";
-
+import LoginModal from "./modals/LoginModal";
 const Card = ({
   id, // Assuming you have an asset `id` passed as a prop now
   title,
@@ -20,6 +20,10 @@ const Card = ({
   saved,
   views,
 }) => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  function closeLoginModal() {
+    setIsLoginModalOpen(false);
+  }
   const [isSaved, setIsSaved] = useState(saved);
   const { fetchUserAssets, user, handleSaveClick } = useAppData();
   const [localSavedCount, setLocalSavedCount] = useState(savedcount);
@@ -36,6 +40,11 @@ const Card = ({
   const handleActionClick = async (actionType) => {
     if (clicked[actionType]) return; // Prevent multiple clicks
 
+    if (!user) {
+      // setIsLoginModalOpen(true);
+      return;
+    }
+
     try {
       // Optimistically update the UI
       setClicked((prev) => ({ ...prev, [actionType]: true }));
@@ -48,14 +57,17 @@ const Card = ({
       }
 
       // Make the backend API call
-      await axios.post("http://172.16.15.155:5001/update-asset-action", {
-        assetId: id,
-        actionType,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/update-asset-action`,
+        {
+          assetId: id,
+          actionType,
+        }
+      );
 
       console.log(`${actionType} count incremented for asset: ${id}`);
     } catch (error) {
-      console.error(`Error updating ${actionType} count:`, error);
+      console.log(`Error updating ${actionType} count:`, error);
 
       // Revert UI state if the API call fails
       setClicked((prev) => ({ ...prev, [actionType]: false }));
@@ -334,6 +346,12 @@ const Card = ({
           )}
         </div>
       </div>
+      {isLoginModalOpen && (
+        <LoginModal
+          modalIsOpen={isLoginModalOpen}
+          closeModal={closeLoginModal}
+        />
+      )}
     </div>
   );
 };

@@ -70,7 +70,7 @@ const HeroCard = () => {
               className="w-full h-full object-contain" // Set a fixed width and height for the image
               onClick={() =>
                 window.open(
-                  "https://odyssey-independent-platform.vercel.app/",
+                  "https://platform3.tenant-7654b5-plat3.ord1.ingress.coreweave.cloud/",
                   "_blank",
                   "noopener,noreferrer"
                 )

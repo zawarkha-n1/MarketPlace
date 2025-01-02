@@ -12,6 +12,13 @@ const menuItems = [
 ];
 
 const Library = () => {
+  const capitalizeTitle = (title) => {
+    return title
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+  const { user } = useAppData();
   const [visibleCards, setVisibleCards] = useState(8);
   const [isActive, setIsActive] = useState("All");
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
@@ -22,6 +29,7 @@ const Library = () => {
   const { assets } = useAppData();
 
   const dropDownRef = useRef(null);
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
@@ -42,14 +50,14 @@ const Library = () => {
       const useremail = user?.email;
 
       if (!useremail) {
-        console.error("User email not found in sessionStorage.");
+        console.log("User email not found in sessionStorage.");
         setLoading(false);
         return;
       }
 
       try {
         const response = await axios.get(
-          "http://172.16.15.155:5001/user-assets"
+          `${process.env.REACT_APP_BASE_URL}/user-assets`
         );
         const userAssetsData = response.data;
 
@@ -60,13 +68,37 @@ const Library = () => {
         if (currentUserAssets) {
           const libraryAssetIds =
             currentUserAssets.userassetsdata.libraryassets || [];
+          const threeDAssets =
+            currentUserAssets.userassetsdata["3dAssets"] || []; // Ensure there's a fallback
 
+          // Combine the assets from the library and 3D assets
           const userFilteredAssets = assets.filter((asset) =>
             libraryAssetIds.includes(asset.id)
           );
 
-          setFilteredAssets(userFilteredAssets);
-          setDisplayedAssets(userFilteredAssets);
+          const threeDAssetsWithType = threeDAssets.map((asset) => ({
+            ...asset,
+            asset_data: {
+              title: asset.Title.replace(/\.(png|jpg|jpeg)$/i, ""),
+              type: "3d", // Add type to 3D assets
+              url: asset.imageUrl,
+              price: 0, // Add price for now or fetch from a different source
+              discount: 0,
+              metadata: {
+                stars: Math.floor(Math.random() * 5) + 1, // Random stars for demo
+                favourite: Math.floor(Math.random() * 100),
+                bookmark: Math.floor(Math.random() * 100),
+                smiley: Math.floor(Math.random() * 100),
+              },
+              creatorLogo:
+                JSON.parse(sessionStorage.getItem("user"))?.picture ||
+                "/woman.png", // Add mock data
+              creatorName: capitalizeTitle(user.name), // Add mock data
+            },
+          }));
+
+          setFilteredAssets([...userFilteredAssets, ...threeDAssetsWithType]);
+          setDisplayedAssets([...userFilteredAssets, ...threeDAssetsWithType]);
         } else {
           setFilteredAssets([]);
           setDisplayedAssets([]);
@@ -74,7 +106,7 @@ const Library = () => {
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching user assets:", error);
+        console.log("Error fetching user assets:", error);
         setLoading(false);
       }
     };
@@ -118,7 +150,7 @@ const Library = () => {
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-center">
       <div className="text-white font-urbanist">
-        <Headingpage pagename={"My Library"} secondheading={"Pages"} />
+        <Headingpage pagename={"My Library"} />
       </div>
 
       {loading ? (
@@ -189,7 +221,7 @@ const Library = () => {
                   savedcount={card.asset_data.metadata.bookmark}
                   smileycount={card.asset_data.metadata.smiley}
                   inlibrary={true}
-                  bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
+                  bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"}
                   image={card.asset_data.url}
                   creatorImage={card.asset_data.creatorLogo}
                   creatorName={card.asset_data.creatorName}

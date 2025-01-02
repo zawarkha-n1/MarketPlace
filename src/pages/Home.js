@@ -7,6 +7,7 @@ import axios from "axios";
 
 const Home = () => {
   // States for pagination in each section
+  console.log(process.env.REACT_APP_BASE_URL);
   const [topPicksIndex, setTopPicksIndex] = useState(0);
   const [topDealsIndex, setTopDealsIndex] = useState(0);
   const [popularIndex, setPopularIndex] = useState(0);
@@ -22,22 +23,25 @@ const Home = () => {
       try {
         const token = sessionStorage.getItem("authToken");
         if (!token) {
-          console.error("No token found in session storage.");
+          console.log("No token found in session storage.");
           return;
         }
 
-        const response = await axios.get("http://172.16.15.155:5001/get-user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/get-user`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const userData = response.data;
         sessionStorage.setItem("user", JSON.stringify(userData)); // Update session storage
         setUser(userData); // Update global state
         setExaCredits(userData.exaCredits); // Update EXA credits in global state
       } catch (error) {
-        console.error("Error fetching user data on home page:", error);
+        console.log("Error fetching user data on home page:", error);
         if (error.response?.status === 401) {
           console.log("Token expired or unauthorized. Logging out...");
           sessionStorage.clear();
@@ -233,7 +237,7 @@ const Home = () => {
     const assetTitle = card.asset_data.title;
     const assetId = card.id;
     if (!useremail) {
-      console.error("User email not found in sessionStorage.");
+      console.log("User email not found in sessionStorage.");
       navigate(`/product/${assetTitle}`, {
         state: card,
       });
@@ -242,14 +246,17 @@ const Home = () => {
 
     try {
       // Make an API call to update the user_assets table
-      await axios.post("http://172.16.15.155:5001/update-user-assets-recent", {
-        useremail,
-        assetId,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/update-user-assets-recent`,
+        {
+          useremail,
+          assetId,
+        }
+      );
 
       console.log("API call successful: Recent asset added.", assetId);
     } catch (error) {
-      console.error("Error updating user assets:", error);
+      console.log("Error updating user assets:", error);
     }
 
     // Navigate to the product page
@@ -293,7 +300,7 @@ const Home = () => {
                 savedcount={card.asset_data.metadata.bookmark}
                 smileycount={card.asset_data.metadata.smiley}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"} // Alternating background color
                 image={card.asset_data.url}
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
@@ -382,7 +389,7 @@ const Home = () => {
                 savedcount={card.asset_data.metadata.bookmark}
                 smileycount={card.asset_data.metadata.smiley}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"} // Alternating background color
                 image={card.asset_data.url}
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
@@ -453,7 +460,7 @@ const Home = () => {
             className="relative cursor-pointer"
             onClick={() =>
               window.open(
-                "https://odyssey-independent-platform.vercel.app/",
+                "https://platform3.tenant-7654b5-plat3.ord1.ingress.coreweave.cloud/",
                 "_blank",
                 "noopener,noreferrer"
               )
@@ -486,7 +493,7 @@ const Home = () => {
                 savedcount={card.asset_data.metadata.bookmark}
                 smileycount={card.asset_data.metadata.smiley}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"} // Alternating background color
                 image={card.asset_data.url}
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
@@ -631,7 +638,7 @@ const Home = () => {
                 savedcount={card.asset_data.metadata.bookmark}
                 smileycount={card.asset_data.metadata.smiley}
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"} // Alternating background color
                 image={card.asset_data.url}
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
@@ -718,7 +725,7 @@ const Home = () => {
                 savedcount={card.asset_data.metadata.bookmark}
                 smileycount={card.asset_data.metadata.smiley} // Example use
                 inlibrary={inlibrary}
-                bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"} // Alternating background color
+                bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"} // Alternating background color
                 image={card.asset_data.url}
                 creatorImage={card.asset_data.creatorLogo}
                 creatorName={card.asset_data.creatorName}
@@ -791,9 +798,14 @@ const Home = () => {
             <h2 className="text-white text-[22px] sm:text-[28px] md:text-[34px] xl:text-[46px] 2xl:text-[64px] leading-[40px] sm:leading-[46px] md:leading-[58px] lg:leading-[70px] font-publicSans tracking-[1.2px] sm:tracking-[1.4px]">
               Soon to <span className="font-bold ">Bazaar</span>
             </h2>
-            <h4 className="2xl:text-[26px] leading-7 mt-2">
-              Currently available on Shopify
+            <h4 className="2xl:text-[20px] leading-7 mt-4">
+              Currently available on Shopify, Zeniva makes
             </h4>
+            <h4 className="2xl:text-[20px] leading-7">
+              it easy to generate high-quality, customised
+            </h4>
+            <h4 className="2xl:text-[26px] leading-7">content on you store</h4>
+
             <a
               href="https://zeniva.ai/"
               target="_blank"

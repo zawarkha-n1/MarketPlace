@@ -42,14 +42,14 @@ const SavedProducts = () => {
       const useremail = user?.email;
 
       if (!useremail) {
-        console.error("User email not found in sessionStorage.");
+        console.log("User email not found in sessionStorage.");
         setLoading(false);
         return;
       }
 
       try {
         const response = await axios.get(
-          "http://172.16.15.155:5001/user-assets"
+          `${process.env.REACT_APP_BASE_URL}/user-assets`
         );
         const userAssetsData = response.data;
 
@@ -77,7 +77,7 @@ const SavedProducts = () => {
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching user assets:", error);
+        console.log("Error fetching user assets:", error);
         setLoading(false);
       }
     };
@@ -131,7 +131,7 @@ const SavedProducts = () => {
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-center">
       <div className="text-white font-urbanist">
-        <Headingpage pagename={"Saved Products"} secondheading={"Pages"} />
+        <Headingpage pagename={"Saved Products"} />
       </div>
 
       {loading ? (
@@ -202,7 +202,7 @@ const SavedProducts = () => {
                   savedcount={card.asset_data.metadata.bookmark}
                   smileycount={card.asset_data.metadata.smiley}
                   inlibrary={false}
-                  bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
+                  bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"}
                   image={card.asset_data.url}
                   creatorImage={card.asset_data.creatorLogo}
                   creatorName={card.asset_data.creatorName}

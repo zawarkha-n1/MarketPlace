@@ -119,7 +119,7 @@ const Explore = () => {
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-center">
       <div className="text-white font-urbanist">
-        <Headingpage pagename={"Explore"} secondheading={"Pages"} />
+        <Headingpage pagename={"Explore"} />
       </div>
 
       {/* Category and Network Buttons */}
@@ -193,7 +193,7 @@ const Explore = () => {
               heartcount={card.asset_data.metadata.favourite}
               savedcount={card.asset_data.metadata.bookmark}
               smileycount={card.asset_data.metadata.smiley}
-              bgcolor={index % 2 === 0 ? "#8A7FFF" : "#DC90FF"}
+              bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"}
               image={card.asset_data.url}
               creatorImage={card.asset_data.creatorLogo}
               creatorName={card.asset_data.creatorName}

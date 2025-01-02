@@ -33,7 +33,7 @@ const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
 
     try {
       const response = await axios.post(
-        "http://172.16.15.155:5001/one-time-payment-exas",
+        `${process.env.REACT_APP_BASE_URL}/one-time-payment-exas`,
         {
           useremail: user.email,
           selectedOption,

@@ -1,7 +1,12 @@
 import React from "react";
 import Modal from "react-modal";
 
-const ConfirmationModal = ({ handleNavigation, modalIsOpen, closeModal }) => {
+const ConfirmationModal = ({
+  handleNavigation,
+  modalIsOpen,
+  closeModal,
+  in3d,
+}) => {
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -15,10 +20,18 @@ const ConfirmationModal = ({ handleNavigation, modalIsOpen, closeModal }) => {
           <h2 className="text-[#FFFFFF] font-urbanist text-[29.22px] font-bold mb-4">
             Congratulation!
           </h2>
-          <p className="text-[#FFFFFF] font-urbanist text-[18px] mb-10 w-full justify-center">
-            You have successfully purchased the product. It can be accessed from
-            the library.
-          </p>
+          {!in3d && (
+            <p className="text-[#FFFFFF] font-urbanist text-[18px] mb-10 w-full justify-center">
+              You have successfully purchased the product. It can be accessed
+              from the library.
+            </p>
+          )}
+          {in3d && (
+            <p className="text-[#FFFFFF] font-urbanist text-[18px] mb-10 w-full justify-center">
+              You have successfully purchased the Generated Asset. It can be
+              accessed from the library.
+            </p>
+          )}
           <button
             className="bg-[#5750A2] text-white font-urbanist text-[20.46px] py-3 px-6 w-[100%] text-center rounded-[30px]"
             onClick={handleNavigation}

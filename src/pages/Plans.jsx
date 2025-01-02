@@ -11,7 +11,7 @@ const Plans = () => {
 
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
-      <Headingpage pagename={"Our Pricing Plans"} secondheading={"Pricing"} />
+      <Headingpage pagename={"Our Pricing Plans"} />
       <div className="w-full flex items-center justify-center">
         <div className="xl:w-[70%] 2xl:w-[60%] flex flex-row items-center justify-center gap-8">
           {/* <PricingCard

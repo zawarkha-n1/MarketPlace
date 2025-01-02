@@ -35,7 +35,7 @@ const Cart = () => {
   const onCheckout = async () => {
     const useremail = user?.email;
     if (!useremail) {
-      console.error("User email not found.");
+      console.log("User email not found.");
       return;
     }
 
@@ -48,7 +48,7 @@ const Cart = () => {
     try {
       // Process payment first
       const paymentResponse = await axios.post(
-        "http://172.16.15.155:5001/process-payment",
+        `${process.env.REACT_APP_BASE_URL}/process-payment`,
         {
           email: useremail,
           paymentType: "onetime",
@@ -70,14 +70,14 @@ const Cart = () => {
         const assetIds = cartAssets.map((asset) => asset.id);
 
         if (!Array.isArray(assetIds) || assetIds.length === 0) {
-          console.error("No asset Ids found.");
-          alert("Error: No assets to add to the library.");
+          console.log("No asset Ids found.");
+
           return;
         }
 
         // Call the bulk add-to-library API
         const response = await axios.post(
-          "http://172.16.15.155:5001/update-user-assets-library",
+          `${process.env.REACT_APP_BASE_URL}/update-user-assets-library`,
           {
             useremail,
             assetIds,
@@ -91,21 +91,18 @@ const Cart = () => {
           }
           window.location.reload();
         } else {
-          console.error("Error adding assets to library:", response.data.error);
-          alert("Error adding assets to library.");
+          console.log("Error adding assets to library:", response.data.error);
         }
       } else {
-        console.error("Payment failed:", paymentResponse.data.message);
-        alert(`Payment failed: ${paymentResponse.data.message}`);
+        console.log("Payment failed:", paymentResponse.data.message);
       }
     } catch (error) {
-      console.error("Error during checkout:", error);
-      alert("An error occurred during checkout. Please try again.");
+      console.log("Error during checkout:", error);
     }
   };
   return (
     <div className="min-h-screen bg-[#14141F] flex flex-col items-center justify-start">
-      <Headingpage pagename={"Cart"} secondheading={"Explore"} />
+      <Headingpage pagename={"Cart"} />
       {cartAssets?.length == 0 ? (
         <EmptyCartCard />
       ) : (
