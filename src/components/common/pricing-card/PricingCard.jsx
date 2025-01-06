@@ -3,13 +3,18 @@ import RoundedOutlineButton from "../buttons/RoundedOutlineButton";
 import { useAppData } from "../../../context/AppContext";
 import axios from "axios";
 import LoginModal from "../../modals/LoginModal";
+import CryptoJS from "crypto-js";
 
 const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(1); // Default selected option is the first one
+  const { user } = useAppData();
+
   function closeLoginModal() {
     setIsLoginModalOpen(false);
   }
 
+  // Add the interceptor for Authorization header
   axios.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("token"); // Example of retrieving the token
@@ -22,9 +27,7 @@ const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
       return Promise.reject(error);
     }
   );
-  const [selectedOption, setSelectedOption] = useState(1); // Default selected option is the first one
-  const { user } = useAppData();
-  // This function will handle the Buy Now button click
+
   const handleBuyNow = async () => {
     if (!user) {
       setIsLoginModalOpen(true);
@@ -32,17 +35,51 @@ const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
     }
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/one-time-payment-exas`,
-        {
-          useremail: user.email,
-          selectedOption,
-        }
+      // Prepare data for HMAC signature generation
+      const data = {
+        useremail: user.email,
+        selectedOption,
+      };
+
+      // Ensure sorted keys before stringifying the data
+      const sortedData = Object.keys(data)
+        .sort() // Sort keys to ensure consistent ordering
+        .reduce((acc, key) => {
+          acc[key] = data[key];
+          return acc;
+        }, {});
+
+      const dataString = JSON.stringify(sortedData);
+
+      // Define your shared secret
+      const secret =
+        "bcdd13e4b669a047d99e1ba6f310f3ad0868630ec7320b96598aef9997b87c59";
+
+      // Generate HMAC signature using SHA256
+      const signature = CryptoJS.HmacSHA256(dataString, secret).toString(
+        CryptoJS.enc.Hex
       );
 
-      const data = response.data; // axios handles JSON parsing
-      if (data.url) {
-        window.location.href = data.url;
+      // Create the API request object with all details
+      const apiRequest = {
+        url: `${process.env.REACT_APP_BASE_URL}/one-time-payment-exas`,
+        data,
+        headers: {
+          "x-signature": signature, // Include the signature in the request header
+        },
+      };
+
+      // Log the full API request including headers for debugging
+      console.log("API Request: ", apiRequest);
+
+      // Make the request with the HMAC signature in the header
+      const response = await axios.post(apiRequest.url, apiRequest.data, {
+        headers: apiRequest.headers,
+      });
+
+      const responseData = response.data;
+      if (responseData.url) {
+        window.location.href = responseData.url; // Redirect to the payment URL
       } else {
         alert("Error: Couldn't process the payment");
       }
@@ -54,6 +91,7 @@ const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
       alert("There was an issue with your payment. Please try again.");
     }
   };
+
   return (
     <div className="py-6 px-5 bg-[#343444] text-white rounded-[21.26px] min-w-[90%] sm:min-w-[45%] md:min-w-[34%] lg:min-w-[32%] xl:min-w-[34%] max-w-[100%] sm:max-w-[45%] md:max-w-[34%] lg:max-w-[32%] xl:max-w-[34%]">
       <div>
@@ -107,9 +145,6 @@ const PricingCard = ({ title, subtitle, price, pricingOptions }) => {
                 <span className="text-sm font-medium text-white">
                   ${option.price.toFixed(2)}
                 </span>
-                {/* <span className="text-md font-medium text-white cursor-pointer">
-                  ${option.pricePerCredit.toFixed(3)}/ credit
-                </span> */}
               </div>
             </div>
           ))}

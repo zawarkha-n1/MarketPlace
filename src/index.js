@@ -6,8 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AppProvider } from "./context/AppContext";
 
 //google clientId
-const clientId =
-  "186730001178-dlu70b3topu1sr8kcuv6ckguf6tah2no.apps.googleusercontent.com";
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 if (!clientId) {
   console.error(
