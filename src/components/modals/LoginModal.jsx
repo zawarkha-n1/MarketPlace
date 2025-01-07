@@ -24,9 +24,7 @@ const LoginModal = ({ modalIsOpen, closeModal }) => {
       overlayClassName="modal-overlay"
     >
       <div className="w-full text-left mb-4">
-        <h2 className="text-white text-xl font-semibold">
-          Login in with Google
-        </h2>
+        <h2 className="text-white text-xl font-semibold">Login with Google</h2>
       </div>
       <div onClick={closeModal}>
         <div

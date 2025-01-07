@@ -124,7 +124,7 @@ const Cart = () => {
               totalValue={`${calculateTotal()} EXA`} // Total price
               lineItems={[
                 { label: "Price", value: `${calculateTotal()} EXA` },
-                { label: "Taxes", value: "0.00 EXA" }, // Static shipping
+                { label: "Tax", value: "0.00 EXA" }, // Static shipping
               ]}
               onCheckout={onCheckout}
             />
