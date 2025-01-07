@@ -39,10 +39,20 @@ const ModelDetails = () => {
             body: JSON.stringify({ url: cardData.asset_data.glbUrl }),
           }
         );
+
         if (!response.ok)
           throw new Error(`Proxy fetch failed: ${response.status}`);
+
         const glbBlob = await response.blob();
-        const objectUrl = URL.createObjectURL(glbBlob);
+        const glbBuffer = await glbBlob.arrayBuffer();
+
+        // Remove the metadata (16-byte signature)
+        const originalArrayBuffer = glbBuffer.slice(
+          0,
+          glbBuffer.byteLength - 16
+        );
+
+        const objectUrl = URL.createObjectURL(new Blob([originalArrayBuffer]));
         setGlbObjectUrl(objectUrl);
       };
       fetchGlb();
