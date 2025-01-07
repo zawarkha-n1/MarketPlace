@@ -58,27 +58,30 @@ const ScrollableCards = ({ cards, CardComponent, title = "Default Title" }) => {
       {/* Card Grid Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 mb-8">
         {/* Slice the cards array based on the currentIndex */}
-        {cards.slice(currentIndex, currentIndex + 4).map((card, index) => (
-          <Card
-            key={card.id}
-            id={card.id}
-            title={card.asset_data.title}
-            discount={card.asset_data.discount}
-            price={card.asset_data.price}
-            starcount={card.asset_data.metadata.stars}
-            heartcount={card.asset_data.metadata.favourite}
-            savedcount={card.asset_data.metadata.bookmark}
-            smileycount={card.asset_data.metadata.smiley}
-            inlibrary={false}
-            bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"} // Alternating background color
-            image={card.asset_data.url}
-            creatorImage={card.asset_data.creatorLogo}
-            creatorName={card.asset_data.creatorName}
-            onClick={() => handleCardClick(card)}
-            saved={card.isSaved}
-            views={card.asset_data.metadata.views}
-          />
-        ))}
+        {cards
+          .sort((a, b) => a.id - b.id)
+          .slice(currentIndex, currentIndex + 4)
+          .map((card, index) => (
+            <Card
+              key={card.id}
+              id={card.id}
+              title={card.asset_data.title}
+              discount={card.asset_data.discount}
+              price={card.asset_data.price}
+              starcount={card.asset_data.metadata.stars}
+              heartcount={card.asset_data.metadata.favourite}
+              savedcount={card.asset_data.metadata.bookmark}
+              smileycount={card.asset_data.metadata.smiley}
+              inlibrary={false}
+              bgcolor={index % 2 === 0 ? "#2A2A37" : "#2A2A37"} // Alternating background color
+              image={card.asset_data.url}
+              creatorImage={card.asset_data.creatorLogo}
+              creatorName={card.asset_data.creatorName}
+              onClick={() => handleCardClick(card)}
+              saved={card.isSaved}
+              views={card.asset_data.metadata.views}
+            />
+          ))}
       </div>
 
       {/* Pagination Controls */}
