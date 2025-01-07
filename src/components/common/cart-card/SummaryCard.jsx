@@ -90,7 +90,7 @@ const SummaryCard = ({
         <CheckoutPopup
           modalIsOpen={isCheckOutPopupOpen}
           closeModal={() => setIsCheckOutPopupOpen(false)}
-          text={`You want to confirm checkout? ${totalValue} EXA will be cut from your account`}
+          text={`You want to confirm checkout? ${totalValue}  will be cut from your account`}
           onCheckout={onCheckout}
         />
       )}
